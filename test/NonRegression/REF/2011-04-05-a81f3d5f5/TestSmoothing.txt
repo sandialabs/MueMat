@@ -1,0 +1,137 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 100 x 100 block matrix with constant block size = 1
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+Running symmetric Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08
+Running symmetric Gauss-Seidel V(1,1) with w = .99 + smoother on coarsest problem
+  1: ||r||=5.015399e+00
+  2: ||r||=4.153724e+00
+  3: ||r||=3.674264e+00
+  4: ||r||=3.276546e+00
+  5: ||r||=2.926561e+00
+  6: ||r||=2.614889e+00
+  7: ||r||=2.336632e+00
+  8: ||r||=2.088053e+00
+  9: ||r||=1.865944e+00
+Running symmetric Block Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08
+Running Jacobi V(1,1) with w = .7
+  1: ||r||=5.386794e+00
+  2: ||r||=1.744351e+00
+  3: ||r||=4.194868e-01
+  4: ||r||=1.320906e-01
+  5: ||r||=4.559585e-02
+  6: ||r||=1.650176e-02
+  7: ||r||=6.153443e-03
+  8: ||r||=2.342645e-03
+  9: ||r||=9.055083e-04
+Running Block Jacobi V(1,1) with w = .7
+  1: ||r||=5.386794e+00
+  2: ||r||=1.744351e+00
+  3: ||r||=4.194868e-01
+  4: ||r||=1.320906e-01
+  5: ||r||=4.559585e-02
+  6: ||r||=1.650176e-02
+  7: ||r||=6.153443e-03
+  8: ||r||=2.342645e-03
+  9: ||r||=9.055083e-04
+Running symmetric Gauss-Seidel V(1,0) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=3.275042e+00
+  3: ||r||=6.062403e-01
+  4: ||r||=1.345777e-01
+  5: ||r||=3.412790e-02
+  6: ||r||=9.370981e-03
+  7: ||r||=2.691810e-03
+  8: ||r||=7.947553e-04
+  9: ||r||=2.390420e-04
+Running symmetric Gauss-Seidel V(0,1) with w = .99
+  1: ||r||=5.852479e+00
+  2: ||r||=3.286791e+00
+  3: ||r||=5.993805e-01
+  4: ||r||=1.315599e-01
+  5: ||r||=3.321300e-02
+  6: ||r||=9.129578e-03
+  7: ||r||=2.633725e-03
+  8: ||r||=7.822940e-04
+  9: ||r||=2.369468e-04
+Running pre-forward sweep only with omega = .5 and post-backward sweep only Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.446526e+00
+  2: ||r||=1.009917e+01
+  3: ||r||=8.911400e+00
+  4: ||r||=8.829409e+00
+  5: ||r||=8.832360e+00
+  6: ||r||=8.833145e+00
+  7: ||r||=8.833001e+00
+  8: ||r||=8.832951e+00
+  9: ||r||=8.832946e+00
+Running overlapping additive domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=5.445111e+00
+  2: ||r||=1.851558e+00
+  3: ||r||=4.298377e-01
+  4: ||r||=1.329822e-01
+  5: ||r||=4.543699e-02
+  6: ||r||=1.626983e-02
+  7: ||r||=5.982410e-03
+  8: ||r||=2.238505e-03
+  9: ||r||=8.486667e-04
+Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=7.468166e+00
+  2: ||r||=8.852803e-01
+  3: ||r||=5.725039e-02
+  4: ||r||=4.420569e-03
+  5: ||r||=3.680814e-04
+  6: ||r||=3.120947e-05
+  7: ||r||=2.658279e-06
+  8: ||r||=2.268529e-07
+  9: ||r||=1.938979e-08
+Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly but ...
+setting the blocks in a more direct but low-level fashion
+  1: ||r||=7.468166e+00
+  2: ||r||=8.852803e-01
+  3: ||r||=5.725039e-02
+  4: ||r||=4.420569e-03
+  5: ||r||=3.680814e-04
+  6: ||r||=3.120947e-05
+  7: ||r||=2.658279e-06
+  8: ||r||=2.268529e-07
+  9: ||r||=1.938979e-08

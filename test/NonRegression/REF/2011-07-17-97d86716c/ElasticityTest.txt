@@ -1,0 +1,676 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+DIM=default=2
+***Running 50x50 1/1***
+CMS: Original Matrix NNZ = 63016
+ElasticityTest: Using Distance Laplacian
+CMS: size(A)=5000 size(AuxMatrix)=2500
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 21904 (Nrows=2500)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 2500 (2500)
+Aggregation(UC) : Phase 1 - total aggregates = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 2500 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.9421e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.4907e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.9421e+00)
+
+Smoothed Aggregation : operator complexity = 1.109615e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 2500 rows and 21904 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.039996 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 2500, # estim. global nnz = 21904
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.94206
+Smoother (level 0) : Setup time : 0.000172 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 11.0522
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.02721 (s)
+- for hierarchy setup = 0.040044 (s)
+- for smoothers setup = 0.000172 (s)
+- for coarse setup    = 0.001563 (s)
+- for final setup     = 7.3e-05 (s)
+FindRoots: Maximum aggregate size 9
+RAP: Regenerating AuxMatrix via AMF
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 2401 (Nrows=289)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 289 (289)
+Aggregation(UC) : Phase 1 - total aggregates = 36 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.7946e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.5157e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.7946e+00)
+
+Smoothed Aggregation : operator complexity = 1.106622e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 289 rows and 2401 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.004069 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 289, # estim. global nnz = 2401
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.79463
+Smoother (level 0) : Setup time : 9.7e-05 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 12.1769
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.01812 (s)
+- for hierarchy setup = 0.004115 (s)
+- for smoothers setup = 9.7e-05 (s)
+- for coarse setup    = 0.000226 (s)
+- for final setup     = 4.6e-05 (s)
+FindRoots: Maximum aggregate size 9
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+OC: (2-Level) = 1.15
+size(level2)=578 nnz(level2)=9600
+  1: ||r||=7.911237e-01
+  1: ||r||=1.474732e-01
+  1: ||r||=1.679280e-02
+  1: ||r||=2.160642e-03
+  1: ||r||=2.688748e-04
+  1: ||r||=3.595214e-05
+  1: ||r||=5.899153e-06
+  1: ||r||=7.538844e-07
+  1: ||r||=7.958045e-08
+  1: ||r||=1.575832e-08
+  1: ||r||=2.176518e-09
+  1: ||r||=2.710328e-10
+ElasticityTest: Using Distance Laplacian
+CMS: size(A)=5000 size(AuxMatrix)=2500
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 21904 (Nrows=2500)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 2500 (2500)
+Aggregation(UC) : Phase 1 - total aggregates = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 2500 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.9427e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.4906e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.9427e+00)
+
+Smoothed Aggregation : operator complexity = 1.109615e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 2500 rows and 21904 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.031777 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 2500, # estim. global nnz = 21904
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.94265
+Smoother (level 0) : Setup time : 0.000106 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 11.0451
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.016592 (s)
+- for hierarchy setup = 0.03182 (s)
+- for smoothers setup = 0.000106 (s)
+- for coarse setup    = 0.001286 (s)
+- for final setup     = 5.1e-05 (s)
+FindRoots: Maximum aggregate size 9
+RAP: Regenerating AuxMatrix via AMF
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 2401 (Nrows=289)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 289 (289)
+Aggregation(UC) : Phase 1 - total aggregates = 36 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.7902e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.5165e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.7902e+00)
+
+Smoothed Aggregation : operator complexity = 1.106622e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 289 rows and 2401 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.003821 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 289, # estim. global nnz = 2401
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.79022
+Smoother (level 0) : Setup time : 9.1e-05 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 12.3122
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.016471 (s)
+- for hierarchy setup = 0.003857 (s)
+- for smoothers setup = 9.1e-05 (s)
+- for coarse setup    = 0.000216 (s)
+- for final setup     = 4.2e-05 (s)
+FindRoots: Maximum aggregate size 9
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+OC: (2-Level) = 1.34
+size(level2)=867 nnz(level2)=21603
+  1: ||r||=7.911237e-01
+  1: ||r||=7.147116e-02
+  1: ||r||=4.575135e-03
+  1: ||r||=3.930024e-04
+  1: ||r||=3.125230e-05
+  1: ||r||=2.313700e-06
+  1: ||r||=1.723543e-07
+  1: ||r||=1.190039e-08
+  1: ||r||=7.369264e-10
+  1: ||r||=5.516366e-11
+ElasticityTest: Using Distance Laplacian
+CMS: size(A)=5000 size(AuxMatrix)=2500
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 21904 (Nrows=2500)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 2500 (2500)
+Aggregation(UC) : Phase 1 - total aggregates = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 2500 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.9429e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.4906e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.9429e+00)
+
+Smoothed Aggregation : operator complexity = 1.109615e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 2500 rows and 21904 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.031236 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 2500, # estim. global nnz = 21904
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.94288
+Smoother (level 0) : Setup time : 0.000103 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 11.0363
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.016332 (s)
+- for hierarchy setup = 0.03127 (s)
+- for smoothers setup = 0.000103 (s)
+- for coarse setup    = 0.001266 (s)
+- for final setup     = 4.5e-05 (s)
+FindRoots: Maximum aggregate size 9
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 578
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   5.63e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=612371.619200, nnzP = 5000
+condest(final Ptent'Ptent) =   2.25e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 648 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 4880.1
+initial emin residual = 2.407e+11
+final emin residual   = 3.001e+06
+condest(Pfinal'Pfinal) =   8.50e+00
+condest(P'AP) =   2.37e+02
+RAP: Regenerating AuxMatrix via AMF
+ML agg: Using 1 equations per node
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 1.000000e-02
+Aggregation(UVB) : Total nonzeros = 2401 (Nrows=289)
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 289 (289)
+Aggregation(UC) : Phase 1 - total aggregates = 36 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 8.7906e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 1.5164e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 8.7906e+00)
+
+Smoothed Aggregation : operator complexity = 1.106622e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 1   [unused]
+aggregation: threshold = 0.01   [unused]
+coarse: max size = 1   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 289 rows and 2401 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 2
+Using increasing levels. Finest level  = 0, coarsest level = 1
+Number of applications of the ML cycle = 1
+Number of PDE equations = 1
+Aggregation threshold = 0.01
+Max coarse size = 1
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = default (constants)
+Null space dimension = 1
+Time to build the hierarchy = 0.003814 (s)
+Number of actual levels : 2
+
+Smoother (level 0) : # global rows = 289, # estim. global nnz = 2401
+Smoother (level 0) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Smoother (level 0) : lambda_min = 0, lambda_max = 8.79058
+Smoother (level 0) : Setup time : 9e-05 (s)
+
+Coarse solve (level 1) : MLS/Chebyshev, polynomial order = 2, alpha = 20, both
+Coarse solve (level 1) : lambda_min = 0, lambda_max = 12.3008
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.016378 (s)
+- for hierarchy setup = 0.003853 (s)
+- for smoothers setup = 9e-05 (s)
+- for coarse setup    = 0.000215 (s)
+- for final setup     = 4.2e-05 (s)
+FindRoots: Maximum aggregate size 9
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 72
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   5.69e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=24068.408605, nnzP = 578
+condest(final Ptent'Ptent) =   2.25e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 98 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 421.973
+initial emin residual = 2.733e+11
+final emin residual   = 4.215e+05
+condest(Pfinal'Pfinal) =   9.06e+00
+condest(P'AP) =   5.89e+01
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+OC: (2-Level) = 1.15
+size(level2)=578 nnz(level2)=9603
+  1: ||r||=7.911237e-01
+  1: ||r||=2.026077e-01
+  1: ||r||=1.375536e-02
+  1: ||r||=1.103371e-03
+  1: ||r||=7.376864e-05
+  1: ||r||=6.800966e-06
+  1: ||r||=9.418660e-07
+  1: ||r||=7.365081e-08
+  1: ||r||=6.101215e-09
+  1: ||r||=4.466089e-10
+------------------------------------------------------------------------------
+** Leaving column map of Main linear system matrix unchanged
+ML_Gen_MultiLevelHierarchy (level 0) : Using auxiliary matrix
+ML_Gen_MultiLevelHierarchy (level 0) : threshold = 1.000000e-02
+ML_Gen_MultiLevelHierarchy (level 0) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 0) begins
+ML_Aggregate_CoarsenUncoupled : current level = 0
+ML_Aggregate_CoarsenUncoupled : current eps = 0.000000e+00
+Aggregation(UVB) : Total nonzeros = 63016 (Nrows=5000)
+Aggregation(UVB) : Amalgamated matrix done 
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 2500 (2500)
+Aggregation(UC) : Phase 1 - total aggregates = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 2500 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 289
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 0) : Max eigenvalue = 2.1012e+00
+
+Prolongator/Restriction smoother (level 0) : damping factor #1 = 6.3439e-01
+Prolongator/Restriction smoother (level 0) : ( = 1.3330e+00 / 2.1012e+00)
+
+ML_Gen_MultilevelHierarchy: Projecting node coordinates from level 0 to level 1
+ML_Gen_MultiLevelHierarchy (level 1) : Using auxiliary matrix
+ML_Gen_MultiLevelHierarchy (level 1) : threshold = 1.000000e-02
+ML_Gen_MultiLevelHierarchy (level 1) : Gen Restriction and Prolongator 
+ML_Aggregate_Coarsen (level 1) begins
+ML_Aggregate_CoarsenUncoupled : current level = 1
+ML_Aggregate_CoarsenUncoupled : current eps = 0.000000e+00
+Aggregation(UVB) : Total nonzeros = 21603 (Nrows=867)
+Aggregation(UVB) : Amalgamated matrix done 
+Aggregation(UC) : Phase 0 - no. of bdry pts  = 0 
+Aggregation(UC) : Phase 1 - nodes aggregated = 289 (289)
+Aggregation(UC) : Phase 1 - total aggregates = 36 
+Aggregation(UC_Phase2_3) : Phase 1 - nodes aggregated = 289 
+Aggregation(UC_Phase2_3) : Phase 1 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2a- additional aggregates = 0
+Aggregation(UC_Phase2_3) : Phase 2 - total aggregates = 36
+Aggregation(UC_Phase2_3) : Phase 2 - boundary nodes   = 0
+Aggregation(UC_Phase2_3) : Phase 3 - leftovers = 0 and singletons = 0
+Gen_Prolongator (level 1) : Max eigenvalue = 1.5846e+00
+
+Prolongator/Restriction smoother (level 1) : damping factor #1 = 8.4123e-01
+Prolongator/Restriction smoother (level 1) : ( = 1.3330e+00 / 1.5846e+00)
+
+ML_Gen_MultilevelHierarchy: Projecting node coordinates from level 1 to level 2
+Smoothed Aggregation : operator complexity = 1.379380e+00.
+------------------------------------------------------------------------------
+** ParameterList **
+ML output = 10   [unused]
+PDE equations = 2   [unused]
+aggregation: aux: enable = 1   [unused]
+aggregation: aux: threshold = 0.01   [unused]
+coarse: max size = 100   [unused]
+coarse: type = Amesos-KLU   [unused]
+max levels = 3   [unused]
+null space: dimension = 3   [unused]
+null space: type = pre-computed   [unused]
+null space: vectors = 0x79e5150   [unused]
+smoother: sweeps = 2   [unused]
+smoother: type = symmetric Gauss-Seidel   [unused]
+x-coordinates = 0x8041230   [unused]
+y-coordinates = 0x7693be0   [unused]
+z-coordinates = 0   [unused]
+
+Using `power-method' for eigen-computations
+*** 
+*** ML_Epetra::MultiLevelPreconditioner
+***
+Matrix has 5000 rows and 63016 nonzeros, distributed over 1 process(es)
+The linear system matrix is an Epetra_CrsMatrix
+Maximum number of levels = 3
+Using increasing levels. Finest level  = 0, coarsest level = 2
+Number of applications of the ML cycle = 1
+Number of PDE equations = 2
+Aggregation threshold = 0
+Max coarse size = 100
+R and P smoothing : P = (I-\omega A) P_t, R = P^T
+R and P smoothing : \omega = 1.333/lambda_max
+Null space type      = user-supplied
+Null space dimension = 3
+Time to build the hierarchy = 0.188762 (s)
+Number of actual levels : 3
+
+Smoother (level 0) : # global rows = 5000, # estim. global nnz = 63016
+Smoother (level 0) : symmetric Gauss-Seidel (sweeps=2,omega=1,both)
+Smoother (level 0) : Epetra_CrsMatrix detected, using Ifpack implementation
+Smoother (level 0) : Setup time : 0.003399 (s)
+
+Smoother (level 1) : # global rows = 867, # estim. global nnz = 21609
+Smoother (level 1) : symmetric Gauss-Seidel (sweeps=2,omega=1,both)
+Smoother (level 1) : Setup time : 5.6e-05 (s)
+
+Amesos (level 2) : NumGlobalRows = 108
+Amesos (level 2) : NumGlobalNonzeros = 2304
+Amesos (level 2) : Fill-in = 19.7531 %
+Amesos (level 2) : Building KLU
+Amesos (level 2) : Time for factorization  = 0.002784 (s)
+
+
+Cumulative timing for construction so far: 
+- for initial setup   = 0.026402 (s)
+- for hierarchy setup = 0.1888 (s)
+- for smoothers setup = 0.003455 (s)
+- for coarse setup    = 0.003099 (s)
+- for final setup     = 5.1e-05 (s)
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+** ParameterList **
+krylov: max iterations = 1   [unused]
+krylov: output level = 0   [unused]
+krylov: tolerance = 1e-100   [unused]
+krylov: type = fixed point   [unused]
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+   ML time information (seconds)          total          avg
+
+   1- Construction                  =   0.195651    0.195651
+   2- Preconditioner apply          =   0.168107
+     a- first application(s) only   =   0.013517    0.013517
+     b- remaining applications      =    0.15459   0.0171767
+
+   3- Total time required by ML so far is 0.363758 seconds
+      (constr + all applications)
+
+statistics: sa-norotate 12(1.17)   sa 10(1.38)   svd-2 10(1.17)   ml  9(1.38)   
+DIM=2
+STRETCH=1.000000
+
+        |  SA-NR  |    SA   |   EMIN  |    ML  
+ SZ LVL | ITS  OC | ITS  OC | ITS  OC | ITS  OC
+-----------------------------------------------
+ 50  3  | 12 1.17 | 10 1.38 | 10 1.17 |  9 1.38

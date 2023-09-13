@@ -1,0 +1,384 @@
+\section{Communication layer}
+
+\subsection{CommunicationLayer class}
+Every factory class needs some input information and produces some output. For example, the \verb|SA-AMG| algorithm takes an initial prolongation operator (e.g. the tentative prolongation operator) as input and calculates a smoothed prolongation operator. The idea is that all \verb|Build| functions in the factory classes use a standardized set of interface functions for the communication with the data source in the \verb|Level| class. In the simple case of smoothed aggregation (\verb|SA-AMG|), the \verb|SaPFactory.BuildP()| function would call something like \verb|GetInitialP()| and \verb|GetA()| for the initial prolongation operator and the level matrix $A$ for smoothing. These standardized interface functions are handled by the communication layer. Of course we could put all these interface functions into the \verb|PFactory| class, but i think it's better to introduce an own class with interface functions to be more flexible.
+
+A sample matlab-style class for a DefaultCommunicationLayer is shown below. The intention of such a DefaultCommunicationLayer class is to provide a standard implementation for the most common interface functions, that are used/needed by most factory classes.
+\begin{verbatim}
+classdef DefaultCommunicationLayer < CopiableHandle
+% default implementation for transfer operator communication layer 
+
+    properties (Access=protected)
+        % not sure if we need the following variables: 
+        % the idea is that every factory class has some input and 
+        % some output:
+        % [Level/user/?] -> input variables -> [Factory class] ...
+        %                           -> output variables -> [Level]
+        % most simple case: the user prescribes which variable is
+        % to be used for input and what variable name is to be used
+        % for storing the results.
+        % For more complicated test cases (e.g. 3
+        % and 4, you'll derive from this DefaultCommunicationLayer
+        % class a new specialized communication layer class, that
+        % you can extend for your needs.
+        % Note: if we store a pointer of the generating factory
+        % we always can use "default names" for the  variables.
+        % That should make things much easier! Then we also could
+        % use static member functions, that is, there's nearly no
+        % difference to the LevelInterface class (as proposed by Ray).
+        PinitialFromVariable_ = []; % variable name for initial P (input)
+        RinitialFromVariable_ = []; % variable name for initial R (input)
+                                    % (i suppose that we don't need this, 
+                                    % we always can use the transposed
+                                    % of variable PinitialFromVariable_)
+        storePas_ = [];             % variable name that shall be used
+                                    % for storing result of the factory
+                                    % class (prolongator)
+        storeRas_ = [];             % variable name that shall be used
+                                    % for storing result of the factory
+                                    % class (restrictor)
+    end
+
+    methods
+        %% constructor for default communication layer
+        % if not prescribed by the user, set default variable names for input and output variables.
+        function [this] = TransferOpCommunication(fromPInitial,toP,fromRinitial,toR)
+            if nargin == 1 && isa(fromPInitial, class(this)), this.Copy_(fromPInitial,[]); return; end
+            
+            if ~varexist('fromPInitial') this.PinitialFromVariable_ = 'Pinitial';
+            else this.PinitialFromVariable_ = fromPInitial; end;
+
+            if ~varexist('fromRInitial') this.RinitialFromVariable_ = 'Rinitial';
+            else this.RinitialFromVariable_ = fromRInitial; end;
+
+            
+            if ~varexist('toP') this.storePas_ = 'P';
+            else this.storePas_ = toP; end;
+
+            if ~varexist('toR') this.storeRas_ = 'R';
+            else this.storeRas_ = toR; end;
+
+        end
+        
+        %% get/set functions for input/output variable names
+
+        % we should get rid of these functions and store factory
+        % pointers together with the default variable 
+        % names (as Jeremie suggested).
+        function [oldPvariable] = StorePas(this,Pvar)
+            if varexist('Pvar') 
+                oldPvariable = this.storePas_;
+                this.storePas_ = Pvar;
+            else
+                oldPvariable = this.storePas_;
+            end
+        end
+
+        function [oldRvariable] = StoreRas(this,Rvar)
+            if varexist('Rvar') 
+                oldRvariable = this.storeRas_;
+                this.storeRas_ = Rvar;
+            else
+                oldRvariable = this.storeRas_;
+            end
+        end
+        
+        function [oldPinitialvar] = PinitialFrom(this,Pvar)
+            if varexist('Pvar') 
+                oldPinitialvar = this.PinitialFromVariable_;
+                this.PinitialFromVariable_ = Pvar;
+            else
+                oldPinitialvar = this.PinitialFromVariable_;
+            end
+        end
+
+        function [oldRinitialvar] = RinitialFrom(this,Rvar)
+            if varexist('Rvar') 
+                oldRinitialvar = this.RinitialFromVariable_;
+                this.RinitialFromVariable_ = Rvar;
+            else
+                oldRinitialvar = this.RinitialFromVariable_;
+            end
+        end
+        
+        %% communication layer level interface functions
+
+        % The following functions correspond to the static member functions
+        % in the LevelInterface class (proposed by Ray)
+        % Here, i have only three of these level interface functions as example. 
+        % I suppose we need some more, but the idea is to have only a as small 
+        % as possible set of common functions that is used by most/all 
+        % (P)Factory classes. 
+        % For more special [P]Factory classes (e.g. Emin) i would rather
+        % introduce a EminCommunicationLayer class, that derives from 
+        % DefaultCommunicationLayer class, than add some functions like
+        % GetPAux() or things like AForEnergy, that you only need in 
+        % some special cases.
+
+        % In your Factory.Build functions you have to call these 
+        % "standardized" level interface functions, that are defined
+        % and handled here by the communication layer.
+        % The parameter list for such level interface functions should 
+        % always contain the FineLevel and CoarseLevel objects, that are
+        % used for the communication with the level class.
+
+        % GetInitialP provides an initial prolongation operator and the
+        % corresponding coarse grid nullspacace. Either use a user
+        % prescribed variable name, or generate a tentative
+        % prolongation operator.
+        % TODO: move prolongation_mode_ flag from PFactory to CommunicationLayer...
+        function [P,cnull] = GetInitialP(this, prolongation_mode, FineLevel,...
+                                                           CoarseLevel, Specs)
+         if(CoarseLevel.IsData(this.PinitialFromVariable_))
+                if isempty(CoarseLevel.GetNull())
+                    error('no carse level stored in CoarseLevel\n');
+                end
+                P = CoarseLevel.Get(this.PinitialFromVariable_);
+                cnull = CoarseLevel.GetNull();
+          else
+
+                % use TentativePFactory with default parameters 
+                % note: generate a default communication layer class for the
+                % tentative prolongation PFactory
+                % set correct input/output variable names (no input for tentative
+                % prolongation necessary)
+                PinitialLevelCommunicator = DefaultCommunicationLayer(...
+                   [],this.PinitialFromVariable_,[],this.RinitialFromVariable_); 
+                   % communication flow: [] -> this.PinitialFromVariable_ (='Pinitial')
+                TentPFact = TentativePFactory(); 
+                TentPFact.SetLevelCommunicator(PinitialLevelCommunicator);
+
+                % overwrites CoarseLevel.GetNull()
+                TentPFact.BuildP(FineLevel,CoarseLevel,Specs);
+
+                P = CoarseLevel.Get(this.PinitialFromVariable_);
+                cnull = CoarseLevel.GetNull();
+          end
+      end  % end GetInitialP
+
+      function [A] = GetA(this, prolongation_mode, ...
+                                    FineLevel, CoarseLevel, Specs);
+      %GETA
+      %
+      %   SYNTAX   [A] = GetA(prolongation_mode, FineLevel, CoarseLevel, Specs);
+      %
+      %     prolongation_mode - mode of communication object (true or false)
+      %     FineLevel         - Level object for fine level
+      %     CoarseLevel       - Level object for coarse level
+      %     A                 - level system matrix for prolongation smoothing
+      %
+      % default implementation for PFactory derived prolongation operators
+      % with support of "restriction" mode
+      % The prolongation_mode flag controls what is used as system matrix
+      % for smoothing the prolongation operator: A in "prolongation" mode
+      % and the transposed of A in the "restriction" mode
+          if prolongation_mode == true
+              % PFactory is in prolongation mode
+              % use system matrix A
+              A = FineLevel.GetA();
+          else
+              % PFactory is in restriction mode
+              % use the transposed of A (downwinding)
+              A = FineLevel.GetA()';
+          end
+      end   % end GetA
+      
+      function SetTransferOperator(this, prolongation_mode, FineLevel, ...
+                                     CoarseLevel, Specs, TransferOperator)
+      %SETTRANSFEROPERATOR
+      %
+      %   SYNTAX   SetTransferOperator(CoarseLevel, TransferOperator;
+      %
+      %     prolongation_mode- denotes if PFactory is in prolongation or
+      %                        restriction mode
+      %     FineLevel        - Level object for fine level
+      %     CoarseLevel      - Level object for coarse level
+      %     Specs            - ...
+      %     TransferOperator - prolongator (or transposed of restrictor in
+      %                        "restriction" mode)
+      %
+      % stores the result of transfer operator smoothing in level data
+      % structure as prolongator (if prolongation_mode_==true) or as
+      % restrictor (if prolongation_mode_==false).
+      % This is the default implementation for prolongation operator with
+      % support of "restriction mode".
+          if prolongation_mode == true
+              % PFactory is in prolongation mode
+              % set prolongation operator
+              CoarseLevel.Set(this.storePas_,TransferOperator);
+          else
+              % PFactory is in restriction mode
+              % set restriction operator
+              CoarseLevel.Set(this.storeRas_,TransferOperator');
+          end
+      end      
+    end
+    
+    methods (Access = protected)
+        % for copy constructor
+        function Copy_(this, src, mc)
+          %COPY_
+          %
+          %   SYNTAX   obj.Copy_(src, mc);
+          %
+          %     src - Object to copy
+          %     mc  - MATLAB Metaclass
+          [cmd, data, mc] = this.CopyCmd_(src,mc);
+          eval(cmd);
+        end        
+    end
+
+end % end classdef
+\end{verbatim}
+
+\subsection{Factory Access}
+
+Let me give you a small and simple example, how the communication layer class is used within a PFactory class.
+\begin{verbatim}
+ classdef PgPFactory < PFactory
+
+  properties (Access = private)
+      % this PFactory class supports a prolongation and restriction mode
+      % default behaviour: prolongation mode
+      % if prolongation_mode_ is set to false, the BuildP function is used
+      % for generating a restriction operator (using A^T -> communication layer)
+      % TODO: move me to communication layer
+      prolongation_mode_ = true;
+
+      initialPFact_         % PFactory for initial guess of prolongator
+      ...
+  end
+
+  methods   % public functions
+      %% constructor
+      function [this] = PgPFactory(initialPFact,diagonalView) 
+
+          % constructor sets options
+
+          % initialize inter-factory communication
+          % default data flow: 'Pinitial' -> 'P', 'Rinitial' -> 'R'
+          this.myLevelComm_ = TransferOpCommunication();
+
+          % set PFactory for initial guess
+          if varexist('initialPFact'), 
+              this.initialPFact_ = initialPFact; 
+          end;
+
+          % set diagonal view ?
+          if varexist('diagonalView'), this.diagonalView_ = diagonalView; end
+      end
+
+
+      function [ToF] = ProlongationMode(this, ToF)
+          if varexist('ToF'),
+              ToFold = this.prolongation_mode_;
+              this.prolongation_mode_ = ToF;
+              ToF = ToFold;
+          else ToF = this.prolongation_mode_; end
+      end
+
+.....
+
+      %% build prolongator
+      function flag = BuildP(this,FineLevel,CoarseLevel,Specs)
+          % construct PG-AMG prolongator
+          flag = true;
+
+          this.TempOutputLevel(Specs);
+
+          %% 1) check for system matrix and prepare fine level nullspace
+          % get system matrix from level storage 
+          % (depending on prolongation_mode_)
+          Amat = this.myLevelComm_.GetA(this.prolongation_mode_,...
+                   FineLevel,CoarseLevel,Specs); % use communication layer
+          NS   = FineLevel.Get('cnull');% fine level NS (note: direct
+                                        % communication with Level is
+                                        % also possible!)
+
+          ...
+
+          %% 2) build initial prolongation operator (based on aggregates)
+
+          % build initial prolongator 
+          % (data flow: [] -> CoarseLevel.'Pinitial')
+          % either the user has to make sure, that the data flow
+          % is set correctly or this is done automatically (should
+          % be easy if we store not only the variable names, but
+          % also the factory, which generated the data. Then we can
+          % "link" the Pinitial_ factory with the current PFactory class)
+          if ~isempty(this.initialPFact_)
+               this.initialPFact_.BuildP(FineLevel, CoarseLevel,Specs);  
+          end;
+
+          % use communication layer
+          [P,cnull] = this.myLevelComm_.GetInitialP(...
+                  this.prolongation_mode_, FineLevel,CoarseLevel,Specs);
+
+          % PGAMG smoothing...
+
+          %% 10) store PG-AMG transfer operator in CoarseLevel level class
+          % use communication layer 
+          % store transfer operator (data flow: P -> 'P' or 'R',
+          % depending on prolongation_mode_)
+          this.myLevelComm_.SetTransferOperator(this.prolongation_mode_, ...
+                                            FineLevel, CoarseLevel, Specs,P);
+
+          this.RestoreOutputLevel();
+      end
+  end   %  end public methods
+  ...
+end
+\end{verbatim}
+
+There are some differences to the LevelInterface class, Ray proposed, that i want to point out here:
+\begin{itemize}
+ \item Ray uses only one (common) LevelView class with a sepearate instance of the LevelView class for every multigrid level object. Optionally every factory class can have its own instance of the LevelView class (FactoryView) that is then merged together with the LevelViews of the level class to a MergedView LevelView instance that is used for communication with the level object in the factory Build function. In the contrary to that, i have only one instance of a (Default)Communication layer for every factory class. The \verb|DefaultCommunicationLayer| class, as shown in the previous subsection, corresponds to the LevelView instance of Ray's LevelInterface class. If you need some special communication, you would introduce a new CommunicationLayer class (e.g. EminCommunicationLayer $<$ DefaultCommunicationLayer) and overwrite/add communication functions in there. This \verb|EminCommunicationLayer| then is used as default communication layer class in the \verb|EminPFactory| class. Deriving from \verb|DefaultCommunicationLayer| and adding new communication functions corresponds to Ray's FactoryView concept with merging down LevelView and FactoryView.
+ \item Ray proposes, that every level class has its own instance of a \verb|LevelInterface| class. From the \verb|TwoLevelFactoryBase| point of view then you have a FineLevel.LevelView and a CoarseLevel.LevelView. I suppose you have two FactoryViews and two MergedViews, too (one for the fine level, one for the coarse level).
+My communication layer classes have always the FineLevel object as well as the coarse level object as parameters. The communication layer functions know, which level object they have to use (e.g. GetA() $\rightarrow$ FineLevel, SetP() $\rightarrow$ CoarseLevel). I think this is a detail we can hide from the ``BuildP()'' developer, since it's only a matter of communication which level object (fine or coarse) is used to store the results.
+ \item The idea of the communication layer class is to group some of these communication layer functions in a reasonable way. I think i would even introduce separate communication layer classes for different types of factories. For example pattern factories have some different communication functions than prolongation factories. Why to pollute the communication layer class for PFactory with pattern stuff?
+ \item Maybe i'm wrong, but somehow i have the feeling that the \verb|LevelInterface| class tries to ``emulate'' the old style level class (before introducing the hash table, $\rightarrow$ SetAuxP functions, etc.). The communication layer is not just a shell around the level class. It's a layer between the level and the factory class that is adapted to the special needs of the algorithms in the corresponding factory.
+\end{itemize}
+
+\subsection{Strengths}
+\begin{itemize}
+ \item handles important cases ($\rightarrow$ Jeremie's suggestion for extending the \verb|Level| class by storing the generating factory).
+ \item communication layer concept is designed for factory developers: as a factory developer you only have to provide the necessary communication layer functions. You can either add them to the factory class (not recommended), to existing communication class with default implementations for the most basic communication layer functions, or even use your own communication layer class for grouping all necessary communication layer functions. For a factory developer this may be somewhat easier to understand, than to change/adapt some interface class to the level class or the level class itself.
+ \item it's object-oriented.
+ \item default communication functions are logically grouped in default communication layer classes.
+ \item You can develop advanced communication layer functions within your communication layer classes that allow to automatically link different factories together (Ptent $\rightarrow$ SaPFactory $\rightarrow$ Emin $\rightarrow$ Emin$\ldots$). You don't have to link some function pointers by hand.
+ \item The communication layer functions don't hide the \verb|Level| class behind an interface. They try to make use of the functionality of \verb|Level| for the factory classes.
+\end{itemize}
+
+\subsection{Weakness}
+\begin{itemize}
+ \item Factories could do dangerous things. But we can try to provide very smart default implementations to hide most of the communication stuff from the not so advanced factory developer. So we can minimize the risk that something goes wrong.
+ \item If we have some local variables within our communication layer classes (e.g. \verb|prolongation_mode_|, variable names for input/output?) we cannot use static functions. The resulting code for calling communication layer functions from the factories doesn't look very elegant:
+\begin{verbatim}
+this.myComm_.GetA(FineLevel,CoarseLevel,Specs,maybe even more parameters?);
+\end{verbatim}
+\item feel free to add your concerns
+\end{itemize}
+
+\subsection{Implementation of Test Cases}
+\begin{enumerate}
+ \item \textit{SA with coalesced A for aggregation:} Standard SA case requiring only defaults. (same for PG-AMG, see above).
+ \item \textit{SA with filtered then coalesced A for aggregation \& filtered A for prolongator smoother:} In my opinion it's not so important for the SA smoothing algorithm to know, if it's a filtered system matrix or not. The SA smoothing algorithm just calls \verb|GetA| and gets the correct (filtered or not) matrix for smoothing. Since using a filtered matrix should be a quite common case we should extend the \verb|GetA| function of the \verb|DefaultCommunicationLayer| class for filtered A matrices, too. One of the simplest possibilities would be, that the user first generates the filtered matrix A and stores it in the level matrix (using a variable name, e.g. 'myFilteredA') and adapt the communication layer function \verb|GetA| for user given variable names (similar to what is done for \verb|GetInitialP|). 
+
+There are several possibilities for the pattern: We could add a \verb|GetAforAPpattern| communication function to the \verb|DefaultCommunicationLayer| class, that is only called within the pattern factories. Then we can use the \verb|DefaultCommunicationLayer| class for the \verb|AP_PatternFactory| (and other PatternFactories), too. I would feel better if we have an own \verb|DefaultPatternCommunicationLayer| class with default communication routines for all pattern factories. The \verb|PatternFactory| class is independent from the \verb|PFactory| with its own communication functions. I'm not sure, but i think sometimes we might have different filtered matrices for pattern and smoothing?
+
+Anyway, we can extend the default communication layer classes to support this kind of examples.
+ 
+\item \textit{SA with user-defined auxiliary graph for aggregation \& a decoalesced version to define matrix for prolongator smoother:} Depending how ``strange'' we rank this test case, we have different possibilities to add support for such things:
+\begin{enumerate}
+\item If it's something that we need very often, we can extend the \verb|DefaultCommunicationClass| by a \verb|GetGraphForDecoalescing| communication function, that is called within the \verb|CoalesceAndDropFactory| class. Then \verb|CoalesceAndDropFactory| uses the same \verb|DefaultCommunicatoinClass| as PFactory classes.
+\item Maybe it's even worth to introduce an own communication class for \verb|CoalesceAndDropFactory| classes, that derives from \verb|DefaultCommunicationClass|. In my opinion that's not necessary, but of course we can do it and keep the \verb|DefaultCommunicationClass| clean from stuff, that's only interesting for decoalescing.
+\item Note, that if this test case is too strange, so that we don't want to introduce an own communication layer class or pollute the \verb|DefaultCommunicationClass| with such things, it's also ok, if we put the communication layer functions in the factory class itself! Then the \verb|CoalesceAndDropFactory| class has its own (private?) \verb|GetGraphForDecoalescing| function, which communicates with the fine and coarse level classes. The main idea of the communication classes is to put and group some of these communication functions together and reuse them, wherever it's possible and makes sense.
+\end{enumerate}
+\item \textit{SA with user-defined auxiliary graph for aggregation \& prolongator smoother matrix is a filtered A where pattern matches decoalesced version of auxiliary matrix:} Same as above. I think/hope that the new Level class (semi-) automatically knows which data has to be stored and can be freed.
+\item \textit{Standard Emin using an initial guess of \textit{Ptent} (obtained by aggregating coalesced A):} just use defaults.
+\item \textit{Badri-like case where two user-provided matrices are each filtered to provide different matrices for Emin: one is Krylov energy \& the other for use by APpattern:} The \verb|GetA(forAPpattern?)| function in the communication layer for pattern factory should handle the (filtered) matrix for APpattern (per default). I think i would introduce an extended \verb|EminCommunicationLayer| class (derived from \verb|DefaultCommunicationLayer|) that handles the special needs of Emin (something like \verb|AForEnergy|, again with support for filtered matrices). In that extended Emin communication class we also can add some additional communication functions that are needed by the CoalesceAndDrop factory. Within the Emin.BuildP function then we have to replace the standard communication layer class for the CoalesceAndDropFactory class with our EminCommunicationLayer... You see, we're very flexible. We only have to make sure, that all factories get their own communication layer class, that fits all their needs. However we should try to provide standard implementations for the most common problems, that can be easily adapted.
+\item \textit{Emin using 1-step SA as initial guess:} I hope the new Level class supports something like CoarseLevel.Get('P',Ptent), as Jeremie suggested in one of his mails last week. Then you don't need 'SetPAux'...
+\item \textit{Emin using Emin as initial guess where each computes a Ptent and Coarse null space \& both are to be saved for later reuse:} Two different Emin methods in a chain with independent Ptent and Coarse null space should be no problem with Jeremie's proposed level class. Since you're using two different instances of the \verb|TentativePFactory| class you can store it as two ``different'' variables with the same name 'Ptent' in the level class. There should be no need for functions like ``GetPAux''...
+\item \textit{Convert an SA factory so that it can be used for restriction:} see above default implementation: i used a \verb|prolongation_mode_| flag within the PgPFactory and MinDescentPFactory class. We should move it to the communication layer, since the algorithms (BuildP()) should be independent of the ``prolongation'' or ``restriction'' mode. The only thing that is changing is the communication layer, that is $A \rightarrow A^T$ and store the result as R instead of P. The \verb|GenericRFactory| class only switches the \verb|prolongation_mode_| flag in the communication class for the corresponding \verb|Pfactory| class, then calls \verb|BuildP| for calculating the restrictor, and finally switches back the \verb|prolongation_mode_| flag to standard (=prolongation) mode.
+\item \textit{A test case for an F/C-style sparsity pattern (e.g. F/C pattern generates a P0)?} The pattern specific communication functions should handle the communication between level classes and pattern factory.
+\end{enumerate}

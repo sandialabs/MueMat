@@ -1,0 +1,129 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+TestSaPFactoryReUse(0, 0, 0, 0, 3)
+*****************************************************************************
+
+Building 100 x 100 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+TestSaPFactoryReUse(1, 0, 0, 0, 3)
+*****************************************************************************
+
+Building 100 x 100 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+TestSaPFactoryReUse(0, 0, 1, 0, 3)
+*****************************************************************************
+
+Building 100 x 100 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+TestSaPFactoryReUse(0, 0, 0, 1, 3)
+*****************************************************************************
+
+Building 100 x 100 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 .
+Aggregating
+ 1 Hierarchy: actual #levels  = 3
+  1: ||r||=5.073552e+00
+  1: ||r||=2.149534e-01
+  1: ||r||=2.529491e-03
+  1: ||r||=1.541498e-05
+  1: ||r||=2.324816e-07
+  1: ||r||=2.439207e-09
+  1: ||r||=2.174767e-11

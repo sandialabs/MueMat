@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{authblk}
+\usepackage[dvips]{graphics}
+\usepackage{hyperref}
+\hypersetup{
+  pdfauthor = {Jeremie Gaidamour, Jonathan J. Hu, Christopher M. Siefert, Ray S. Tuminaro},
+  pdftitle = {Accomplishment, Energy Minimizing AMG Algorithms},
+  pdfkeywords = {multigrid, algebraic multigrid, AMG, energy minimization},
+}
+
+\newcommand{\mcol}{\multicolumn}
+
+\begin{document}
+\begin{centering}
+{\large Energy-Minimizing Algebraic Multigrid Solvers for Systems of Partial Differential Equations}\\
+\vskip 0.1in
+J. Gaidamour, J. Hu, C. Siefert, and R. Tuminaro (consultant)\\
+\vskip 0.1in
+\end{centering}
+%
+The repeated implicit solution of large sparse linear systems is a key computational challenge
+in many parallel calculations at Sandia and often dominates the total simulation time.  The solvers in the Trilinos framework are frequently used
+for these systems, in particular the smoothed aggregation (SA) multigrid
+methods in the ML library.
+%The SA methods are well-developed but can struggle with linear systems arising
+%from problems with multiphysics and/or severely stretched meshes, as might be found in in structural mechanics
+%or electro-magnetics.  Stretched meshes can reflect either underlying anisotropic phenomena or meshing
+%technology limitations.
+The SA methods are well-developed but can struggle with linear systems arising
+from problems with multiphysics and/or severely stretched meshes, as might be found in in structural mechanics
+or electro-magnetics.  Stretched meshes can reflect either underlying anisotropic phenomena or meshing
+technology limitations.
+In this CSRF project we have developed a family of novel
+energy-minimizing multigrid algorithms  that address these shortcomings
+while providing faster solution times.
+These new algorithms have the flexibility to take any sparsity pattern for transfer
+matrices that propagate information within the multigrid hierarchy.  This allows us to choose patterns
+tailored for problem physics.
+Additionally, the cost of applying these algorithms is lower than SA 
+while still achieving accurate interpolation of key problematic error modes.
+This yields methods that still have very good convergence properties.
+In 3D linear elasticity mesh scaling studies,
+energy minimization is always cheaper to apply (meaning faster run times) than SA.  As the mesh stretching
+becomes more severe, energy minimization converges faster than SA. 
+As an example, the new method is about $2.5$ times faster than SA
+on a $40^3$ mesh where the stretching in the $x$ direction is 100 times either the $y$ or
+$z$ directions.
+
+\end{document}

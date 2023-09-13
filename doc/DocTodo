@@ -1,0 +1,19 @@
+Mailing lists
+Explain Design/usage: Factory for developers and users
+List of capabilities
+Exemple using a Matlab matrix
+Ref (citing bibtex)
+Installing/Using MLMEX for MueMat
+Dump hierarchy/matrices
+Verbose
+
+developpers.m:
+% <li><a href="dev_GeneralDesign.html">MueMat General Design</a></li>       => Factories
+% <li><a href="dev_DirectoryStructures.html">Directory Structures</a></li>  => ok
+% <li><a href="dev_CodingGuidelines.html">Coding Guidelines</a></li>
+
+We have some documentation in latex format (Operators...). We should decide if we want to keep it separate.
+
+Example of Geometric multigrid ?
+
+Check "Content.m" using "helpwin"

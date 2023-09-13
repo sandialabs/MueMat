@@ -1,0 +1,43 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+Underweighting 0 constraint equations
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 26
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   1.20e+03
+norm(P.cnull-fnull)=266121.991053, nnzP = 4138
+condest(final Ptent'Ptent) =   1.20e+03
+initial emin residual = 3.500e+00
+final emin residual   = 2.523e-01
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.210674e+00
+  1: ||r||=4.467702e-01
+  1: ||r||=8.816771e-02
+  1: ||r||=9.935976e-03
+  1: ||r||=1.367861e-03
+  1: ||r||=2.755986e-04
+  1: ||r||=8.599017e-05
+  1: ||r||=1.737116e-05
+  1: ||r||=2.920486e-06
+  1: ||r||=6.350376e-07
+  1: ||r||=9.391401e-08
+Nits = 11, ||r|| = 1.770914e-08 

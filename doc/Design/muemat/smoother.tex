@@ -1,0 +1,165 @@
+The standard procedure for setting smoothers in the MG hierarchy is to
+create a smoother factory and pass this to MgHierarchy.SetSmoothers()
+which automatically invokes the smoother factory's build method to
+create smoothers on all levels.
+
+\subsection{Previous design: discussion}
+
+This part discuss the initial design of the factories responsible to the creation of smoothers in MueMat.
+
+Smoothers factories are specialized in the production of a particular kind of smoother:
+\begin{itemize}
+\item A smoother factory stores the parameters of the object they will produce.
+\item Smoother parameters depends on the smoother (nits, omega for Jacobi; nits, lambdaratio for Chebychev...). 
+\item Factories know the exact class of object that will be created.
+\end{itemize}
+
+A smoother factory have a method Build() to create smoother object
+depending on the data of the MG level (depending on the matrix A of
+the level for instance).  Build() do the setup phase of the
+smoother. This step could be costly and must be done only once for pre
+and post smoother (for example, the LU factorization for the
+DirectSolve smoother). Build() instantiate pre and post smoother,
+passing in arguments the data of the setup phase ans the parameters of
+the smoother stored in the factory.
+
+A smoother factory produces 2 smoothers at a time (pre and post
+smoother). Each factory produces only one kind of smoother.  We can
+build completely independent pre and post smoothing objects by
+invoking MgHierarchy.SetSmoothers() twice with two different smoother
+factories.
+
+Problems:
+\begin{itemize}
+\item To add a smoother, we must add a factory or modify an existing
+factory.
+\item Factories stores parameters (nits, omega, forward backward step,
+blocking scheme) for both Pre and Post smoother in is class variables.
+\item Setup phase of a smoother depends on the smoother. I prefer to
+have a Setup() function in a smoother rather than in a factory. Like
+this, Setup() and Apply() are on the same file.
+\item Each smoother factories built 2 smoothers: a pre-smoother and a
+post-smoother.  I was initially thinking to modify this behavior by
+storing one pre-smoother factory and one post-smoother factory in the
+MG hierarchy but it's actually harder to avoid duplicate setup
+computation if smoother factories create only one smoother at a time.
+\end{itemize}
+
+\subsection{New design}
+
+The new design is based on the prototype design pattern 
+\href{http://en.wikipedia.org/wiki/Prototype_pattern}{[1]}
+\href{http://www.oodesign.com/prototype-pattern.html}{[2]}.
+%http://en.wikipedia.org/wiki/Factory_method_pattern
+
+My (rstumin) understanding is that a prototype is similar to a factory. 
+In the factory pattern, we give parameters to the factory that it stores, but it never 
+stores real data. The factory knows how to make objects and 
+so when Build() is invoked it creates the desired object using 
+the supplied data. It is then ready to build new objects once
+new data is supplied. 
+In the prototype design pattern, factories use prototypes as model to
+make objects. Factories doesn't know anything about the
+parameters. The parameters are stored in the prototypes.  The
+prototype give also the exact type of object to build (ie:
+ChebySmoother, ILUSmoother, etc.). 
+The main advantage of prototype pattern is that the factory don't need
+to know anything about the object to create. The factory can be very
+generic.
+
+A prototype is like an unfinished object and never store real data.
+To create a object from the prototype, we do not directly populate 
+the data fields of the prototype as this would mean that the prototype would have data
+associated with it and so it wouldn't make sense to build another
+object from it. To make the desired object, the prototype is instead cloned
+and the cloned version's data fields are populated. In this way,
+the original prototype remains data-less. The way we use this
+for smoothers is as follows. When we want to build a pre-smoother, 
+the pre-smoother prototype is cloned and the clone's data fields are 
+populated. When we want to build a post-smoother, we can clone the 
+post-smoother's prototype and populate the clone's fields. However, if 
+the pre- and post-smoother are essentially identical with perhaps 
+different parameters which do not affect setup, we can instead clone 
+the pre-smoother (which already has data fields set) and copy over the 
+parameters from the post-smoother prototype.  The main scenario for this 
+is doing something like an ILU smoother where we do not want to perform
+the factorization twice. 
+
+%% Factory Pattern:
+%% - the factory store parameter
+%% - you pass on input of the build method the real data
+%% - the factory creates a new object 'smoother'. this object stores both parameters and real data.
+
+%% Prototype Factory:
+%% - the factory uses prototyped object as model to create other objects. The factory don't know anything about the parameters. The parameters are stored in the prototypes.
+%% - you pass on input of the build method the real data
+%% - the factory clones the prototype in order to create a new object 'smoother'. This object get the parameters from the prototype and the data from the input parameters of the build method.
+
+A generic smoother factory is defined. The smoother factory uses
+prototypical instances of smoothers and prototypes are cloned to
+produce new objects. There is one prototype for the presmoother and
+one for the postsmoother. Thus, one factory can produce two different
+smoothers for pre and post-smoothing (but still produces both).
+Prototypes are stores in the factory.
+
+The type of smoother to create is determined by the prototypical instances.
+Prototypes stores they own parameters (nits, omega) and factory don't have any knowledge about that.
+
+\subsubsection{Instantiation of the Smoother Factory}
+The 'client' instantiated the smoother factory by passing in argument to the Smoother Factory constructor a pre-configured prototypes.
+
+Ex:
+
+\begin{verbatim}
+SmooFactory = SmootherFactory(ChebySmoother(5,1/30))
+\end{verbatim}
+
+or 
+
+\begin{verbatim}
+nIts        = 5;
+lambdaRatio = 1/30;
+Smoo        = ChebySmoother()
+Smoo        = Smoo.SetIts(nIts);
+Smoo        = Smoo.SetLambdaRatio(1/30); 
+SmooFactory = SmootherFactory(Smoo);
+\end{verbatim}
+
+To use different pre and post smoother, two prototypes can be passed in argument:
+\begin{verbatim}
+PreSmoo     = ChebySmoother(2, 1/30)
+PostSmoo    = ChebySmoother(10,1/30)
+SmooFactory = SmootherFactory(PreSmoo, PostSmoo);
+\end{verbatim}
+
+[] is a valid smoother which do nothing:
+\begin{verbatim}
+PostSmoo    = ChebySmoother(10,1/30)
+SmooFactory = SmootherFactory([], PostSmoo);
+\end{verbatim}
+
+\subsection{Production of Smoother object by the Smoother Factory}
+Factory.Build() clones its prototypes and call Setup() on the new objects to create fully functional smoothers for the current hierarchy level. Smoothers do is one setup (ie: DirectSolve compute his LU factorization).
+If  pre and post smoother are of the same, Setup() is call only one, on the presmoother. To obtain the post-smoother, the presmoother is cloned and its parameters are changed according to the parameters of the post-smoother.
+
+%Idea of that design pattern: rather than creation it uses cloning. If the cost of creating a new object is large and creation is resource intensive, we clone the object.
+
+% todo: discussion here if setup() depends on parameters.
+
+\subsection{The Smoother class}
+A smoother must have the capability to
+\begin{itemize}
+\item Clone itself
+\item Copy is parameters
+\item + Setup() and Apply()
+\end{itemize}
+
+%an abstract base class that specifies a pure virtual clone() method.
+% any class that needs a "polymorphic constructor" capability derives itself from the abstract base class, and implements the clone() operation.
+%If needed, possibility to keep the same interface, by calling the factory method with a parameter designating the particular concrete derived class desired
+
+\subsection{Special case of Hybrid2x2 Smoother}
+
+The Hybrid2x2 Smoother could be created by the generic SmootherFactory but in this case, we are not able to avoid duplicate setup computation. A special factory (Hybrid2x2SmootherFactory) must be used on this case. 
+The factory create two temporary smoother factories to do the setup of Pre and Post Smoother of each part of the system at the same time.
+

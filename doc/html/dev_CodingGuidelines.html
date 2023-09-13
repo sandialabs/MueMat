@@ -1,0 +1,154 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MueMat Coding Guidelines</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-19"><meta name="DC.source" content="dev_CodingGuidelines.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>MueMat Coding Guidelines</h1><!--introduction--><p>Coding recommendations for MueMat developers. This document presents the naming convention which are enforced in MueMat.</p><p>See also : <a href="http://www.mathworks.com/matlabcentral/fileexchange/2529">MATLAB Programming Style Guidelines by Richard Johnson</a></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Classes</a></li><li><a href="#2">Variables and parameters</a></li><li><a href="#3">Indentation, spacing, tabs</a></li></ul></div><h2>Classes<a name="1"></a></h2><pre>- Class names should be nouns in CamelCase with the first letter capitalized.</pre><pre>    Example(s): SmootherFactory</pre><pre>- Class methods should be verbs in CamelCase with the first letter capitalized.</pre><pre>    Example(s): GetProperty(), SetProperty(), Build().</pre><pre>- Class properties ended with an underscore (_)</pre><pre>- Constants should be all uppercase (currently, we don't use underscore to separate words in mue_include but we could).</pre><h2>Variables and parameters<a name="2"></a></h2><p>- Variables should be named in camelCase with the first letter lowercase.</p><pre>    Exceptions:</pre><pre>      * Name of matrices are upper case.</pre><pre>         Example(s): P / A / Pdata / APpattern / APnode / Mdata / ...</pre><pre>      * Name of variables storing instances of factories are also upper case.</pre><pre>         Example(s): SmootherFact</pre><p>- The prefix 'n' should be used for variables representing the number of objects.</p><pre>    Example(s): nRows</pre><p>- Methods related to variables representing a number should use "Num" on their names.</p><pre>    Example(s): SetNumIterations(nIts)</pre><p>- Convention on pluralization: 's' suffix.</p><pre>    Example(s): nRows, nIts</pre><p>- Convention on acronyms: first letter capitalized, all the rest lowercase.</p><pre>    Example(s): Nnz, Dof, Rhs</pre><p>- Convention on compound: no capitalization of the first letter of second stem.</p><pre>    Example(s): nullspace, multigrid</pre><p>- Please choose meaningful names. We also like names that reflect variable function.</p><pre>    Example(s):</pre><pre>     * CoarseDofPerNode (vs. nCDofs)</pre><pre>     * finestLevel (vs. finest)</pre><pre>     * aggregates (vs. aggInfo or aggWidget)</pre><p>- List of allowed abbreviations:</p><pre>      * blk for block</pre><pre>      * const for constant</pre><pre>      * sol for solution (sol = mg.Iterate())</pre><pre>      * its for iterations</pre><pre>      * null for nullspace</pre><h2>Indentation, spacing, tabs<a name="3"></a></h2><p>Please do <b>not</b> insert tab characters into the code. Instead, use the equivalent number of spaces. Here are instructions for causing the tab key to insert spaces rather than a tab character:</p><p><b>vim</b>   --   add the line <tt>set expandtab</tt> to your <tt>.vimrc</tt> file.</p><p><b>emacs</b> --   add the line <tt>(setq-default indent-tabs-mode nil)</tt> to your <tt>.emacs</tt> file.</p><p>The emacs hint comes from this <a href="http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/Indent-Tabs-Mode.html">document</a>.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% MueMat Coding Guidelines
+% Coding recommendations for MueMat developers. This document presents the naming convention which are enforced in MueMat.
+%
+% See also : <http://www.mathworks.com/matlabcentral/fileexchange/2529 MATLAB Programming Style Guidelines by Richard Johnson>
+% 
+%% Classes
+%  - Class names should be nouns in CamelCase with the first letter capitalized.
+%
+%      Example(s): SmootherFactory
+%
+%  - Class methods should be verbs in CamelCase with the first letter capitalized.
+%
+%      Example(s): GetProperty(), SetProperty(), Build().
+%
+%  - Class properties ended with an underscore (_)
+%
+%  - Constants should be all uppercase (currently, we don't use underscore to separate words in mue_include but we could).
+%
+%% Variables and parameters
+% 
+% - Variables should be named in camelCase with the first letter lowercase.
+%
+%      Exceptions:
+%
+%        * Name of matrices are upper case.
+%
+%           Example(s): P / A / Pdata / APpattern / APnode / Mdata / ...
+%
+%        * Name of variables storing instances of factories are also upper case.
+%
+%           Example(s): SmootherFact
+%        
+% - The prefix 'n' should be used for variables representing the number of objects.
+%
+%      Example(s): nRows
+%
+% - Methods related to variables representing a number should use "Num" on their names.
+%
+%      Example(s): SetNumIterations(nIts)
+%
+% - Convention on pluralization: 's' suffix.
+%
+%      Example(s): nRows, nIts
+%
+% - Convention on acronyms: first letter capitalized, all the rest lowercase.
+%
+%      Example(s): Nnz, Dof, Rhs
+% 
+% - Convention on compound: no capitalization of the first letter of second stem.
+%
+%      Example(s): nullspace, multigrid    
+%
+% - Please choose meaningful names. We also like names that reflect variable function. 
+%
+%      Example(s): 
+%
+%       * CoarseDofPerNode (vs. nCDofs)
+%      
+%       * finestLevel (vs. finest)
+%      
+%       * aggregates (vs. aggInfo or aggWidget)
+%
+% - List of allowed abbreviations:
+%
+%        * blk for block
+%
+%        * const for constant
+%
+%        * sol for solution (sol = mg.Iterate())
+%
+%        * its for iterations
+%
+%        * null for nullspace
+%
+%% Indentation, spacing, tabs
+%
+% Please do *not* insert tab characters into the code. Instead, use the equivalent number of spaces.
+% Here are instructions for causing the tab key to insert spaces rather than a tab character:
+%
+% *vim*   REPLACE_WITH_DASH_DASH   add the line |set expandtab| to your |.vimrc| file.
+%
+% *emacs* REPLACE_WITH_DASH_DASH   add the line |(setq-default indent-tabs-mode nil)| to your |.emacs| file.
+%
+% The emacs hint comes from this <http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/Indent-Tabs-Mode.html document>.
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,299 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Variable Block Size Problem projecting coordinate values and
+an auxiliary matrix which happens to be equal to Amat
+
+*****************************************************************************
+
+Building 81 x 81 block matrix with variable block size = [3,6]
+Nullspace: Using default nullspace size=6
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 5
+Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Hierarchy: actual #levels  = 4
+Hierarchy filled. Printing some projected coordinates
+
+ans =
+
+  Columns 1 through 7
+
+    0.0535    0.1235    0.2346    0.3457    0.4568    0.5679    0.6790
+
+  Columns 8 through 9
+
+    0.7901    0.9012
+
+
+Now comparing project auxiliary matrix with coarse Amat
+nnz( Amatcoarse - projected Aux ) = 0
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Variable Block Size Problem projecting coordinate values and
+an auxiliary matrix which has 1 dof/node (built by coalescing.
+entries in Amat).
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 5
+Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Hierarchy: actual #levels  = 5
+
+Printing a projected auxiliary matrix. This would look like a
+scaled Laplace problem if the tenative prolongator was used for
+projecting auxiliary information. Unfortunately, there is no easy
+way to currently turn-off prolongator smoothing. Another problem
+is that the RAP factory works with Generic Data Buckets ... so
+we need to do something smart if it is to somehow use a tentative
+prolongator. There might be a way to have it query the databucket
+and get the grid transfer operators out?
+
+ans =
+
+  Columns 1 through 13
+
+     4     4     2     0     0     0     0     0     0     0     0     0     0
+     4     6     4     2     0     0     0     0     0     0     0     0     0
+     2     4     6     4     2     0     0     0     0     0     0     0     0
+     0     2     4     6     4     2     0     0     0     0     0     0     0
+     0     0     2     4     6     4     2     0     0     0     0     0     0
+     0     0     0     2     4     6     4     2     0     0     0     0     0
+     0     0     0     0     2     4     6     4     2     0     0     0     0
+     0     0     0     0     0     2     4     6     4     2     0     0     0
+     0     0     0     0     0     0     2     4     6     4     2     0     0
+     0     0     0     0     0     0     0     2     4     6     4     2     0
+     0     0     0     0     0     0     0     0     2     4     6     4     2
+     0     0     0     0     0     0     0     0     0     2     4     6     4
+     0     0     0     0     0     0     0     0     0     0     2     4     6
+     0     0     0     0     0     0     0     0     0     0     0     2     4
+     0     0     0     0     0     0     0     0     0     0     0     0     2
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 14 through 26
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     2     0     0     0     0     0     0     0     0     0     0     0     0
+     4     2     0     0     0     0     0     0     0     0     0     0     0
+     6     4     2     0     0     0     0     0     0     0     0     0     0
+     4     6     4     2     0     0     0     0     0     0     0     0     0
+     2     4     6     4     2     0     0     0     0     0     0     0     0
+     0     2     4     6     4     2     0     0     0     0     0     0     0
+     0     0     2     4     6     4     2     0     0     0     0     0     0
+     0     0     0     2     4     6     4     2     0     0     0     0     0
+     0     0     0     0     2     4     6     4     2     0     0     0     0
+     0     0     0     0     0     2     4     6     4     2     0     0     0
+     0     0     0     0     0     0     2     4     6     4     2     0     0
+     0     0     0     0     0     0     0     2     4     6     4     2     0
+     0     0     0     0     0     0     0     0     2     4     6     4     2
+     0     0     0     0     0     0     0     0     0     2     4     6     4
+     0     0     0     0     0     0     0     0     0     0     2     4     6
+     0     0     0     0     0     0     0     0     0     0     0     2     4
+
+  Column 27
+
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     2
+     4
+     4
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Constant Block Size Problem projecting coordinate values and
+an auxiliary matrix which happens to be equal to Amat
+
+*****************************************************************************
+
+Building 81 x 81 block matrix with constant block size = 4
+Nullspace: Using default nullspace size=4
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 5
+Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Hierarchy: actual #levels  = 4
+Hierarchy filled. Printing some projected coordinates
+
+ans =
+
+  Columns 1 through 7
+
+    0.0535    0.1235    0.2346    0.3457    0.4568    0.5679    0.6790
+
+  Columns 8 through 9
+
+    0.7901    0.9012
+
+
+Now comparing project auxiliary matrix with coarse Amat
+nnz( Amatcoarse - projected Aux ) = 0
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Constant Block Size Problem projecting coordinate values and
+an auxiliary matrix which has 1 dof/node (built by coalescing.
+entries in Amat).
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 5
+Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Aggregating
+ 1 Hierarchy: actual #levels  = 5
+
+Printing a projected auxiliary matrix. This would look like a
+scaled Laplace problem if the tenative prolongator was used for
+projecting auxiliary information. Unfortunately, there is no easy
+way to currently turn-off prolongator smoothing. Another problem
+is that the RAP factory works with Generic Data Buckets ... so
+we need to do something smart if it is to somehow use a tentative
+prolongator. There might be a way to have it query the databucket
+and get the grid transfer operators out?
+
+ans =
+
+  Columns 1 through 13
+
+     4     4     2     0     0     0     0     0     0     0     0     0     0
+     4     6     4     2     0     0     0     0     0     0     0     0     0
+     2     4     6     4     2     0     0     0     0     0     0     0     0
+     0     2     4     6     4     2     0     0     0     0     0     0     0
+     0     0     2     4     6     4     2     0     0     0     0     0     0
+     0     0     0     2     4     6     4     2     0     0     0     0     0
+     0     0     0     0     2     4     6     4     2     0     0     0     0
+     0     0     0     0     0     2     4     6     4     2     0     0     0
+     0     0     0     0     0     0     2     4     6     4     2     0     0
+     0     0     0     0     0     0     0     2     4     6     4     2     0
+     0     0     0     0     0     0     0     0     2     4     6     4     2
+     0     0     0     0     0     0     0     0     0     2     4     6     4
+     0     0     0     0     0     0     0     0     0     0     2     4     6
+     0     0     0     0     0     0     0     0     0     0     0     2     4
+     0     0     0     0     0     0     0     0     0     0     0     0     2
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 14 through 26
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     0     0     0     0     0     0     0     0     0     0     0     0     0
+     2     0     0     0     0     0     0     0     0     0     0     0     0
+     4     2     0     0     0     0     0     0     0     0     0     0     0
+     6     4     2     0     0     0     0     0     0     0     0     0     0
+     4     6     4     2     0     0     0     0     0     0     0     0     0
+     2     4     6     4     2     0     0     0     0     0     0     0     0
+     0     2     4     6     4     2     0     0     0     0     0     0     0
+     0     0     2     4     6     4     2     0     0     0     0     0     0
+     0     0     0     2     4     6     4     2     0     0     0     0     0
+     0     0     0     0     2     4     6     4     2     0     0     0     0
+     0     0     0     0     0     2     4     6     4     2     0     0     0
+     0     0     0     0     0     0     2     4     6     4     2     0     0
+     0     0     0     0     0     0     0     2     4     6     4     2     0
+     0     0     0     0     0     0     0     0     2     4     6     4     2
+     0     0     0     0     0     0     0     0     0     2     4     6     4
+     0     0     0     0     0     0     0     0     0     0     2     4     6
+     0     0     0     0     0     0     0     0     0     0     0     2     4
+
+  Column 27
+
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     2
+     4
+     4
+

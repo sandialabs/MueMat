@@ -1,0 +1,180 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 100 x 100 block matrix with constant block size = 1
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+Running symmetric Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08
+Running symmetric Block Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08
+Running Jacobi V(1,1) with w = .7
+  1: ||r||=5.468278e+00
+  2: ||r||=1.814692e+00
+  3: ||r||=4.488242e-01
+  4: ||r||=1.420167e-01
+  5: ||r||=4.882667e-02
+  6: ||r||=1.751396e-02
+  7: ||r||=6.453855e-03
+  8: ||r||=2.424185e-03
+  9: ||r||=9.238566e-04
+Running Block Jacobi V(1,1) with w = .7
+  1: ||r||=6.487466e+00
+  2: ||r||=1.899270e+00
+  3: ||r||=4.787204e-01
+  4: ||r||=1.522982e-01
+  5: ||r||=5.241631e-02
+  6: ||r||=1.876116e-02
+  7: ||r||=6.882877e-03
+  8: ||r||=2.570258e-03
+  9: ||r||=9.730809e-04
+Running overlapping additive domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=8.092230e+00
+  2: ||r||=2.159330e+00
+  3: ||r||=5.378024e-01
+  4: ||r||=1.701330e-01
+  5: ||r||=5.834151e-02
+  6: ||r||=2.071148e-02
+  7: ||r||=7.489528e-03
+  8: ||r||=2.741099e-03
+  9: ||r||=1.012564e-03
+Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=7.338853e+00
+  2: ||r||=8.735751e-01
+  3: ||r||=5.676744e-02
+  4: ||r||=4.393528e-03
+  5: ||r||=3.664225e-04
+  6: ||r||=3.113104e-05
+  7: ||r||=2.658558e-06
+  8: ||r||=2.276264e-07
+  9: ||r||=1.953444e-08
+Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly but ...
+setting the blocks in a more direct but low-level fashion
+***Running 40x40 1/1***
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 ................
+RAP: Regenerating AuxMatrix via AMF
+Aggregating
+ 1 .
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+  1: ||r||=2.525340e+01
+  1: ||r||=2.015565e+00
+  1: ||r||=9.965674e-02
+  1: ||r||=6.153027e-03
+  1: ||r||=3.217662e-04
+  1: ||r||=1.769715e-05
+  1: ||r||=1.474930e-06
+  1: ||r||=7.036379e-08
+  1: ||r||=5.206611e-09
+weights = [1  1  1]
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 ................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 392
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   6.98e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=313533.870581, nnzP = 3200
+condest(final Ptent'Ptent) =   2.25e+00
+Emin: Using Filtered(A)*P for initial pattern
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 392 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2976.36
+column by column norm(FNull - P(noenergy)*CNull) =   4.52e-17   3.45e-17   9.51e-17 
+initial emin residual = 2.407e+11
+final emin residual   = 8.136e+04
+condest(Pfinal'Pfinal) =   7.73e+00
+condest(P'AP) =   1.40e+02
+norm(P.cnull-fnull)=0.000000, nnzP = 17424
+column by column norm(FNull - P(energy)*CNull) =   9.42e-16   9.77e-16   9.83e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.4840e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 1.3772e+03
+Final energy (sum_i p_i^T A p_i)        = 4.1199e+02
+RAP: Regenerating AuxMatrix via AMF
+Aggregating
+ 1 .
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 50
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   7.29e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=13442.513938, nnzP = 392
+condest(final Ptent'Ptent) =   2.25e+00
+Emin: Using Filtered(A)*P for initial pattern
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 72 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 243.765
+column by column norm(FNull - P(noenergy)*CNull) =   5.41e-03   5.41e-03   6.20e-03 
+initial emin residual = 2.336e+11
+final emin residual   = 4.085e+05
+condest(Pfinal'Pfinal) =   9.13e+00
+condest(P'AP) =   3.52e+01
+norm(P.cnull-fnull)=0.005083, nnzP = 1936
+column by column norm(FNull - P(energy)*CNull) =   5.41e-03   5.41e-03   6.20e-03 
+Initial energy (sum_i pt_i^T A pt_i)     = 2.2258e+02
+Constrained energy (sum_i pc_i^T A pc_i) = 2.0459e+02
+Final energy (sum_i p_i^T A p_i)        = 9.7334e+01
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+  1: ||r||=2.525340e+01
+  1: ||r||=2.055613e+00
+  1: ||r||=5.704324e-02
+  1: ||r||=1.741416e-03
+  1: ||r||=1.235846e-04
+  1: ||r||=6.129499e-06
+  1: ||r||=1.927676e-07
+  1: ||r||=5.777758e-09
+
+statistics:   0(0.00)   sa  9(1.40)   svd-2  8(1.18)   
+DIM=2
+STRETCH=1.000000
+
+       |  SA-NR  |    SA   |   EMIN  |    ML  
+SZ LVL | ITS  OC | ITS  OC | ITS  OC | ITS  OC
+----------------------------------------------
+40  3  |  0 0.00 |  9 1.40 |  8 1.18 |  0 0.00

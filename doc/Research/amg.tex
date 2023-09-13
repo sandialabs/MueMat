@@ -1,0 +1,175 @@
+%\subsection{AMG principle}
+
+In this part, we remind the principle of the AMG algorithm to introduce notations.
+
+We consider solving linear systems of equations 
+$A.x= b$ using an Algebraic Multigrid method.
+%
+During the setup phase of AMG we have to:
+\begin{myitem}
+\item select coarse grids,
+\item define the interpolation/prolongator,
+\item define the restriction and coarse grid operator.
+\end{myitem}
+
+%TODO: few words about smoothing\dots
+
+\subsection{Coarse grids, prolongation and restriction}
+
+Let $k$ be a grid level. $k+1$ is then a coarser grid level ($A^1 = A$).
+For the ease of notation, we may drop this level indices. 
+
+Coarse grids are built by an aggregation algorithm. For each level, we
+generate a covering $\{C_i\}_{i=1}^n$ of a set of nodes
+$\{1,\dots,n\}$ of a fine grid. $\{C_i\}_{i=1}^n$ is the set of
+aggregates. Aggregates are formed based on the connectivity and the strength of connections in the fine grid.
+On our case, the coarse-level degrees of freedom are viewed as a subset of the fine-level degrees of freedom.
+Each aggregate is composed by one root node and some fine
+grid nodes (compatible relaxation scheme). The set of fine-grid variables
+and coarse-grid variables (supernodes) are respectively denoted $F$-points and $C$-points.
+
+After the aggregates have been set up, a hierarchy of coarse level matrices $A_k$ is determined by
+$$A_{k+1} = R_{k}^{k+1} . A_k . P_{k}^{k+1}$$ \noindent where:
+\begin{myitem}
+\item $P_{k}^{k+1}: \R^{n_{k+1}} \rightarrow \R^{n_{k}}$ is the prolongator (interpolation from the coarse level to the finer level),
+\item $R_{k}^{k+1}: \R^{n_{k}} \rightarrow \R^{n_{k+1}}$ is the restrictor (often $R_{k}^{k+1} = (P_{k}^{k+1})^\T$ is used as a simple restrictor).
+\end{myitem}
+
+\subsection{Tentative prolongator}
+\newcommand{\Ptent}{\hat{P}}
+
+The prolongator $P$ is generally defined as a product of a prolongator
+smoother $S$ and a tentative prolongator $\Ptent$.
+$$P=S.\Ptent$$ 
+The idea of the tentative prolongator is to
+accurately interpolate certain near null space components of
+the discrete operator $A$. Once constructed, the tentative prolongator
+is then improved by $S$ which smooths the basis functions.
+
+The pattern of $\Ptent$ is directly defined by the set of aggregates.
+We specify the non-zero values of $\Ptent$, we use a $B^1$ matrix who
+specified which functions of the finest level (finest level vectors)
+should be exactly representable on each coarse level in the sense that
+$$\forall k, range(B^1) \subset range(P^k)$$
+%
+We typically choose $B^1$ to be a generator of zero energy modes. In
+finite element context, $B^1$ represents the near null space of $A$:
+$\tilde{A}.B^1=0$ where $\tilde{A}$ differs from $A$ in that Dirichlet
+boundary conditions are replaced by natural boundary conditions.
+%
+Thereby, $\Ptent$ preserves the nullspace of the finest level matrix
+$A^1$ on series of coarse grids.
+
+To be able to apply recursively this method, $\Ptent$ and the coarse representation of the nullspace are constructed simultaneously so that
+$$P_{k+1}^k . B^{k+1} = B^{k}$$
+
+Algorithm:
+
+%% Input: 
+
+%% - $B$ is a $n \times r$ matrix where $r$ is the nullspace dimension.
+%% - $\{A_i\}_1^N$ is the set of aggregates
+
+%% Output:
+
+%% - P
+%% - B^{k+1}
+
+
+\subsection{The Schur complement point of view}
+
+%
+\newcommand{\Aff}{A_{ff}}
+\newcommand{\Afc}{A_{fc}}
+\newcommand{\Acf}{A_{cf}}
+\newcommand{\Acc}{A_{cc}}
+\newcommand{\AH} {A_{H }}
+\newcommand{\Efc}{E_{fc}}
+\newcommand{\Ecf}{E_{cf}}
+\newcommand{\inv}{^{-1}}
+
+\newcommand{\vect}[1]{
+\begin{pmatrix}
+#1_f \\
+#1_c \\
+\end{pmatrix}\xspace
+}
+%
+
+We consider the system $A.x=b$ where the aggregates induce an ordering which leads to the following block matrix system:
+\begin{equation} %\label{eq:schur:initial}
+\begin{pmatrix}
+\Aff & \Afc \\
+\Acf & \Acc \\
+\end{pmatrix} .
+\vect{x} = \vect{b}
+\end{equation}
+%
+Here the subscript $f$ denotes $F$-points and subscript $c$ is used for $C$-points. Next, we transform the block system as follow:
+%
+\begin{equation} \label{eq:schur:multiply}
+\begin{pmatrix}
+I_f & 0 \\
+R_f & R_c \\
+\end{pmatrix} .
+\begin{pmatrix}
+\Aff & \Afc \\
+\Acf & \Acc \\
+\end{pmatrix} .
+\begin{pmatrix}
+I_f & 0 \\
+R_f & R_c \\
+\end{pmatrix} .
+\vect{y} = \vect{b}
+\end{equation}
+%
+with
+%
+\begin{equation} %\label{eq:schur:misc}
+\begin{pmatrix}
+I_f & 0 \\
+R_f & R_c \\
+\end{pmatrix} .
+\vect{y} = \vect{x}
+\end{equation}
+%
+Equation \eqref{eq:schur:multiply} defines the new block linear system:
+\begin{equation} \label{eq:schur:new}
+\begin{pmatrix}
+\Aff & \Efc \\
+\Ecf & \AH \\
+\end{pmatrix} .
+\vect{y} = 
+\begin{pmatrix}
+b_f \\
+R.(b_f^\T.b_c^\T)^\T \\
+\end{pmatrix}
+\end{equation}
+%
+where 
+\begin{myitem}
+\item $\AH = R.A.P$,
+\item $\Efc = (\Aff \Afc).P$,
+\item $\Ecf = R.(\Aff \Afc)^\T$.
+\end{myitem}
+
+If the linear system \eqref{eq:schur:new} is solved by a block Jacobi iteration with a block diagonal
+preconditioner 
+$M = \begin{pmatrix}
+\Aff\inv & 0\\
+0 & \AH\inv \\
+\end{pmatrix}$,
+the convergence obviously will be rapid if the terms $\Efc$ and $\Ecf$ are small.
+
+Moreover, if $P = (P_f I)^\T$ (compatible relaxation), 
+$\Efc = 0 \Leftrightarrow (\Aff \Afc).P^{opt} = 0 \Leftrightarrow P^{opt}=(-\Aff\inv.\Afc I)^\T$
+
+Using this optimal prolongator with the corresponding optimal restrictor $R^{opt} = (-\Acf\Aff\inv I)$ leads to:
+$$A_H^{opt} = R^{opt}.A.P^{opt} = (-\Acf\Aff\inv I) .
+\begin{pmatrix}
+\Aff & \Afc \\
+\Acf & \Acc \\
+\end{pmatrix} .
+(-\Aff\inv.\Afc I)^\T = \Acc - \Acf\Aff\inv\Afc
+$$
+This is the Schur complement of matrix $A$.

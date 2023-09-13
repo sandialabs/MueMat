@@ -1,0 +1,556 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+TransferOpTests:       data/TransferOpTest.mat 
+=====================
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+Aggregating
+ 1 .......................
+{Warning: AffInvAfc_PatternFactory(neumann): norm(I-gamma * A) = 1.051821e+00 >
+1
+} 
+> In AffInvAfc_PatternFactory>AffInvAfc_PatternFactory.AffSolve at 238
+  In AffInvAfc_PatternFactory>AffInvAfc_PatternFactory.BuildPattern at 134
+  In PatternFactory>PatternFactory.Build at 144
+  In EminPFactory>EminPFactory.BuildP at 172
+  In GenericPRFactory>GenericPRFactory.Build at 72
+  In Hierarchy>Hierarchy.FillHierarchy at 264
+  In TransferOpTest at 52
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 54
+MinDescent(global) iter (prolongation): 1/8 steplength 1.00000e-01, norm_Fro (A*P) 6.4325378e-01 
+MinDescent(global) iter (prolongation): 2/8 steplength 1.00000e-01, norm_Fro (A*P) 5.1981369e-01 
+MinDescent(global) iter (prolongation): 3/8 steplength 1.00000e-01, norm_Fro (A*P) 4.6709940e-01 
+MinDescent(global) iter (prolongation): 4/8 steplength 1.00000e-01, norm_Fro (A*P) 4.3763368e-01 
+MinDescent(global) iter (prolongation): 5/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2261265e-01 
+MinDescent(global) iter (prolongation): 6/8 steplength 1.00000e-01, norm_Fro (A*P) 4.1561631e-01 
+MinDescent(global) iter (prolongation): 7/8 steplength 1.00000e-01, norm_Fro (A*P) 4.1131433e-01 
+MinDescent(global) iter (prolongation): 8/8 steplength 1.00000e-01, norm_Fro (A*P) 4.0697703e-01 
+condest(Pfinal'Pfinal) =   2.45e+07
+condest(P'AP) =   6.81e+05
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+MinDescent(global) iter (restriction ): 1/8 steplength 9.88476e-01, norm_Fro (A*P) 6.6852914e-01 
+MinDescent(global) iter (restriction ): 2/8 steplength 4.30150e-01, norm_Fro (A*P) 5.8620875e-01 
+MinDescent(global) iter (restriction ): 3/8 steplength 4.30732e-01, norm_Fro (A*P) 5.2646512e-01 
+MinDescent(global) iter (restriction ): 4/8 steplength 4.34897e-01, norm_Fro (A*P) 4.7993784e-01 
+MinDescent(global) iter (restriction ): 5/8 steplength 4.37997e-01, norm_Fro (A*P) 4.4791648e-01 
+MinDescent(global) iter (restriction ): 6/8 steplength 4.39139e-01, norm_Fro (A*P) 4.2871864e-01 
+MinDescent(global) iter (restriction ): 7/8 steplength 4.38599e-01, norm_Fro (A*P) 4.1895356e-01 
+MinDescent(global) iter (restriction ): 8/8 steplength 4.37181e-01, norm_Fro (A*P) 4.1522731e-01 
+condest(Pfinal'Pfinal) =   3.75e+07
+condest(P'AP) =   1.02e+06
+Aggregating
+ 1 ..
+{Warning: AffInvAfc_PatternFactory(neumann): norm(I-gamma * A) = 1.270638e+00 >
+1
+} 
+> In AffInvAfc_PatternFactory>AffInvAfc_PatternFactory.AffSolve at 238
+  In AffInvAfc_PatternFactory>AffInvAfc_PatternFactory.BuildPattern at 134
+  In PatternFactory>PatternFactory.Build at 144
+  In EminPFactory>EminPFactory.BuildP at 172
+  In GenericPRFactory>GenericPRFactory.Build at 72
+  In Hierarchy>Hierarchy.FillHierarchy at 264
+  In TransferOpTest at 52
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 996
+MinDescent(global) iter (prolongation): 1/8 steplength 1.00000e-01, norm_Fro (A*P) 2.5776547e-02 
+MinDescent(global) iter (prolongation): 2/8 steplength 1.00000e-01, norm_Fro (A*P) 2.2138575e-02 
+MinDescent(global) iter (prolongation): 3/8 steplength 1.00000e-01, norm_Fro (A*P) 2.0420692e-02 
+MinDescent(global) iter (prolongation): 4/8 steplength 1.00000e-01, norm_Fro (A*P) 1.9483586e-02 
+MinDescent(global) iter (prolongation): 5/8 steplength 1.00000e-01, norm_Fro (A*P) 1.8596530e-02 
+MinDescent(global) iter (prolongation): 6/8 steplength 1.00000e-01, norm_Fro (A*P) 1.7713870e-02 
+MinDescent(global) iter (prolongation): 7/8 steplength 1.00000e-01, norm_Fro (A*P) 1.7102953e-02 
+MinDescent(global) iter (prolongation): 8/8 steplength 1.00000e-01, norm_Fro (A*P) 1.6802212e-02 
+condest(Pfinal'Pfinal) =   3.38e+01
+condest(P'AP) =   9.74e+04
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+MinDescent(global) iter (restriction ): 1/8 steplength 4.82917e-01, norm_Fro (A*P) 3.0731613e-02 
+MinDescent(global) iter (restriction ): 2/8 steplength 4.73800e-01, norm_Fro (A*P) 2.6790873e-02 
+MinDescent(global) iter (restriction ): 3/8 steplength 4.81499e-01, norm_Fro (A*P) 2.3475817e-02 
+MinDescent(global) iter (restriction ): 4/8 steplength 4.92241e-01, norm_Fro (A*P) 2.0941860e-02 
+MinDescent(global) iter (restriction ): 5/8 steplength 5.01682e-01, norm_Fro (A*P) 1.9249735e-02 
+MinDescent(global) iter (restriction ): 6/8 steplength 5.08249e-01, norm_Fro (A*P) 1.8233249e-02 
+MinDescent(global) iter (restriction ): 7/8 steplength 5.11559e-01, norm_Fro (A*P) 1.7676556e-02 
+MinDescent(global) iter (restriction ): 8/8 steplength 5.12174e-01, norm_Fro (A*P) 1.7405762e-02 
+condest(Pfinal'Pfinal) =   3.29e+01
+condest(P'AP) =   9.27e+04
+Hierarchy: actual #levels  = 3
+  1: ||r||=8.660838e-01
+  1: ||r||=4.698060e-02
+  1: ||r||=4.628669e-02
+  1: ||r||=2.929207e-02
+  1: ||r||=1.563533e-02
+  1: ||r||=1.137189e-02
+  1: ||r||=5.433527e-02
+  1: ||r||=2.622420e-02
+  1: ||r||=1.914783e-02
+  1: ||r||=1.758980e-02
+  1: ||r||=1.796100e-02
+  1: ||r||=2.354434e-02
+  1: ||r||=1.848140e-02
+  1: ||r||=3.150572e-02
+  1: ||r||=1.918144e-02
+  1: ||r||=3.244910e-02
+  1: ||r||=2.385569e-02
+  1: ||r||=2.181399e-02
+  1: ||r||=2.121323e-02
+  1: ||r||=1.865830e-02
+  1: ||r||=1.749646e-02
+  1: ||r||=1.745164e-02
+  1: ||r||=2.036005e-02
+  1: ||r||=1.969327e-02
+  1: ||r||=2.101155e-02
+  1: ||r||=1.944624e-02
+  1: ||r||=1.846767e-02
+  1: ||r||=2.047160e-02
+  1: ||r||=1.857337e-02
+  1: ||r||=1.891667e-02
+  1: ||r||=1.786332e-02
+  1: ||r||=1.799444e-02
+  1: ||r||=1.873071e-02
+  1: ||r||=2.004015e-02
+  1: ||r||=1.800040e-02
+  1: ||r||=1.756531e-02
+  1: ||r||=1.736900e-02
+  1: ||r||=1.873310e-02
+  1: ||r||=2.095118e-02
+  1: ||r||=2.147464e-02
+  1: ||r||=1.687293e-02
+  1: ||r||=1.826461e-02
+  1: ||r||=1.770705e-02
+  1: ||r||=1.707655e-02
+  1: ||r||=1.593745e-02
+  1: ||r||=1.709815e-02
+  1: ||r||=1.661774e-02
+  1: ||r||=1.917868e-02
+  1: ||r||=1.692237e-02
+  1: ||r||=1.641861e-02
+  1: ||r||=1.737540e-02
+  1: ||r||=1.771981e-02
+  1: ||r||=1.718448e-02
+  1: ||r||=1.727803e-02
+  1: ||r||=1.709972e-02
+  1: ||r||=1.790081e-02
+  1: ||r||=1.666687e-02
+  1: ||r||=1.882532e-02
+  1: ||r||=1.843031e-02
+  1: ||r||=1.753276e-02
+  1: ||r||=1.757469e-02
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+Aggregating
+ 1 .......................
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 44
+MinDescent(global) iter (prolongation): 1/8 steplength 1.00000e-01, norm_Fro (A*P) 7.6018149e-01 
+MinDescent(global) iter (prolongation): 2/8 steplength 1.00000e-01, norm_Fro (A*P) 6.8625145e-01 
+MinDescent(global) iter (prolongation): 3/8 steplength 1.00000e-01, norm_Fro (A*P) 6.3252082e-01 
+MinDescent(global) iter (prolongation): 4/8 steplength 1.00000e-01, norm_Fro (A*P) 5.8406913e-01 
+MinDescent(global) iter (prolongation): 5/8 steplength 1.00000e-01, norm_Fro (A*P) 5.4506076e-01 
+MinDescent(global) iter (prolongation): 6/8 steplength 1.00000e-01, norm_Fro (A*P) 5.1835042e-01 
+MinDescent(global) iter (prolongation): 7/8 steplength 1.00000e-01, norm_Fro (A*P) 5.0273876e-01 
+MinDescent(global) iter (prolongation): 8/8 steplength 1.00000e-01, norm_Fro (A*P) 4.9484692e-01 
+condest(Pfinal'Pfinal) =   7.63e+06
+condest(P'AP) =   3.04e+05
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+MinDescent(global) iter (restriction ): 1/8 steplength 9.87135e-01, norm_Fro (A*P) 7.5631280e-01 
+MinDescent(global) iter (restriction ): 2/8 steplength 4.07308e-01, norm_Fro (A*P) 6.7707135e-01 
+MinDescent(global) iter (restriction ): 3/8 steplength 4.15844e-01, norm_Fro (A*P) 6.2040686e-01 
+MinDescent(global) iter (restriction ): 4/8 steplength 4.24803e-01, norm_Fro (A*P) 5.7424149e-01 
+MinDescent(global) iter (restriction ): 5/8 steplength 4.30328e-01, norm_Fro (A*P) 5.3904726e-01 
+MinDescent(global) iter (restriction ): 6/8 steplength 4.32806e-01, norm_Fro (A*P) 5.1495726e-01 
+MinDescent(global) iter (restriction ): 7/8 steplength 4.33080e-01, norm_Fro (A*P) 5.0041788e-01 
+MinDescent(global) iter (restriction ): 8/8 steplength 4.32171e-01, norm_Fro (A*P) 4.9274633e-01 
+condest(Pfinal'Pfinal) =   1.86e+07
+condest(P'AP) =   6.54e+05
+Aggregating
+ 1 ..
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 419
+MinDescent(global) iter (prolongation): 1/8 steplength 1.00000e-01, norm_Fro (A*P) 4.3442519e-02 
+MinDescent(global) iter (prolongation): 2/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2190757e-02 
+MinDescent(global) iter (prolongation): 3/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2050036e-02 
+MinDescent(global) iter (prolongation): 4/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2041028e-02 
+MinDescent(global) iter (prolongation): 5/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2040810e-02 
+MinDescent(global) iter (prolongation): 6/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2040798e-02 
+MinDescent(global) iter (prolongation): 7/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2040797e-02 
+MinDescent(global) iter (prolongation): 8/8 steplength 1.00000e-01, norm_Fro (A*P) 4.2040797e-02 
+condest(Pfinal'Pfinal) =   2.11e+00
+condest(P'AP) =   1.10e+05
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+MinDescent(global) iter (restriction ): 1/8 steplength 3.77732e-01, norm_Fro (A*P) 4.3377559e-02 
+MinDescent(global) iter (restriction ): 2/8 steplength 3.68270e-01, norm_Fro (A*P) 4.3602352e-02 
+MinDescent(global) iter (restriction ): 3/8 steplength 3.59336e-01, norm_Fro (A*P) 4.5389039e-02 
+MinDescent(global) iter (restriction ): 4/8 steplength 3.62603e-01, norm_Fro (A*P) 4.6064272e-02 
+MinDescent(global) iter (restriction ): 5/8 steplength 3.67175e-01, norm_Fro (A*P) 4.5700037e-02 
+MinDescent(global) iter (restriction ): 6/8 steplength 3.70988e-01, norm_Fro (A*P) 4.4831495e-02 
+MinDescent(global) iter (restriction ): 7/8 steplength 3.73742e-01, norm_Fro (A*P) 4.3894304e-02 
+MinDescent(global) iter (restriction ): 8/8 steplength 4.58429e-05, norm_Fro (A*P) 4.3894198e-02 
+condest(Pfinal'Pfinal) =   7.51e+00
+condest(P'AP) =   1.18e+05
+Hierarchy: actual #levels  = 3
+  1: ||r||=8.660838e-01
+  1: ||r||=8.766824e-02
+  1: ||r||=3.085253e-02
+  1: ||r||=3.882864e-02
+  1: ||r||=2.076218e-02
+  1: ||r||=1.454184e-02
+  1: ||r||=1.824824e-02
+  1: ||r||=2.612544e-02
+  1: ||r||=2.665141e-02
+  1: ||r||=1.939634e-02
+  1: ||r||=1.980642e-02
+  1: ||r||=2.115431e-02
+  1: ||r||=1.663779e-02
+  1: ||r||=1.815860e-02
+  1: ||r||=2.283700e-02
+  1: ||r||=2.046982e-02
+  1: ||r||=2.322133e-02
+  1: ||r||=2.426429e-02
+  1: ||r||=2.192780e-02
+  1: ||r||=2.749394e-02
+  1: ||r||=2.797986e-02
+  1: ||r||=2.610826e-02
+  1: ||r||=1.955093e-02
+  1: ||r||=2.529733e-02
+  1: ||r||=2.312496e-02
+  1: ||r||=2.313771e-02
+  1: ||r||=2.431278e-02
+  1: ||r||=2.307745e-02
+  1: ||r||=2.183075e-02
+  1: ||r||=2.464030e-02
+  1: ||r||=2.596874e-02
+  1: ||r||=2.611007e-02
+  1: ||r||=2.679336e-02
+  1: ||r||=2.299576e-02
+  1: ||r||=2.305832e-02
+  1: ||r||=2.213743e-02
+  1: ||r||=2.185067e-02
+  1: ||r||=2.313588e-02
+  1: ||r||=2.351720e-02
+  1: ||r||=2.286938e-02
+  1: ||r||=2.610583e-02
+  1: ||r||=2.597103e-02
+  1: ||r||=2.340803e-02
+  1: ||r||=2.239234e-02
+  1: ||r||=2.408501e-02
+  1: ||r||=2.403105e-02
+  1: ||r||=2.319680e-02
+  1: ||r||=2.218895e-02
+  1: ||r||=2.292020e-02
+  1: ||r||=2.394283e-02
+  1: ||r||=2.604250e-02
+  1: ||r||=2.577943e-02
+  1: ||r||=2.452329e-02
+  1: ||r||=2.126791e-02
+  1: ||r||=2.108855e-02
+  1: ||r||=2.195625e-02
+  1: ||r||=2.161935e-02
+  1: ||r||=2.173345e-02
+  1: ||r||=2.117271e-02
+  1: ||r||=2.052280e-02
+  1: ||r||=2.101665e-02
+  1: ||r||=2.081180e-02
+  1: ||r||=2.146595e-02
+  1: ||r||=2.010882e-02
+  1: ||r||=2.034578e-02
+  1: ||r||=2.260918e-02
+  1: ||r||=2.245966e-02
+  1: ||r||=2.338805e-02
+  1: ||r||=2.281364e-02
+  1: ||r||=2.438530e-02
+  1: ||r||=2.513473e-02
+  1: ||r||=2.455037e-02
+  1: ||r||=2.436464e-02
+  1: ||r||=2.472805e-02
+  1: ||r||=2.581275e-02
+  1: ||r||=2.476371e-02
+  1: ||r||=2.385753e-02
+  1: ||r||=2.376269e-02
+  1: ||r||=2.253703e-02
+  1: ||r||=2.095599e-02
+  1: ||r||=2.045844e-02
+  1: ||r||=2.225394e-02
+  1: ||r||=2.397695e-02
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+Aggregating
+ 1 .......................
+repair 2 zero rows in P 
+use P (generated by InitPFact_) for repairing zero rows/cols
+repair 2 zero rows in P 
+use P (generated by InitPFact_) for repairing zero rows/cols
+Aggregating
+ 1 ..
+repair 2 zero rows in P 
+use P (generated by InitPFact_) for repairing zero rows/cols
+repair 2 zero rows in P 
+use P (generated by InitPFact_) for repairing zero rows/cols
+Hierarchy: actual #levels  = 3
+  1: ||r||=8.660838e-01
+  1: ||r||=5.202832e-02
+  1: ||r||=1.223457e-02
+  1: ||r||=3.614655e-02
+  1: ||r||=4.194512e-02
+  1: ||r||=1.569484e-02
+  1: ||r||=4.333479e-02
+  1: ||r||=1.495279e-02
+  1: ||r||=2.585412e-02
+  1: ||r||=1.947070e-02
+  1: ||r||=2.583266e-02
+  1: ||r||=2.454178e-02
+  1: ||r||=3.163803e-02
+  1: ||r||=1.974559e-02
+  1: ||r||=2.566269e-02
+  1: ||r||=1.586242e-02
+  1: ||r||=1.425370e-02
+  1: ||r||=1.970208e-02
+  1: ||r||=1.590869e-02
+  1: ||r||=1.886329e-02
+  1: ||r||=2.435123e-02
+  1: ||r||=2.670256e-02
+  1: ||r||=2.526930e-02
+  1: ||r||=3.130301e-02
+  1: ||r||=1.697030e-02
+  1: ||r||=2.422195e-02
+  1: ||r||=1.428989e-02
+  1: ||r||=1.469254e-02
+  1: ||r||=1.603409e-02
+  1: ||r||=1.887878e-02
+  1: ||r||=1.866494e-02
+  1: ||r||=1.732142e-02
+  1: ||r||=1.588894e-02
+  1: ||r||=1.478068e-02
+  1: ||r||=1.389827e-02
+  1: ||r||=1.325502e-02
+  1: ||r||=1.307194e-02
+  1: ||r||=1.314536e-02
+  1: ||r||=1.580809e-02
+  1: ||r||=1.460532e-02
+  1: ||r||=1.453850e-02
+  1: ||r||=1.622230e-02
+  1: ||r||=1.650984e-02
+  1: ||r||=1.823880e-02
+  1: ||r||=1.604490e-02
+  1: ||r||=1.702018e-02
+  1: ||r||=1.620766e-02
+  1: ||r||=2.003406e-02
+  1: ||r||=1.619479e-02
+  1: ||r||=1.458357e-02
+  1: ||r||=1.625566e-02
+  1: ||r||=2.086620e-02
+  1: ||r||=1.786772e-02
+  1: ||r||=1.873348e-02
+  1: ||r||=1.664678e-02
+  1: ||r||=1.560449e-02
+  1: ||r||=1.646046e-02
+  1: ||r||=1.650378e-02
+  1: ||r||=1.695888e-02
+  1: ||r||=1.847098e-02
+  1: ||r||=1.973720e-02
+  1: ||r||=1.859741e-02
+  1: ||r||=1.746010e-02
+  1: ||r||=1.811846e-02
+  1: ||r||=1.787806e-02
+  1: ||r||=1.819293e-02
+  1: ||r||=1.785481e-02
+  1: ||r||=1.776930e-02
+  1: ||r||=1.745198e-02
+  1: ||r||=1.670739e-02
+  1: ||r||=1.784485e-02
+  1: ||r||=1.892953e-02
+  1: ||r||=1.981206e-02
+  1: ||r||=1.932836e-02
+  1: ||r||=1.947926e-02
+  1: ||r||=1.897946e-02
+  1: ||r||=1.878920e-02
+  1: ||r||=1.879089e-02
+  1: ||r||=1.960569e-02
+  1: ||r||=2.138784e-02
+  1: ||r||=1.768425e-02
+  1: ||r||=1.988828e-02
+  1: ||r||=1.932971e-02
+  1: ||r||=1.819622e-02
+  1: ||r||=1.832616e-02
+  1: ||r||=1.835888e-02
+  1: ||r||=1.909396e-02
+  1: ||r||=1.972594e-02
+  1: ||r||=2.000824e-02
+  1: ||r||=2.061446e-02
+  1: ||r||=1.863492e-02
+  1: ||r||=1.737558e-02
+  1: ||r||=1.813358e-02
+  1: ||r||=1.907824e-02
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+Aggregating
+ 1 .......................
+Aggregating
+ 1 ..
+Hierarchy: actual #levels  = 3
+  1: ||r||=8.660838e-01
+  1: ||r||=9.462428e-02
+  1: ||r||=1.719088e-02
+  1: ||r||=1.352793e-02
+  1: ||r||=1.834894e-02
+  1: ||r||=1.771494e-02
+  1: ||r||=1.528387e-02
+  1: ||r||=1.350782e-02
+  1: ||r||=1.204263e-02
+  1: ||r||=1.535029e-02
+  1: ||r||=1.459661e-02
+  1: ||r||=1.745821e-02
+  1: ||r||=1.635741e-02
+  1: ||r||=1.513985e-02
+  1: ||r||=1.508715e-02
+  1: ||r||=1.723949e-02
+  1: ||r||=2.193052e-02
+  1: ||r||=1.978447e-02
+  1: ||r||=1.987784e-02
+  1: ||r||=2.156683e-02
+  1: ||r||=1.834051e-02
+  1: ||r||=2.067241e-02
+  1: ||r||=2.173720e-02
+  1: ||r||=1.963610e-02
+  1: ||r||=1.932205e-02
+  1: ||r||=1.990841e-02
+  1: ||r||=1.765438e-02
+  1: ||r||=2.034896e-02
+  1: ||r||=1.818623e-02
+  1: ||r||=2.382448e-02
+  1: ||r||=2.152322e-02
+  1: ||r||=1.661861e-02
+  1: ||r||=1.952759e-02
+  1: ||r||=1.725580e-02
+  1: ||r||=1.554306e-02
+  1: ||r||=1.429564e-02
+  1: ||r||=1.570518e-02
+  1: ||r||=1.502490e-02
+  1: ||r||=1.620758e-02
+  1: ||r||=1.599761e-02
+  1: ||r||=1.450930e-02
+  1: ||r||=1.497311e-02
+  1: ||r||=1.539046e-02
+  1: ||r||=1.612092e-02
+  1: ||r||=1.510747e-02
+  1: ||r||=1.573171e-02
+  1: ||r||=1.505568e-02
+  1: ||r||=1.618045e-02
+  1: ||r||=1.655420e-02
+  1: ||r||=1.609695e-02
+  1: ||r||=1.587552e-02
+  1: ||r||=1.499513e-02
+  1: ||r||=1.587015e-02
+  1: ||r||=1.576922e-02
+  1: ||r||=1.594673e-02
+  1: ||r||=1.746015e-02
+  1: ||r||=1.732545e-02
+  1: ||r||=1.784586e-02
+  1: ||r||=2.149906e-02
+  1: ||r||=1.810823e-02
+  1: ||r||=1.750944e-02
+  1: ||r||=1.697543e-02
+  1: ||r||=1.719681e-02
+  1: ||r||=1.633005e-02
+  1: ||r||=1.849580e-02
+  1: ||r||=1.862224e-02
+  1: ||r||=1.820247e-02
+  1: ||r||=1.679693e-02
+  1: ||r||=1.741213e-02
+  1: ||r||=1.924640e-02
+  1: ||r||=1.880284e-02
+  1: ||r||=1.851121e-02
+  1: ||r||=1.834778e-02
+  1: ||r||=1.819515e-02
+  1: ||r||=1.593765e-02
+  1: ||r||=1.503570e-02
+  1: ||r||=1.602206e-02
+  1: ||r||=1.618646e-02
+  1: ||r||=1.772806e-02
+  1: ||r||=1.783600e-02
+  1: ||r||=1.746839e-02
+  1: ||r||=1.685909e-02
+  1: ||r||=1.595536e-02
+  1: ||r||=1.625017e-02
+  1: ||r||=1.757520e-02
+  1: ||r||=1.793551e-02
+  1: ||r||=1.785570e-02
+  1: ||r||=1.799564e-02
+  1: ||r||=1.830140e-02
+  1: ||r||=1.772694e-02
+  1: ||r||=1.906958e-02
+  1: ||r||=1.857911e-02
+  1: ||r||=1.833810e-02
+  1: ||r||=1.859420e-02
+  1: ||r||=1.794863e-02
+  1: ||r||=1.721917e-02
+  1: ||r||=1.757274e-02
+  1: ||r||=1.931973e-02
+  1: ||r||=1.819883e-02
+  1: ||r||=1.778307e-02
+  1: ||r||=1.648241e-02
+  1: ||r||=1.701352e-02
+  1: ||r||=1.773346e-02
+  1: ||r||=1.744532e-02
+  1: ||r||=1.763640e-02
+  1: ||r||=1.968492e-02
+  1: ||r||=1.977492e-02
+  1: ||r||=2.056377e-02
+  1: ||r||=1.966027e-02
+  1: ||r||=1.828337e-02
+  1: ||r||=1.850714e-02
+  1: ||r||=1.898575e-02
+  1: ||r||=1.939403e-02
+  1: ||r||=1.923154e-02
+  1: ||r||=1.907573e-02
+  1: ||r||=2.062211e-02
+  1: ||r||=1.983062e-02
+  1: ||r||=1.783956e-02
+  1: ||r||=1.723677e-02
+  1: ||r||=1.792961e-02
+  1: ||r||=1.868442e-02
+  1: ||r||=1.897024e-02
+  1: ||r||=1.888706e-02
+  1: ||r||=1.948408e-02
+  1: ||r||=1.853995e-02
+  1: ||r||=1.931713e-02
+  1: ||r||=1.996926e-02
+  1: ||r||=1.983302e-02
+  1: ||r||=2.046728e-02
+  1: ||r||=2.045334e-02
+{Warning: plot_scatra2d not supported} 
+> In Scatra2D.plot_scatra2d at 3
+  In Scatra2D.Scatra2D>Scatra2D.plot_vector at 112
+  In TransferOpTest at 115
+
+        |  MinDesc  | MinDesc (AP) |   PG-AMG    |   SA-AMG   
+ SZ LVL | ITS   OC  | ITS   OC     |   ITS   OC  |  ITS    OC  
+---------------------------------------------------------------
+2304  3 | 60  1.22  | 82  1.18     |   93  1.18  |  129  1.18 

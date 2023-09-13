@@ -1,0 +1,147 @@
+\documentclass[pdf,ps2pdf,12pt,report]{article}
+\usepackage{pslatex}
+\usepackage{psboxit}
+\usepackage{xspace} %puts spaces after macros only when needed
+\usepackage{mathptmx}	% Use the Postscript Times font
+\usepackage[FIGBOTCAP,normal,bf,tight]{subfigure}
+\usepackage[dvips,light,first,bottomafter]{draftcopy}
+\usepackage[pdftex, pdfpagemode=none, pdfstartview=FitH]{hyperref}
+\usepackage{verbatim}
+\usepackage{chngpage}
+\usepackage{authblk}  % for footnoting of author affiliations
+
+% Figs
+\usepackage{graphicx}
+
+% Theorem
+\usepackage{amsthm}
+\newtheorem{remark}{Remark}
+
+% For listing code.  Default will be C++ unless you override it with the language=BLAH option.
+\usepackage{listings}
+\lstloadlanguages{C++}
+\lstset{language=C++,breaklines=true,showstringspaces=false}
+
+\usepackage[usenames]{color}
+\definecolor{jhured}{rgb}{1,.08,.58}
+\definecolor{rstblue}{rgb}{0,0,1}
+\definecolor{cmsgreen}{rgb}{0,.7,.4}
+
+% For making comments in the document.
+\newcommand{\JJH}[1]{\textcolor{red}{JJH: #1}}
+\newcommand{\RST}[1]{\textcolor{blue}{RST: #1}}
+\newcommand{\CMS}[1]{\textcolor{green}{CMS: #1}}
+\newcommand{\JG}[1]{\textcolor{cyan}{JG: #1}}
+%\newcommand{\JJH}[1]{#1}
+%\newcommand{\RST}[1]{#1}
+%\newcommand{\CMS}[1]{#1}
+%\newcommand{\JG}[1]{#1}
+
+% For displaying class names, computer code, etc.
+\newcommand{\cc}[1]{{\lstinline!#1!}}
+
+% Package names.
+\newcommand{\Amesos}{{\sc Amesos}\xspace}
+\newcommand{\Anasazi}{{\sc Anasazi}\xspace}
+\newcommand{\AztecOO}{{\sc AztecOO}\xspace}
+\newcommand{\Belos}{{\sc Belos}\xspace}
+\newcommand{\Epetra}{{\sc Epetra}\xspace}
+\newcommand{\Ifpack}{{\sc Ifpack}\xspace}
+\newcommand{\Isorropia}{{\sc Isorropia}\xspace}
+\newcommand{\ML}{{\sc ML}\xspace}
+\newcommand{\mloo}{{\sc \textsf{M\"{u}Loo}}\xspace}
+\newcommand{\muelu}{\mloo}
+\newcommand{\mulu}{\mloo}
+\newcommand{\muemat}{{\sc\textsf{M\"{u}Mat}}\xspace}
+\newcommand{\NOX}{{\sc NOX}\xspace}
+\newcommand{\Teuchos}{{\sc Teuchos}\xspace}
+\newcommand{\Tifpack}{{\sc Tifpack}\xspace}
+\newcommand{\Tpetra}{{\sc Tpetra}\xspace}
+\newcommand{\TpetraExt}{{\sc TpetraExt}\xspace}
+\newcommand{\Trilinos}{{\sc Trilinos}\xspace}
+\newcommand{\Zoltan}{{\sc Zoltan}\xspace}
+\newcommand{\zulu}{{\sc Zulu}\xspace}
+\newcommand{\cthulhu}{{\sc cThUlHu}\xspace}
+
+\hypersetup{
+  pdfauthor = {Jeremie Gaidamour, Jonathan J. Hu, Christopher M. Siefert, Ray S. Tuminaro},
+  pdftitle = {\mloo Design Document},
+  colorlinks= {true},
+  citecolor = {blue},
+}
+
+% MueMat specific macros
+\newcommand{\operator}{{\tt operator}\xspace}
+\newcommand{\Operator}{{\tt Operator}\xspace}
+\newcommand{\Diagonal}{{\tt Diagonal}\xspace}
+\newcommand{\Map}{{\tt Map}\xspace}
+\newcommand{\OperatorView}{{\tt OperatorView}\xspace}
+\newcommand{\oldSingleViewOperator}{{\tt SingleViewOperator}\xspace}
+\newcommand{\View}{{\tt View}\xspace}
+\newcommand{\ViewTable}{{\tt ViewTable}\xspace}
+
+% MLOO specific macros
+\newcommand{\EpetraMap}{{\tt Epetra\_Map}\xspace}
+\newcommand{\TpetraMap}{{\tt Tpetra\_Map}\xspace}
+
+% common macros
+\newcommand{\point}{point\xspace}           % aka degree-of-freedom
+\newcommand{\node}{node\xspace}             % all the degrees-of-freedom at a "node"
+\newcommand{\block}{block\xspace}           % an arbitrary collection of degrees-of-freedom
+\newcommand{\getrow}{{\tt getrow}\xspace}
+
+% Miscellaneous.
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+
+% how to hide some parts of the documents
+\newcommand{\SectionMueMat}[1]{#1}
+\newcommand{\SectionMueLu}[1]{#1}
+\newcommand{\SectionMueLuAPI}[1]{}
+
+\newcommand{\SubSectionOperator}[1]{#1}
+\newcommand{\SubSectionSmoother}[1]{}
+
+\newcommand{\MeetingSummary}{}
+%\newcommand{\MeetingSummary}{\begin{comment}} % \MeetingSummary is tricky to use, \MeetingSummary must be ended by %%\end{comment}. See an example.
+                                               % We use the comment environnement because verbatim code cannot be embedded in \MeetingSummary{})
+
+\newcommand{\blabla}[1]{}
+
+%
+\title{Design Document for the \mloo Project}
+\author[1]{J\'er\'emie Gaidamour}
+\author[1]{Jonathan J. Hu}
+\author[2]{Christopher M. Siefert}
+\author[1]{Raymond S. Tuminaro}
+\affil[1]{Scalable Algorithms Department}
+\affil[2]{Computational Shock \& Multiphysics Department}
+
+\begin{document}
+
+  \maketitle
+
+  \tableofcontents
+
+  \section{Introduction}
+  \input{intro}
+  %
+  \SectionMueMat{
+    \section{\muemat Matlab Project}\label{muemat}
+    \input{muemat/muemat}
+  }
+  %
+  \SectionMueLu{
+    \section{\muelu}\label{muelu}
+    \input{muelu/muelu}
+  }
+  %
+  \SectionMueLuAPI{
+    \section{\mloo API}\label{api}
+    \input{muelu-api/muelu-api}
+}
+
+%  \appendix
+%  \section{\ML Source Files}
+%  \input{source.txt}
+\end{document}

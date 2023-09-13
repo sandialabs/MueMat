@@ -1,0 +1,102 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MueMat Toolbox Overview</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2010-12-06"><meta name="DC.source" content="overview.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>MueMat Toolbox Overview</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Target Problems</a></li><li><a href="#2">Implemented Multigrid Algorithms</a></li><li><a href="#3">Smoothers</a></li><li><a href="#4">Extensibility</a></li><li><a href="#5">Advanced Usage</a></li></ul></div><h2>Target Problems<a name="1"></a></h2><p>The MueMat Toolbox provides a variety of algebraic multigrid (AMG) methods for the solution of linear systems <img src="overview_eq84590.png" alt="$Ax=b$">.  Theoretically, these methods are appropropriate for symmetric positive definite linear systems arising from self-adjoint elliptic partial differential equations (PDEs).  However, these methods can also be applied to other linear systems, e.g., those arising parabolic PDEs such as the convection-diffusion equations. It <i>may</i> be possible to apply the AMG solvers in MueMat to semi-definite linear systems, as long as the right hand side and initial guess are in the range space of the matrix.</p><h2>Implemented Multigrid Algorithms<a name="2"></a></h2><p>MueMat has implementations of smoothed aggregation AMG and a constrained energy-minimizing AMG method.  The latter method is appropriate for linear systems arising from systems of PDEs where the number of near-kernel components is greater than the number of degrees of freedom per node.</p><p>MueMat does not contain any geometric multigrid or classic (aka Ruge-Stueben) AMG methods.</p><h2>Smoothers<a name="3"></a></h2><p>MueMat provides point and block versions of Jacobi, Gauss-Seidel, and symmetric Gauss-Seidel smoothers. MueMat also implements a Chebyshev polynomial smoother.</p><h2>Extensibility<a name="4"></a></h2><p>MueMat is designed for researching and developing new algorithms and to provide straight-forward extensibility. Thus, one could implement new geometric or algebraic methods and integrate them easily into the existing project.</p><h2>Advanced Usage<a name="5"></a></h2><p>One can create hybrid methods that combine two or more multigrid methods. For example, one could create a preconditioner that is a two-level geometric multigrid method followed by an energy-minimization multigrid method.</p><p>It is possible to access some parts of the Trilinos package ML via the mlmex interface.  (Please see the ML User's Guide for instructions on how to compile mlmex.)</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% MueMat Toolbox Overview
+%
+%% Target Problems
+% The MueMat Toolbox provides a variety of algebraic multigrid (AMG) methods for the solution of linear systems
+% $Ax=b$.  Theoretically, these methods
+% are appropropriate for symmetric positive definite linear systems arising from self-adjoint
+% elliptic partial differential equations (PDEs).  However, these methods can also be applied to other linear
+% systems, e.g., those arising parabolic PDEs such as the convection-diffusion equations.
+% It _may_ be possible to apply the AMG solvers in MueMat to semi-definite linear systems, as long as
+% the right hand side and initial guess are in the range space of the matrix.
+%
+%% Implemented Multigrid Algorithms
+% MueMat has implementations of smoothed aggregation AMG and a constrained energy-minimizing AMG method.  The latter
+% method is appropriate for linear systems arising from systems of PDEs where the number of near-kernel components
+% is greater than the number of degrees of freedom per node.
+%
+% MueMat does not contain any geometric multigrid or classic (aka Ruge-Stueben) AMG methods.
+%
+%% Smoothers
+% MueMat provides point and block versions of Jacobi, Gauss-Seidel, and symmetric Gauss-Seidel smoothers. MueMat
+% also implements a Chebyshev polynomial smoother.
+%
+%% Extensibility
+% MueMat is designed for researching and developing new algorithms and to provide straight-forward extensibility.
+% Thus, one could implement new geometric or algebraic methods and integrate them easily into the existing project. 
+%
+%% Advanced Usage
+% One can create hybrid methods that combine two or more multigrid methods. For example, one could create a
+% preconditioner that is a two-level geometric multigrid method followed by an energy-minimization multigrid method.
+%
+% It is possible to access some parts of the Trilinos package ML via the mlmex interface.  (Please see the ML User's
+% Guide for instructions on how to compile mlmex.)
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,11 @@
+This planning document is intended to record some design ideas and decisions for the new algebraic multigrid libary \mloo.
+\mloo is meant to be both a research vehicle and a replacement for \ML in existing applications.  (Obviously,
+those codes would have to use \Tpetra instead of \Epetra.)  Hence, \mloo must be flexible enough to
+support new algorithm development, but also robust enough for everyday use.  This means
+that \mloo\ {\em must} contain the key algorithms in \ML that are in use today:  standard smoothed
+aggregation, Petrov Galerkin for nonsymmetric systems, and reformulated Maxwell.
+
+This document is organized as follows.
+\SectionMueMat{In \S\ref{muemat}, we discuss the Matlab prototype multigrid code \muemat.}
+\SectionMueLu{In \S\ref{muelu}, we adresses the design issues which are specific to \mloo.}
+\SectionMueLuAPI{In \S\ref{api}, we describe the \mloo application programming interface (API).}

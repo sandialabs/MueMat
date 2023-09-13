@@ -1,0 +1,128 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Policy/Process for Safe Checkin Testing</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-04-19"><meta name="DC.source" content="dev_CheckinPolicy.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Policy/Process for Safe Checkin Testing</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Non-Regression testing</a></li><li><a href="#2">Setting environment</a></li><li><a href="#3">Script usage</a></li><li><a href="#4">Managing version of reference</a></li><li><a href="#5">Adding new tests</a></li><li><a href="#6">Advanced usages</a></li></ul></div><h2>Non-Regression testing<a name="1"></a></h2><p>In order to maintain the stability of MueMat, the shell script 'non-regression.sh' should always be used to test modifications before any checkin that changes source code. This script executes a batch of tests. Outputs of tests are compared against outputs of previous MueMat version.</p><h2>Setting environment<a name="2"></a></h2><p>The shell script can be found in 'test/NonRegression/'.</p><p>PreRequirement:</p><p>- GNU/parallel is used to run test cases in parallel (by using one instance of MATLAB per processor).   GNU/parallel can be downloaded at: <a href="http://www.gnu.org/software/parallel/">http://www.gnu.org/software/parallel/</a></p><pre>Quick install guide:
+  tar -xjf parallel-*.tar.bz2
+  cd parallel-*
+  ./configure
+  make -j; sudo make install</pre><p>- tkdiff is used by default to present results of the non-regression testing.</p><h2>Script usage<a name="3"></a></h2><pre> ./non-regression.sh: run tests and compare results
+                      against the last version of output
+                      available in 'REF/'.</pre><p>A tkdiff window is open for each test output that differ from the previous version. You can check visually if differences are significative.</p><h2>Managing version of reference<a name="4"></a></h2><p>The directory 'current-version/' is temporarily used to store outputs of your test runs. This directory can be removed after non-regression testing. The directory 'REF/' stores outputs of previous MueMat versions.</p><p>If you fix a bug and believe that changes on the results of tests are OK, you can commit a new version of output reference in REF/ by using the following command:</p><pre> mv current-version REF/`date +%F`-`git rev-parse HEAD | tail -c 10`</pre><h2>Adding new tests<a name="5"></a></h2><p>The non-regression script executes the MATLAB commands defined in 'config.txt'.</p><h2>Advanced usages<a name="6"></a></h2><p>- non-regression.sh uses internally two sub-scripts that can be run independently:</p><pre> 1) non-regression-run.sh:   run tests.
+ 2) non-regression-check.sh: compare results against reference output.</pre><p>- Advanced options are listed on the header of shell scripts.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Policy/Process for Safe Checkin Testing
+%
+%% Non-Regression testing
+% In order to maintain the stability of MueMat, the shell script 'non-regression.sh' should always be used to test modifications before any checkin that changes source code. 
+% This script executes a batch of tests. Outputs of tests are compared against outputs of previous MueMat version.
+%
+%% Setting environment
+%
+% The shell script can be found in 'test/NonRegression/'. 
+%
+% PreRequirement:
+%
+% - GNU/parallel is used to run test cases in parallel (by using one instance of MATLAB per processor).
+%   GNU/parallel can be downloaded at: http://www.gnu.org/software/parallel/
+%
+%  Quick install guide:
+%    tar -xjf parallel-*.tar.bz2
+%    cd parallel-*
+%    ./configure
+%    make -j; sudo make install
+%
+% - tkdiff is used by default to present results of the non-regression testing.
+%
+%% Script usage
+%
+%   ./non-regression.sh: run tests and compare results 
+%                        against the last version of output 
+%                        available in 'REF/'.
+%
+% A tkdiff window is open for each test output that differ from the previous version. You can check visually if differences are significative.
+%
+%% Managing version of reference
+%
+% The directory 'current-version/' is temporarily used to store outputs of your test runs. This directory can be removed after non-regression testing.
+% The directory 'REF/' stores outputs of previous MueMat versions.
+%
+% If you fix a bug and believe that changes on the results of tests are OK, you can commit a new version of output reference in REF/ by using the following command:
+%
+%   mv current-version REF/`date +%F`-`git rev-parse HEAD | tail -c 10`
+%
+%% Adding new tests
+%
+% The non-regression script executes the MATLAB commands defined in 'config.txt'.
+%
+%% Advanced usages
+%
+% - non-regression.sh uses internally two sub-scripts that can be run independently: 
+%
+%   1) non-regression-run.sh:   run tests.
+%   2) non-regression-check.sh: compare results against reference output.
+%
+% - Advanced options are listed on the header of shell scripts.
+##### SOURCE END #####
+--></body></html>

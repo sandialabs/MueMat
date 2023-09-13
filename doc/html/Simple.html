@@ -1,0 +1,200 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>A minimalist example of the MueMat interface</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2010-12-07"><meta name="DC.source" content="Simple.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>A minimalist example of the MueMat interface</h1><!--introduction--><p>This example solves a linear system <img src="Simple_eq84590.png" alt="$Ax=b$"> using the default parameters of MueMat.</p><p>See also: Tutorial, DefaultParameters, Laplace1D</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Header</a></li><li><a href="#2">Setup the multigrid Solver</a></li><li><a href="#3">Generate a random right-hand side ('b')</a></li><li><a href="#4">Solve Ax=b (AMG used directly as a solver)</a></li><li><a href="#5">Solve Ax=b (AMG as a preconditioner of an iterative method)</a></li></ul></div><h2>Header<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>;
+mue_include;
+</pre><h2>Setup the multigrid Solver<a name="2"></a></h2><pre class="codeinput">Amat = gallery(<span class="string">'poisson'</span>,30); <span class="comment">% The test matrix</span>
+
+<span class="comment">% Create a multigrid solver with default parameters</span>
+mySolver = Hierarchy(Amat);
+mySolver.SetOutputLevel(1);
+status = mySolver.FillHierarchy();
+mySolver.SetSmoothers();
+</pre><pre class="codeoutput">Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 .........
+condest(P'P) =   4.86e+00
+condest(P'AP) =   7.17e+01
+Aggregating
+ 1 .
+condest(P'P) =   1.56e+01
+condest(P'AP) =   6.52e+00
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+(level 1) GaussSeidel: sweeps=1, omega=1, symmetric mode
+(level 2) GaussSeidel: sweeps=1, omega=1, symmetric mode
+</pre><h2>Generate a random right-hand side ('b')<a name="3"></a></h2><p>'srand' initializes the random number generator to ensure reproducible results</p><pre class="codeinput">srand;
+n = size(Amat,1);
+b = rand(n,1);
+</pre><h2>Solve Ax=b (AMG used directly as a solver)<a name="4"></a></h2><p>A fixed number of iterations is performed</p><pre class="codeinput">nIts = 9;
+disp(norm(b))
+fprintf(<span class="string">'Solving Ax=b with multigrid...\n\n'</span>);
+x    = mySolver.Iterate(b, nIts);
+
+fprintf(<span class="string">'\n||r_0|| / ||r_final|| = %g\n\n'</span>,norm(b-Amat*x)/norm(b));
+</pre><pre class="codeoutput">   17.0597
+
+Solving Ax=b with multigrid...
+
+  1: ||r||=1.362314e+01
+  2: ||r||=2.636156e+00
+  3: ||r||=6.517465e-01
+  4: ||r||=1.673453e-01
+  5: ||r||=4.287978e-02
+  6: ||r||=1.089642e-02
+  7: ||r||=2.750012e-03
+  8: ||r||=6.908268e-04
+  9: ||r||=1.730329e-04
+
+||r_0|| / ||r_final|| = 3.85194e-06
+
+</pre><h2>Solve Ax=b (AMG as a preconditioner of an iterative method)<a name="5"></a></h2><pre class="codeinput">maxIts = nIts;
+tol  = 1e-8;
+
+mySolver.SetOutputLevel(0);
+fprintf(<span class="string">'Solving Ax=b again with conjugate gradients preconditioned by multigrid...\n\n'</span>);
+[x,flag,relres,iter,resvec] = <span class="keyword">...</span><span class="comment">                                % pcg() is the Matlab conjugate gradients method.</span>
+    pcg(                           <span class="keyword">...</span><span class="comment"> %</span>
+        Amat, b,                   <span class="keyword">...</span><span class="comment"> % parameters: * Matrix and right-hand side</span>
+        tol, maxIts,               <span class="keyword">...</span><span class="comment"> %             * Conjugate Gradient parameters</span>
+        @(v)mySolver.Iterate(v, 1) <span class="keyword">...</span><span class="comment"> %             * AMG Preconditioner</span>
+       );
+<span class="keyword">for</span> ii=1:length(resvec),
+  fprintf(<span class="string">'  %d: ||r||=%g\n'</span>,ii,resvec(ii));
+<span class="keyword">end</span>
+
+fprintf(<span class="string">'\n||r_0|| / ||r_final|| = %g\n\n'</span>,norm(b-Amat*x)/norm(b));
+</pre><pre class="codeoutput">Solving Ax=b again with conjugate gradients preconditioned by multigrid...
+
+  1: ||r||=17.0597
+  2: ||r||=6.98341
+  3: ||r||=0.883808
+  4: ||r||=0.0378003
+  5: ||r||=0.00264464
+  6: ||r||=0.000195799
+  7: ||r||=1.22541e-05
+  8: ||r||=6.97385e-07
+  9: ||r||=3.55132e-08
+
+||r_0|| / ||r_final|| = 2.0817e-09
+
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% A minimalist example of the MueMat interface
+% This example solves a linear system $Ax=b$ using the default
+% parameters of MueMat.
+%
+% See also: Tutorial, DefaultParameters, Laplace1D
+
+%% Header
+clear all;
+mue_include;
+
+%% Setup the multigrid Solver
+Amat = gallery('poisson',30); % The test matrix
+
+% Create a multigrid solver with default parameters
+mySolver = Hierarchy(Amat);
+mySolver.SetOutputLevel(1);
+status = mySolver.FillHierarchy();
+mySolver.SetSmoothers();
+
+                              
+%% Generate a random right-hand side ('b')
+% 'srand' initializes the random number generator to ensure reproducible results
+srand;
+n = size(Amat,1);
+b = rand(n,1);
+
+%% Solve Ax=b (AMG used directly as a solver)
+% A fixed number of iterations is performed
+nIts = 9;
+disp(norm(b))
+fprintf('Solving Ax=b with multigrid...\n\n');
+x    = mySolver.Iterate(b, nIts);
+
+fprintf('\n||r_0|| / ||r_final|| = %g\n\n',norm(b-Amat*x)/norm(b));
+
+%% Solve Ax=b (AMG as a preconditioner of an iterative method)
+maxIts = nIts;
+tol  = 1e-8;
+
+mySolver.SetOutputLevel(0);
+fprintf('Solving Ax=b again with conjugate gradients preconditioned by multigrid...\n\n');
+[x,flag,relres,iter,resvec] = ...                                % pcg() is the Matlab conjugate gradients method.
+    pcg(                           ... %
+        Amat, b,                   ... % parameters: * Matrix and right-hand side
+        tol, maxIts,               ... %             * Conjugate Gradient parameters
+        @(v)mySolver.Iterate(v, 1) ... %             * AMG Preconditioner
+       );
+for ii=1:length(resvec),
+  fprintf('  %d: ||r||=%g\n',ii,resvec(ii));
+end
+
+fprintf('\n||r_0|| / ||r_final|| = %g\n\n',norm(b-Amat*x)/norm(b));
+
+##### SOURCE END #####
+--></body></html>

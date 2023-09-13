@@ -1,0 +1,71 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 400 x 400 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 ....
+Hierarchy: actual #levels  = 2
+Running symmetric Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=8.726650e+00
+  2: ||r||=1.090568e+00
+  3: ||r||=1.538382e-01
+  4: ||r||=2.185800e-02
+  5: ||r||=3.126310e-03
+  6: ||r||=4.492852e-04
+  7: ||r||=6.476526e-05
+  8: ||r||=9.353745e-06
+  9: ||r||=1.352493e-06
+Running ILU with default parameters (currently ILU(0))
+  1: ||r||=8.226599e+00
+  2: ||r||=9.300865e-01
+  3: ||r||=1.162531e-01
+  4: ||r||=1.469286e-02
+  5: ||r||=1.867826e-03
+  6: ||r||=2.381835e-04
+  7: ||r||=3.042078e-05
+  8: ||r||=3.888041e-06
+  9: ||r||=4.970206e-07
+Running ILUC with droptol= 0.1
+  1: ||r||=8.226599e+00
+  2: ||r||=9.300865e-01
+  3: ||r||=1.162531e-01
+  4: ||r||=1.469286e-02
+  5: ||r||=1.867826e-03
+  6: ||r||=2.381835e-04
+  7: ||r||=3.042078e-05
+  8: ||r||=3.888041e-06
+  9: ||r||=4.970206e-07
+Running ILUC with droptol= 0.01
+  1: ||r||=6.354620e+00
+  2: ||r||=4.484757e-01
+  3: ||r||=3.273304e-02
+  4: ||r||=2.393975e-03
+  5: ||r||=1.751006e-04
+  6: ||r||=1.280580e-05
+  7: ||r||=9.364479e-07
+  8: ||r||=6.847515e-08
+  9: ||r||=5.006867e-09
+Running DirectSolveSmoother
+  1: ||r||=8.200359e-14
+  2: ||r||=8.200359e-14
+  3: ||r||=8.200359e-14
+  4: ||r||=8.200359e-14
+  5: ||r||=8.200359e-14
+  6: ||r||=8.200359e-14
+  7: ||r||=8.200359e-14
+  8: ||r||=8.200359e-14
+  9: ||r||=8.200359e-14

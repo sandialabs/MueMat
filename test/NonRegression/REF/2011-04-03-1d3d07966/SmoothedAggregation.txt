@@ -1,0 +1,41 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 ....
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.081340e+01
+  2: ||r||=8.523389e-01
+  3: ||r||=7.776330e-02
+  4: ||r||=7.508539e-03
+  5: ||r||=7.657495e-04
+  6: ||r||=8.257953e-05
+  7: ||r||=9.353880e-06
+  8: ||r||=1.098857e-06
+  9: ||r||=1.321952e-07
+ 10: ||r||=1.613533e-08
+ 11: ||r||=1.986811e-09
+ 12: ||r||=2.460306e-10
+ 13: ||r||=3.059708e-11
+ 14: ||r||=3.822264e-12
+ 15: ||r||=4.956693e-13
+
+ans =
+
+   8.2183e-15
+

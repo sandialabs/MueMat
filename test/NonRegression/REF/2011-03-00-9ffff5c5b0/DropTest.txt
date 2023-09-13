@@ -1,0 +1,106 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Nullspace: Using default nullspace size=1
+Aggregating
+ 3 ................................................................................
+ 2 ................................................................................
+ 1 ...........................
+EminFactory: Smoothing nullspace before energy minimization
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 143.01
+column by column norm(FNull - P(noenergy)*CNull) =   6.28e-17 
+initial emin residual = 5.052e+03
+final emin residual   = 1.161e+02
+condest(Pfinal'Pfinal) =   1.49e+01
+condest(P'AP) =   1.62e+07
+norm(P.cnull-fnull)=0.000000, nnzP = 36103
+column by column norm(FNull - P(energy)*CNull) =   4.39e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 3.7336e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 3.7336e+03
+Final energy (sum_i p_i^T A p_i)        = 2.1405e+03
+Aggregating
+ 1 .....................................................
+EminFactory: Smoothing nullspace before energy minimization
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 300.05
+column by column norm(FNull - P(noenergy)*CNull) =   5.63e-17 
+initial emin residual = 9.136e+02
+final emin residual   = 5.604e+00
+condest(Pfinal'Pfinal) =   2.46e+01
+condest(P'AP) =   1.66e+06
+norm(P.cnull-fnull)=0.000000, nnzP = 7310
+column by column norm(FNull - P(energy)*CNull) =   4.82e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.6263e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 1.6263e+03
+Final energy (sum_i p_i^T A p_i)        = 1.3133e+03
+Aggregating
+ 1 ..................
+EminFactory: Smoothing nullspace before energy minimization
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 219.979
+column by column norm(FNull - P(noenergy)*CNull) =   5.75e-17 
+initial emin residual = 3.065e+02
+final emin residual   = 8.489e-01
+condest(Pfinal'Pfinal) =   5.47e+01
+condest(P'AP) =   5.72e+05
+norm(P.cnull-fnull)=0.000000, nnzP = 2358
+column by column norm(FNull - P(energy)*CNull) =   4.87e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 6.1282e+02
+Constrained energy (sum_i pc_i^T A pc_i) = 6.1282e+02
+Final energy (sum_i p_i^T A p_i)        = 5.1585e+02
+Hierarchy: actual #levels  = 4
+  1: ||r||=4.854585e-02
+  1: ||r||=9.022550e-02
+  1: ||r||=7.092068e-02
+  1: ||r||=5.468697e-02
+  1: ||r||=3.085402e-02
+  1: ||r||=2.044376e-02
+  1: ||r||=1.619229e-02
+  1: ||r||=7.361621e-03
+  1: ||r||=3.935561e-03
+  1: ||r||=2.042322e-03
+  1: ||r||=1.649004e-03
+  1: ||r||=8.953160e-04
+  1: ||r||=3.874300e-04
+  1: ||r||=1.923936e-04
+  1: ||r||=1.163053e-04
+  1: ||r||=7.559256e-05
+  1: ||r||=5.399912e-05
+  1: ||r||=3.244160e-05
+  1: ||r||=1.822321e-05
+  1: ||r||=8.909964e-06
+  1: ||r||=6.626395e-06
+  1: ||r||=3.057600e-06
+  1: ||r||=1.767407e-06
+  1: ||r||=8.075489e-07
+  1: ||r||=4.218783e-07
+  1: ||r||=2.119901e-07
+  1: ||r||=1.072616e-07
+  1: ||r||=5.468375e-08
+  1: ||r||=2.930754e-08
+  1: ||r||=1.682202e-08
+  1: ||r||=9.040039e-09
+  1: ||r||=5.136740e-09
+Nits = 32,||r||=7.977175e-08

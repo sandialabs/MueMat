@@ -1,0 +1,423 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>The operator and multivector class tutorial</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2010-12-06"><meta name="DC.source" content="TutorialOperator.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>The operator and multivector class tutorial</h1><!--introduction--><p>This tutorial presents the basic usage of Operator and Vector objects.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Build a scalar operator</a></li><li><a href="#3">Build a 2x2-block operator</a></li><li><a href="#4">Build a 2x2-block operator using a pre-defined Map object</a></li><li><a href="#5">Build a variable block size operator</a></li><li><a href="#6">Build vectors</a></li><li><a href="#7">Copy vectors or operators</a></li><li><a href="#8">Operator views</a></li><li><a href="#9">Operator diagonals</a></li><li><a href="#10">Loops 'for each operator blocks'</a></li></ul></div><p>See also: <a href="ref_Operator.html">Operator</a>, <a href="ref_MultiVector.html">MultiVector</a></p><pre class="codeinput">clear;
+</pre><h2>Build a scalar operator<a name="2"></a></h2><pre class="codeinput">Amat = gallery(<span class="string">'poisson'</span>,50); <span class="comment">% a matlab matrix</span>
+opScalar = Operator(Amat);
+
+disp(Amat - opScalar.GetMatrixData());
+</pre><pre class="codeoutput">   All zero sparse: 2500-by-2500
+
+</pre><h2>Build a 2x2-block operator<a name="3"></a></h2><pre class="codeinput">op2x2Blk = Operator(Amat,2,2);
+
+<span class="keyword">if</span> op2x2Blk.GetRowMap().HasConstBlkSize()
+  fprintf(<span class="string">'Stats of op2x2Blk:\n'</span>);
+  fprintf(<span class="string">'  nDOFs      : %d\n'</span>, op2x2Blk.GetRowMap().NDOFs());
+  fprintf(<span class="string">'  nBlk       : %d\n'</span>, op2x2Blk.GetRowMap().NNodes()); <span class="comment">% number of block per row</span>
+  fprintf(<span class="string">'  blkSize    : %d\n'</span>, op2x2Blk.GetRowMap().ConstBlkSize());
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Stats of op2x2Blk:
+  nDOFs      : 2500
+  nBlk       : 1250
+  blkSize    : 2
+</pre><h2>Build a 2x2-block operator using a pre-defined Map object<a name="4"></a></h2><pre class="codeinput">ConstBlkSize = 2;                            <span class="comment">% block size</span>
+nBlk         = size(Amat,1) / ConstBlkSize;  <span class="comment">% number of blocks</span>
+ConstBlkMap  = Map(nBlk, ConstBlkSize);
+opConstBlk   = Operator(Amat, ConstBlkMap, ConstBlkMap, @MatlabApply);
+</pre><h2>Build a variable block size operator<a name="5"></a></h2><p>On this example, the size of each blocks is defined randomely.</p><p>See also: <a href="matlab:doc('BuildLaplace1DBlk')">BuildLaplace1DBlk</a></p><pre class="codeinput">srand;                <span class="comment">% 'srand' initializes the random number generator to ensure reproducible results</span>
+r = size(Amat,1);
+blkSize = zeros(1,r); <span class="comment">% array preallocation</span>
+i = 1;                <span class="comment">% i: current block number</span>
+<span class="keyword">while</span> r ~= 0
+  blkSize(i) = randi([1,min(10,r)],1); <span class="comment">% Generate random block sizes, without exceeding the matrix size.</span>
+  r = r - blkSize(i);
+  i = i + 1;
+<span class="keyword">end</span>
+nBlk = i;
+blkSize = blkSize(1:nBlk); <span class="comment">% truncate according to the number of blocks.</span>
+
+VarBlkMap  = Map(nBlk, blkSize);
+opVarBlk   = Operator(Amat, VarBlkMap, VarBlkMap, @MatlabApply);
+
+<span class="keyword">if</span> opVarBlk.GetRowMap().HasVariableBlkSize()
+  fprintf(<span class="string">'Stats of opVarBlk:\n'</span>);
+  fprintf(<span class="string">'  nDOFs      : %d\n'</span>, opVarBlk.GetRowMap().NDOFs());
+  fprintf(<span class="string">'  nBlk       : %d\n'</span>, opVarBlk.GetRowMap().NNodes());
+  fprintf(<span class="string">'  maxBlkSize : %d\n'</span>, opVarBlk.GetRowMap().MaxBlkSize());
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Stats of opVarBlk:
+  nDOFs      : 2500
+  nBlk       : 467
+  maxBlkSize : 10
+</pre><h2>Build vectors<a name="6"></a></h2><pre class="codeinput"><span class="comment">% 1 dense vector of length 50 and initialized to zero</span>
+u = MultiVector(50,1);
+
+<span class="comment">% 1 dense vector of length 50 and initialized from user data</span>
+m = zeros(1,50); <span class="comment">% a matlab array</span>
+v = MultiVector([],[],m);
+
+<span class="comment">% 5 dense vector of length 50 and initialized from user data</span>
+m = zeros(5,50); <span class="comment">% a matlab array</span>
+w = MultiVector([],[],m);
+
+fprintf(<span class="string">'w.NumVectors() : %d\n'</span>,w.NumVectors());
+</pre><pre class="codeoutput">w.NumVectors() : 50
+</pre><h2>Copy vectors or operators<a name="7"></a></h2><pre class="codeinput">u = MultiVector(50,1); <span class="comment">% u = [0 0 0 ... 0]</span>
+
+<span class="comment">% Handle copy</span>
+v = u;  <span class="comment">% r and w refers to the same data in memory</span>
+fprintf(<span class="string">'norm(v) : %g \t norm(u) : %g\n'</span>, u.norm(1), v.norm(1));
+
+v.PutScalar(1); <span class="comment">% v = [1 1 1 ... 1]</span>
+fprintf(<span class="string">'norm(v) : %g \t norm(u) : %g\n'</span>, u.norm(1), v.norm(1));
+
+<span class="comment">% Data copy</span>
+v = MultiVector(u); <span class="comment">% v is a copy of u</span>
+w = u.Copy();       <span class="comment">% w is a copy of u (using another syntax)</span>
+
+v.PutScalar(2); <span class="comment">% v = [1 1 1 ... 1]</span>
+fprintf(<span class="string">'norm(v) : %g \t norm(u) : %g\n'</span>, u.norm(1), v.norm(1));
+</pre><pre class="codeoutput">norm(v) : 0 	 norm(u) : 0
+norm(v) : 50 	 norm(u) : 50
+norm(v) : 50 	 norm(u) : 100
+</pre><h2>Operator views<a name="8"></a></h2><p>User can access the matrix as if it were stored in different formats, independent of the actual underlying storage format. Eachway of accessing the matrix is called a "view". A view allows for associating with the matrix a particular row map, column map, matrix-vector multiply, and notion of matrix diagonal.</p><pre class="codeinput"><span class="comment">% Build a 5x5-block operator</span>
+op = Operator(Amat,5,5);
+
+fprintf(<span class="string">'Stats of op:\n'</span>);
+fprintf(<span class="string">'  current view    :     ''%s'' (blkSize=%d)\n'</span>, op.CurrentView(), op.GetRowMap().ConstBlkSize());
+fprintf(<span class="string">'  available views : '</span>); disp(op.GetViewList())
+
+<span class="comment">% Add a view, using a Map defined previously</span>
+op.CreateView(<span class="string">'2x2'</span>,ConstBlkMap, ConstBlkMap, @MatlabApply);
+
+fprintf(<span class="string">'  available views : '</span>); disp(op.GetViewList())
+
+<span class="comment">% Switch to the new view '2x2'</span>
+<span class="comment">% See also: SwitchToDefaultView() and SwitchToPointView();</span>
+oldview = op.SwitchToView(<span class="string">'2x2'</span>); <span class="comment">% output 'oldview' is optional</span>
+
+fprintf(<span class="string">'  current view    :     ''%s'' (blkSize=%d)\n'</span>, op.CurrentView(), op.GetRowMap().ConstBlkSize());
+fprintf(<span class="string">'  old view        :     ''%s''\n'</span>, oldview);
+</pre><pre class="codeoutput">Stats of op:
+  current view    :     'block' (blkSize=5)
+  available views :     'block'    'point'
+
+  available views :     'block'    'point'    '2x2'
+
+  current view    :     '2x2' (blkSize=2)
+  old view        :     'block'
+</pre><h2>Operator diagonals<a name="9"></a></h2><p>Get the scalar diagonal</p><pre class="codeinput">op.SwitchToPointView();
+opDiag = op.GetDiagonal(); <span class="comment">% opDiag is a single view operator</span>
+
+disp(diag(Amat) - opDiag.GetMatrixData());
+
+<span class="comment">% Get the block diagonal</span>
+op.SwitchToDefaultView();
+op.SwitchToView(<span class="string">'2x2'</span>);
+opBlkDiag = op.GetDiagonal(); <span class="comment">% opBlkDiag is a single view operator</span>
+
+disp(size(opBlkDiag.GetMatrixData())); <span class="comment">% diagonal block (2x2) are stored continuously</span>
+</pre><pre class="codeoutput">   All zero sparse: 2500-by-1
+
+        2500           2
+
+</pre><h2>Loops 'for each operator blocks'<a name="10"></a></h2><p>This example creates a cell array where each cell correspond to a block of the inital matrix.</p><pre class="codeinput">op   = Operator(Amat,5,3);  <span class="comment">% note that RowMap and ColMap can be different.</span>
+Amat = op.GetMatrixData();
+
+<span class="comment">%</span>
+nRowBlk = op.GetRowMap().NNodes();
+nColBlk = op.GetRowMap().NNodes();
+Blk  = cell(nRowBlk,nColBlk);
+
+<span class="keyword">if</span> op.GetRowMap().HasConstBlkSize()
+
+  RowBlkSize = op.GetRowMap().ConstBlkSize();
+  ColBlkSize = op.GetColMap().ConstBlkSize();
+
+  <span class="keyword">for</span> i=1:nRowBlk
+    fRow = (i-1)*RowBlkSize+1;
+    lRow = fRow + RowBlkSize-1;
+
+    <span class="keyword">for</span> j=1:nColBlk
+      fCol = (j-1)*ColBlkSize+1;
+      lCol = fCol + ColBlkSize-1;
+
+      c{i,j} = Amat(fRow:lRow, fCol:lCol);
+    <span class="keyword">end</span> <span class="comment">% for j</span>
+  <span class="keyword">end</span> <span class="comment">% for i</span>
+
+<span class="keyword">end</span> <span class="comment">% if</span>
+
+<span class="comment">% Another example with a variable block operator</span>
+op  = Operator(Amat, VarBlkMap, VarBlkMap, @MatlabApply);
+
+nRowBlk = op.GetRowMap().NNodes();
+nColBlk = op.GetRowMap().NNodes();
+Blk = cell(nRowBlk,nColBlk);
+
+<span class="keyword">if</span> op.GetRowMap().HasVariableBlkSize()
+
+  VarRowBlkPtr = op.GetRowMap().Vptr();
+  VarColBlkPtr = op.GetColMap().Vptr();
+  <span class="keyword">for</span> i=1:nRowBlk
+    fRow = VarRowBlkPtr(i);
+    lRow = VarRowBlkPtr(i+1)-1;
+
+    <span class="keyword">for</span> j=1:nColBlk
+      fCol = VarColBlkPtr(j);
+      lCol = VarColBlkPtr(j+1)-1;
+
+      c{i,j} = Amat(fRow:lRow, fCol:lCol);
+    <span class="keyword">end</span> <span class="comment">% for j</span>
+  <span class="keyword">end</span> <span class="comment">% for i</span>
+
+<span class="keyword">end</span> <span class="comment">% if</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%%% The operator and multivector class tutorial
+% This tutorial presents the basic usage of Operator and Vector objects.
+
+%%
+% See also: <ref_Operator.html Operator>, <ref_MultiVector.html MultiVector>
+
+clear;
+
+%% Build a scalar operator
+Amat = gallery('poisson',50); % a matlab matrix
+opScalar = Operator(Amat);     
+
+disp(Amat - opScalar.GetMatrixData());
+
+%% Build a 2x2-block operator
+op2x2Blk = Operator(Amat,2,2);
+
+if op2x2Blk.GetRowMap().HasConstBlkSize()
+  fprintf('Stats of op2x2Blk:\n');
+  fprintf('  nDOFs      : %d\n', op2x2Blk.GetRowMap().NDOFs());
+  fprintf('  nBlk       : %d\n', op2x2Blk.GetRowMap().NNodes()); % number of block per row
+  fprintf('  blkSize    : %d\n', op2x2Blk.GetRowMap().ConstBlkSize());
+end
+
+%% Build a 2x2-block operator using a pre-defined Map object
+ConstBlkSize = 2;                            % block size
+nBlk         = size(Amat,1) / ConstBlkSize;  % number of blocks
+ConstBlkMap  = Map(nBlk, ConstBlkSize);
+opConstBlk   = Operator(Amat, ConstBlkMap, ConstBlkMap, @MatlabApply);
+
+%% Build a variable block size operator
+% On this example, the size of each blocks is defined randomely.
+% 
+% See also: <matlab:doc('BuildLaplace1DBlk') BuildLaplace1DBlk>
+srand;                % 'srand' initializes the random number generator to ensure reproducible results
+r = size(Amat,1);     
+blkSize = zeros(1,r); % array preallocation
+i = 1;                % i: current block number
+while r ~= 0
+  blkSize(i) = randi([1,min(10,r)],1); % Generate random block sizes, without exceeding the matrix size.
+  r = r - blkSize(i);
+  i = i + 1;
+end
+nBlk = i;
+blkSize = blkSize(1:nBlk); % truncate according to the number of blocks.
+
+VarBlkMap  = Map(nBlk, blkSize);
+opVarBlk   = Operator(Amat, VarBlkMap, VarBlkMap, @MatlabApply);
+
+if opVarBlk.GetRowMap().HasVariableBlkSize()
+  fprintf('Stats of opVarBlk:\n');
+  fprintf('  nDOFs      : %d\n', opVarBlk.GetRowMap().NDOFs());
+  fprintf('  nBlk       : %d\n', opVarBlk.GetRowMap().NNodes());
+  fprintf('  maxBlkSize : %d\n', opVarBlk.GetRowMap().MaxBlkSize());
+end
+
+%% Build vectors
+
+% 1 dense vector of length 50 and initialized to zero
+u = MultiVector(50,1);
+
+% 1 dense vector of length 50 and initialized from user data
+m = zeros(1,50); % a matlab array 
+v = MultiVector([],[],m);
+
+% 5 dense vector of length 50 and initialized from user data
+m = zeros(5,50); % a matlab array 
+w = MultiVector([],[],m);
+
+fprintf('w.NumVectors() : %d\n',w.NumVectors());
+
+%% Copy vectors or operators
+u = MultiVector(50,1); % u = [0 0 0 ... 0]
+
+% Handle copy
+v = u;  % r and w refers to the same data in memory
+fprintf('norm(v) : %g \t norm(u) : %g\n', u.norm(1), v.norm(1));
+
+v.PutScalar(1); % v = [1 1 1 ... 1]
+fprintf('norm(v) : %g \t norm(u) : %g\n', u.norm(1), v.norm(1));
+
+% Data copy
+v = MultiVector(u); % v is a copy of u
+w = u.Copy();       % w is a copy of u (using another syntax)
+
+v.PutScalar(2); % v = [1 1 1 ... 1]
+fprintf('norm(v) : %g \t norm(u) : %g\n', u.norm(1), v.norm(1));
+
+%% Operator views
+% User can access the matrix as if it were stored in different
+% formats, independent of the actual underlying storage format. 
+% Eachway of accessing the matrix is called a "view".
+% A view allows for associating with the matrix a particular row map,
+% column map, matrix-vector multiply, and notion of matrix diagonal.
+
+% Build a 5x5-block operator
+op = Operator(Amat,5,5);
+
+fprintf('Stats of op:\n');
+fprintf('  current view    :     ''%s'' (blkSize=%d)\n', op.CurrentView(), op.GetRowMap().ConstBlkSize());
+fprintf('  available views : '); disp(op.GetViewList())
+
+% Add a view, using a Map defined previously 
+op.CreateView('2x2',ConstBlkMap, ConstBlkMap, @MatlabApply);
+
+fprintf('  available views : '); disp(op.GetViewList())
+
+% Switch to the new view '2x2'
+% See also: SwitchToDefaultView() and SwitchToPointView();
+oldview = op.SwitchToView('2x2'); % output 'oldview' is optional
+                                   
+fprintf('  current view    :     ''%s'' (blkSize=%d)\n', op.CurrentView(), op.GetRowMap().ConstBlkSize());
+fprintf('  old view        :     ''%s''\n', oldview);
+
+%% Operator diagonals
+% Get the scalar diagonal
+op.SwitchToPointView();
+opDiag = op.GetDiagonal(); % opDiag is a single view operator
+
+disp(diag(Amat) - opDiag.GetMatrixData());
+
+% Get the block diagonal
+op.SwitchToDefaultView();
+op.SwitchToView('2x2');
+opBlkDiag = op.GetDiagonal(); % opBlkDiag is a single view operator
+
+disp(size(opBlkDiag.GetMatrixData())); % diagonal block (2x2) are stored continuously
+
+%% Loops 'for each operator blocks'
+% This example creates a cell array where each cell correspond to a
+% block of the inital matrix.
+%
+op   = Operator(Amat,5,3);  % note that RowMap and ColMap can be different.
+Amat = op.GetMatrixData();
+
+%
+nRowBlk = op.GetRowMap().NNodes();
+nColBlk = op.GetRowMap().NNodes();
+Blk  = cell(nRowBlk,nColBlk);
+
+if op.GetRowMap().HasConstBlkSize()
+
+  RowBlkSize = op.GetRowMap().ConstBlkSize();
+  ColBlkSize = op.GetColMap().ConstBlkSize();
+  
+  for i=1:nRowBlk
+    fRow = (i-1)*RowBlkSize+1;
+    lRow = fRow + RowBlkSize-1;
+    
+    for j=1:nColBlk
+      fCol = (j-1)*ColBlkSize+1;
+      lCol = fCol + ColBlkSize-1;
+
+      c{i,j} = Amat(fRow:lRow, fCol:lCol);
+    end % for j
+  end % for i
+
+end % if
+
+% Another example with a variable block operator
+op  = Operator(Amat, VarBlkMap, VarBlkMap, @MatlabApply);
+
+nRowBlk = op.GetRowMap().NNodes();
+nColBlk = op.GetRowMap().NNodes();
+Blk = cell(nRowBlk,nColBlk);
+
+if op.GetRowMap().HasVariableBlkSize()
+
+  VarRowBlkPtr = op.GetRowMap().Vptr();
+  VarColBlkPtr = op.GetColMap().Vptr();
+  for i=1:nRowBlk
+    fRow = VarRowBlkPtr(i);
+    lRow = VarRowBlkPtr(i+1)-1;
+    
+    for j=1:nColBlk
+      fCol = VarColBlkPtr(j);
+      lCol = VarColBlkPtr(j+1)-1;
+      
+      c{i,j} = Amat(fRow:lRow, fCol:lCol);
+    end % for j
+  end % for i
+  
+end % if
+##### SOURCE END #####
+--></body></html>

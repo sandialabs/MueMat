@@ -1,0 +1,65 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Aggregating
+ 1 ..........
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 256 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 8.8
+column by column norm(FNull - P(noenergy)*CNull) =   5.66e-16   5.66e-16 
+condest(Pfinal'Pfinal) =   8.77e+00
+condest(P'AP) =   5.00e+03
+norm(P.cnull-fnull)=0.000000, nnzP = 10656
+column by column norm(FNull - P(energy)*CNull) =   8.36e-14   8.36e-14 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.2387e+02
+Constrained energy (sum_i pc_i^T A pc_i) = 1.2387e+02
+Final energy (sum_i p_i^T A p_i)        = 5.0566e+01
+Aggregating
+ 1 ..........
+# its = 28
+
+resvec =
+
+     7.367994465689928e+00
+     4.044155132771388e+00
+     2.313613677884666e+00
+     1.241830404267019e+00
+     8.847111436375173e-01
+     5.371211864677460e-01
+     2.700432308787287e-01
+     1.717459967669748e-01
+     9.718096560593328e-02
+     5.877810987717298e-02
+     2.583781475923459e-02
+     1.588860892483077e-02
+     7.273949061621943e-03
+     4.015095645915762e-03
+     1.638944056180698e-03
+     8.302505829808654e-04
+     3.832768481357605e-04
+     1.810226710458004e-04
+     8.917160774674088e-05
+     4.297578077871322e-05
+     2.067091407340275e-05
+     1.335602559908499e-05
+     6.244838942328655e-06
+     2.892304412971276e-06
+     1.585429334811476e-06
+     6.929374279459552e-07
+     3.324409428125847e-07
+     1.497317337519386e-07
+     7.139594533414052e-08
+

@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{authblk}
+\usepackage[dvips]{graphics}
+\usepackage{hyperref}
+\hypersetup{
+  pdfauthor = {Jeremie Gaidamour, Jonathan J. Hu, Christopher M. Siefert, Ray S. Tuminaro},
+  pdftitle = {Accomplishment, Energy Minimizing AMG Algorithms},
+  pdfkeywords = {multigrid, algebraic multigrid, AMG, energy minimization},
+}
+
+\newcommand{\mcol}{\multicolumn}
+
+\begin{document}
+\begin{centering}
+{\large Energy-Minimizing AMG for PDE Systems}\\
+\vskip 0.1in
+J. Gaidamour, J. Hu, C. Siefert, and R. Tuminaro (consultant)\\
+\vskip 0.1in
+\end{centering}
+Many Sandia parallel simulations rely on the Trilinos framework for the repeated implicit solution
+of linear systems.
+One crucial linear solver is ML, whose primary methods are based on smoothed
+aggregation (SA) algebraic multigrid.
+A successful multigrid solver like ML
+accelerates the solution of the linear system of interest
+by employing related coarser (smaller) linear systems that
+must capture certain near-kernel components of the fine level system.
+SA has a number of known weaknesses, however.
+First, the cost to apply SA can
+grow unacceptably for systems of PDEs and for large number of near-kernel components.
+This problem is exacerbated by anisotropic phenomena and higher dimensionality.
+Second, SA also has rigid requirements for the sparsity pattern of the matrices that transfer data between
+coarse matrices.
+
+
+In this CSRF project we have developed a family of novel
+energy-minimizing coarsening algorithms  that address the aforementioned shortcomings in SA.
+These new algorithms have the flexibility to take any sparsity pattern for the transfer
+matrices.  This allows us to choose patterns which are tailored for anisotropic problems, for instance.
+In addition, the cost of applying these algorithms is lower than SA because the number of
+degrees of freedom per grid point does not grow with the number of near-kernel components.
+Our algorithms still achieve accurate interpolation of the near nullspace
+components while minimizing the energies of the transfer matrices.
+A scaling study of
+iteration counts and complexities (cost to apply the preconditioner) for SA and energy
+minimization is summarized in Table \ref{scaling results}.  The test problem is 3D linear elasticity on
+a logically rectangular mesh.  The stretching factor in the $x$ direction is given by $\epsilon$.
+For the isotropic case, energy minimization is cheaper to apply (meaning faster run times) than SA but has 
+comparable convergence rates.
+For the anisotropic cases, energy minimization is cheaper and converges faster than SA.
+As an example,
+the new method is about $2.5$ times faster than SA for
+$\epsilon=100$ on the $40^3$ mesh.
+%run time savings.
+
+\newcommand{\spa}{\hspace{0.3cm}}
+
+\begin{table}[b]
+\begin{center}
+  \begin{tabular}{|c||c@{\spa}c|c@{\spa}c||c@{\spa}c|c@{\spa}c||c@{\spa}c|c@{\spa}c|}
+    \hline
+    & \mcol{4}{c||}{$\epsilon=1$}  & \mcol{4}{c||}{$\epsilon=10$} & \mcol{4}{c|}{$\epsilon=100$} \\
+    \cline{2-13}
+    \raisebox{1.5ex}[0cm][0cm]{Mesh}
+                 &     \mcol{2}{c|}{SA}  & \mcol{2}{c||}{Emin}  &  \mcol{2}{c|}{SA}  & \mcol{2}{c||}{Emin}  & \mcol{2}{c|}{SA}  & \mcol{2}{c|}{Emin}   \\\hline
+
+%    $5^3$        & 5 & \textit{1.20}   & 5  & \textit{1.05}  & 6  &  \textit{1.76} & 7  & \textit{1.16}  & 6  & \textit{1.82} & 7  & \textit{1.16} \\\hline
+    $10^3$       & 6 &  \textit{1.32}   & 7  & \textit{1.10}  & 7  &  \textit{2.05} & 8  & \textit{1.24}  & 8  & \textit{1.98} & 8  & \textit{1.24} \\\hline
+    $15^3$       & 8 &  \textit{1.19}   & 8  & \textit{1.05}  & 9  &  \textit{1.69} & 11 & \textit{1.16}  & 10 & \textit{1.68} & 12 & \textit{1.16} \\\hline
+    $20^3$       & 8 &  \textit{1.24}   & 8  & \textit{1.06}  & 9  &  \textit{1.82} & 9  & \textit{1.18}  & 11 & \textit{1.76} & 10 & \textit{1.18} \\\hline
+    $25^3$       & 9 &  \textit{1.26}   & 9  & \textit{1.08}  & 10 &  \textit{1.98} & 9  & \textit{1.21}  & 12 & \textit{2.02} & 9  & \textit{1.21} \\\hline
+    $30^3$       & 10 & \textit{1.22}   & 10 & \textit{1.06}  & 11 &  \textit{1.77} & 11 & \textit{1.17}  & 13 & \textit{1.75} & 13 & \textit{1.17} \\\hline
+    $35^3$       & 10 & \textit{1.24}   & 9  & \textit{1.06}  & 11 &  \textit{1.99} & 9  & \textit{1.18}  & 13 & \textit{1.91} & 11 & \textit{1.18} \\\hline
+    $40^3$       & 10 & \textit{1.26}   & 10 & \textit{1.07}  & 12 &  \textit{1.83} & 9  & \textit{1.19}  & 16 & \textit{1.77} & 10 & \textit{1.19} \\\hline
+  \end{tabular}
+\end{center}
+\vspace{-0.1cm} % avoid a new page
+  \caption{Iteration count and complexity (lower complexity = faster run time) for
+  SA and energy minimization for various mesh sizes and stretch factors for
+  a 3D linear elasticity problem.}
+  \label{scaling results}
+\end{table}
+
+\end{document}

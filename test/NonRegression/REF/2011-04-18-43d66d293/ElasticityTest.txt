@@ -1,0 +1,128 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+DIM=default=2
+***Running 50x50 1/1***
+{Warning: AggregationFactory.SetAlgorithm(): MLMEX not found. Cannot use ML
+Aggregation.} 
+> In AggregationFactory>AggregationFactory.SetAlgorithm at 57
+  In ElasticityTest>build_amg_hierarchy at 214
+  In ElasticityTest at 95
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 .........................
+RAP: Regenerating AuxMatrix via AMF
+Aggregating
+ 1 ..
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+  1: ||r||=7.911237e-01
+  1: ||r||=1.474732e-01
+  1: ||r||=1.679280e-02
+  1: ||r||=2.160642e-03
+  1: ||r||=2.688748e-04
+  1: ||r||=3.595214e-05
+  1: ||r||=5.899153e-06
+  1: ||r||=7.538844e-07
+  1: ||r||=7.958045e-08
+  1: ||r||=1.575832e-08
+  1: ||r||=2.176518e-09
+  1: ||r||=2.710328e-10
+{Warning: AggregationFactory.SetAlgorithm(): MLMEX not found. Cannot use ML
+Aggregation.} 
+> In AggregationFactory>AggregationFactory.SetAlgorithm at 57
+  In ElasticityTest>build_amg_hierarchy at 214
+  In ElasticityTest at 102
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 .........................
+RAP: Regenerating AuxMatrix via AMF
+Aggregating
+ 1 ..
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+  1: ||r||=7.911237e-01
+  1: ||r||=7.147116e-02
+  1: ||r||=4.575135e-03
+  1: ||r||=3.930024e-04
+  1: ||r||=3.125230e-05
+  1: ||r||=2.313700e-06
+  1: ||r||=1.723543e-07
+  1: ||r||=1.190039e-08
+  1: ||r||=7.369264e-10
+  1: ||r||=5.516366e-11
+{Warning: AggregationFactory.SetAlgorithm(): MLMEX not found. Cannot use ML
+Aggregation.} 
+> In AggregationFactory>AggregationFactory.SetAlgorithm at 57
+  In ElasticityTest>build_amg_hierarchy at 214
+  In ElasticityTest at 109
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 10
+Aggregating
+ 1 .........................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 578
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   5.63e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=612371.619200, nnzP = 5000
+condest(final Ptent'Ptent) =   2.25e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 648 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 4880.1
+initial emin residual = 2.407e+11
+final emin residual   = 3.001e+06
+condest(Pfinal'Pfinal) =   8.50e+00
+condest(P'AP) =   2.37e+02
+RAP: Regenerating AuxMatrix via AMF
+Aggregating
+ 1 ..
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 72
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   5.69e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=24068.408605, nnzP = 578
+condest(final Ptent'Ptent) =   2.25e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 98 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 421.973
+initial emin residual = 2.733e+11
+final emin residual   = 4.215e+05
+condest(Pfinal'Pfinal) =   9.06e+00
+condest(P'AP) =   5.89e+01
+RAP: Regenerating AuxMatrix via AMF
+Hierarchy: actual #levels  = 3
+Levels Used = 3
+  1: ||r||=7.911237e-01
+  1: ||r||=2.026077e-01
+  1: ||r||=1.375536e-02
+  1: ||r||=1.103371e-03
+  1: ||r||=7.376864e-05
+  1: ||r||=6.800966e-06
+  1: ||r||=9.418660e-07
+  1: ||r||=7.365081e-08
+  1: ||r||=6.101215e-09
+  1: ||r||=4.466089e-10
+This experiment requires MLMEX. Type 'doc MLMEX' for more information.
+
+statistics: sa-norotate 12(1.17)   sa 10(1.38)   svd-2 10(1.17)   
+DIM=2
+STRETCH=1.000000
+
+        |  SA-NR  |    SA   |   EMIN  |    ML  
+ SZ LVL | ITS  OC | ITS  OC | ITS  OC | ITS  OC
+-----------------------------------------------
+ 50  3  | 12 1.17 | 10 1.38 | 10 1.17 |  0 0.00

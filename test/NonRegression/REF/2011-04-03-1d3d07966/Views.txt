@@ -1,0 +1,57 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 100 x 100 block matrix with constant block size = 1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+Running symmetric Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08
+Running symmetric Block Gauss-Seidel V(1,1) with w = .99
+diagonal blocks are 2x2
+  1: ||r||=7.140799e+00
+  2: ||r||=9.119736e-01
+  3: ||r||=7.658122e-02
+  4: ||r||=6.898206e-03
+  5: ||r||=6.397335e-04
+  6: ||r||=6.005635e-05
+  7: ||r||=5.676434e-06
+  8: ||r||=5.389566e-07
+  9: ||r||=5.134074e-08
+Running symmetric Gauss-Seidel V(1,1) with w = .99
+diagonal blocks are 1x1
+  1: ||r||=5.194005e+00
+  2: ||r||=8.004857e-01
+  3: ||r||=6.385547e-02
+  4: ||r||=6.020991e-03
+  5: ||r||=6.004174e-04
+  6: ||r||=6.158255e-05
+  7: ||r||=6.423943e-06
+  8: ||r||=6.776469e-07
+  9: ||r||=7.205340e-08

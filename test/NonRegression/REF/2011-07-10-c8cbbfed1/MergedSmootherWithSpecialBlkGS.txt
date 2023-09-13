@@ -1,0 +1,39 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 3600 x 3600 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 1 ....................................
+Aggregating
+ 1 ......
+Hierarchy: actual #levels  = 3
+{Warning: TipSmoother: a view named tips already exist.} 
+> In TipSmoother>TipSmoother.Setup at 87
+  In MergedSmoother>MergedSmoother.Setup at 103
+  In SmootherFactory>SmootherFactory.Build at 180
+  In Hierarchy>Hierarchy.SetSmoothers at 208
+  In MergedSmootherWithSpecialBlkGS at 82
+  1: ||r||=2.891569e+01
+  1: ||r||=5.635952e+00
+  1: ||r||=2.932936e-01
+  1: ||r||=1.892871e-02
+  1: ||r||=1.030498e-03
+  1: ||r||=5.534245e-05
+  1: ||r||=3.190086e-06
+  1: ||r||=1.339310e-07
+  1: ||r||=7.506388e-09
+pcg iterated 9 times but did not converge.

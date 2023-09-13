@@ -1,0 +1,25 @@
+An important part of the \mloo project is the matlab code called \muemat.
+\muemat serves many purposes.  First, it is intended to guide the design of \mloo by allowing for rapid prototyping and
+testing of algorithms and design decisions.
+Second, it is intended to be the first introduction to \mloo for students and new developers.
+Third, it acts as a living part of the design documentation.
+
+A main tenet is that \muemat will mirror the design of \mloo.  Any capability in \mloo should be present in \muemat, but
+not necessarily vice versa.  While \muemat is written in Matlab, it makes heavy use of classes and inheritance.
+
+%\subsection{General design}
+
+%Based on the factory method patter.
+%TODO: explain 
+% - the concept of factories
+% - how we use it to fillup the AMG Hiearchy 
+
+\SubSectionOperator{
+\subsection{Design of the \operator Class}
+\input{muemat/operator.tex}
+}
+
+\SubSectionSmoother{
+\subsection{Design of the Smoother Factory}
+\input{muemat/smoother.tex}
+}

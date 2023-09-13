@@ -1,0 +1,112 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Aggregation Factory Warning: AggPtsPerDim only used with rectangle algorithm!
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 99
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   1.00e+00
+norm(P.cnull-fnull)=26566.164571, nnzP = 891
+condest(final Ptent'Ptent) =   1.00e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   3.03e+00
+condest(P'AP) =   1.48e+17
+norm(P.cnull-fnull)=0.000000, nnzP = 1683
+column by column norm(FNull - P(energy)*CNull) =   1.21e-15 
+Initial energy (sum_i pt_i^T A pt_i)     = 9.9000e+01
+Constrained energy (sum_i pc_i^T A pc_i) = 9.9000e+01
+Final energy (sum_i p_i^T A p_i)        = 1.1406e+01
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 99
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   1.00e+00
+norm(P.cnull-fnull)=26566.164571, nnzP = 891
+condest(final Ptent'Ptent) =   1.00e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   3.02e+00
+condest(P'AP) =   6.87e+15
+norm(P.cnull-fnull)=0.000000, nnzP = 1683
+column by column norm(FNull - P(energy)*CNull) =   2.25e-15 
+Initial energy (sum_i pt_i^T A pt_i)     = 9.9000e+01
+Constrained energy (sum_i pc_i^T A pc_i) = 9.9000e+01
+Final energy (sum_i p_i^T A p_i)        = 1.1406e+01
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 11
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   1.00e+00
+norm(P.cnull-fnull)=975.087688, nnzP = 99
+condest(final Ptent'Ptent) =   1.00e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   3.73e+00
+condest(P'AP) =   5.10e+15
+norm(P.cnull-fnull)=0.000000, nnzP = 187
+column by column norm(FNull - P(energy)*CNull) =   7.69e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.1000e+01
+Constrained energy (sum_i pc_i^T A pc_i) = 1.1000e+01
+Final energy (sum_i p_i^T A p_i)        = 4.7090e+00
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 11
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   1.00e+00
+norm(P.cnull-fnull)=975.087688, nnzP = 99
+condest(final Ptent'Ptent) =   1.00e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   2.51e+00
+condest(P'AP) =   1.72e+15
+norm(P.cnull-fnull)=0.000000, nnzP = 187
+column by column norm(FNull - P(energy)*CNull) =   8.74e-16 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.0956e+01
+Constrained energy (sum_i pc_i^T A pc_i) = 1.0956e+01
+Final energy (sum_i p_i^T A p_i)        = 4.4904e+00
+Hierarchy: actual #levels  = 3
+Warning: Coarsest Level will have a direct solve!
+  1: ||r||=1.186849e+04
+  1: ||r||=5.740345e+02
+  1: ||r||=1.060981e+04
+  1: ||r||=1.998898e+04
+  1: ||r||=7.124718e+04
+  1: ||r||=1.173181e+05
+  1: ||r||=1.149091e+05
+  1: ||r||=1.017360e+05
+  1: ||r||=9.199727e+04
+  1: ||r||=1.115867e+05
+  1: ||r||=1.168624e+05
+  1: ||r||=1.101563e+05
+  1: ||r||=9.479122e+04
+  1: ||r||=9.427008e+04
+  1: ||r||=9.286526e+04
+  1: ||r||=9.006863e+04
+  1: ||r||=2.637698e-05
+Nits = 15, ||r|| = 3.456554e-09 

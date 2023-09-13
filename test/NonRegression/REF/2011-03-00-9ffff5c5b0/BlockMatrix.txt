@@ -1,0 +1,111 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 149 x 149 block matrix with variable block size = [3,9]
+Nullspace: Using default nullspace size=9
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.707382e+01
+  2: ||r||=3.922871e-01
+  3: ||r||=2.055936e-02
+  4: ||r||=1.259539e-03
+  5: ||r||=8.496432e-05
+  6: ||r||=6.199916e-06
+  7: ||r||=4.797158e-07
+  8: ||r||=3.853801e-08
+  9: ||r||=3.165143e-09
+
+*****************************************************************************
+
+Building 149 x 149 block matrix with variable block size = [3,9]
+Nullspace: Using default nullspace size=9
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.707382e+01
+  2: ||r||=3.922871e-01
+  3: ||r||=2.055936e-02
+  4: ||r||=1.259539e-03
+  5: ||r||=8.496432e-05
+  6: ||r||=6.199916e-06
+  7: ||r||=4.797158e-07
+  8: ||r||=3.853801e-08
+  9: ||r||=3.165143e-09
+
+*****************************************************************************
+
+Building 149 x 149 block matrix with variable block size = [3,9]
+Nullspace: Using default nullspace size=9
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.707382e+01
+  2: ||r||=3.922871e-01
+  3: ||r||=2.055936e-02
+  4: ||r||=1.259539e-03
+  5: ||r||=8.496432e-05
+  6: ||r||=6.199916e-06
+  7: ||r||=4.797158e-07
+  8: ||r||=3.853801e-08
+  9: ||r||=3.165143e-09
+
+*****************************************************************************
+
+Building 149 x 149 block matrix with variable block size = [3,9]
+Nullspace: Using default nullspace size=9
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.707382e+01
+  2: ||r||=3.922871e-01
+  3: ||r||=2.055936e-02
+  4: ||r||=1.259539e-03
+  5: ||r||=8.496432e-05
+  6: ||r||=6.199916e-06
+  7: ||r||=4.797158e-07
+  8: ||r||=3.853801e-08
+  9: ||r||=3.165143e-09
+
+*****************************************************************************
+
+Building 149 x 149 block matrix with variable block size = [3,9]
+Nullspace: Using default nullspace size=9
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.707382e+01
+  2: ||r||=3.922871e-01
+  3: ||r||=2.055936e-02
+  4: ||r||=1.259539e-03
+  5: ||r||=8.496432e-05
+  6: ||r||=6.199916e-06
+  7: ||r||=4.797158e-07
+  8: ||r||=3.853801e-08
+  9: ||r||=3.165143e-09

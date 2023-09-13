@@ -1,0 +1,83 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Aggregating
+ 3 ................................................................................
+ 2 ................................................................................
+ 1 ...........................
+Nullspace: Using default nullspace size=1
+TentativePFactoryEx: Smoothing fine level nullspace 
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 143.01
+initial emin residual = 4.147e+05
+final emin residual   = 6.650e+03
+condest(Pfinal'Pfinal) =   3.33e+01
+condest(P'AP) =   1.58e+07
+Aggregating
+ 1 .....................................................
+TentativePFactoryEx: Smoothing fine level nullspace 
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 543.29
+initial emin residual = 1.697e+07
+final emin residual   = 9.713e+04
+condest(Pfinal'Pfinal) =   4.41e+01
+condest(P'AP) =   3.42e+06
+Aggregating
+ 1 ..................
+TentativePFactoryEx: Smoothing fine level nullspace 
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 1703.94
+initial emin residual = 8.893e+06
+final emin residual   = 9.161e+03
+condest(Pfinal'Pfinal) =   5.44e+02
+condest(P'AP) =   1.83e+06
+Hierarchy: actual #levels  = 4
+  1: ||r||=4.854585e-02
+  1: ||r||=8.852369e-02
+  1: ||r||=6.798265e-02
+  1: ||r||=5.216410e-02
+  1: ||r||=2.905456e-02
+  1: ||r||=2.221972e-02
+  1: ||r||=1.479161e-02
+  1: ||r||=6.890235e-03
+  1: ||r||=3.965011e-03
+  1: ||r||=2.012626e-03
+  1: ||r||=1.713323e-03
+  1: ||r||=8.490844e-04
+  1: ||r||=3.734369e-04
+  1: ||r||=1.893857e-04
+  1: ||r||=1.149062e-04
+  1: ||r||=8.301145e-05
+  1: ||r||=5.152420e-05
+  1: ||r||=3.163605e-05
+  1: ||r||=1.827794e-05
+  1: ||r||=8.629287e-06
+  1: ||r||=6.411768e-06
+  1: ||r||=2.965528e-06
+  1: ||r||=1.731612e-06
+  1: ||r||=8.249885e-07
+  1: ||r||=4.276649e-07
+  1: ||r||=2.116905e-07
+  1: ||r||=1.004218e-07
+  1: ||r||=5.134581e-08
+  1: ||r||=2.840967e-08
+  1: ||r||=1.620381e-08
+  1: ||r||=8.218654e-09
+  1: ||r||=4.576515e-09
+Nits = 32,||r||=6.919738e-08

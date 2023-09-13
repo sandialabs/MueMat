@@ -1,0 +1,61 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+ Explicit AMG :data/Xfem_1cr_al_prop3_090x91.mat 
+=====================
+Predropping crack-cross...Done!
+Aggregating
+ 2 ................................................................................
+ 1 .
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 724959
+initial emin residual = 9.444e+06
+final emin residual   = 2.091e+06
+condest(Pfinal'Pfinal) =   1.64e+02
+condest(P'AP) =   7.36e+04
+Predropping crack-cross...Done!
+Aggregating
+ 1 .........
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 1457 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 129996
+initial emin residual = 2.120e+06
+final emin residual   = 3.416e+05
+condest(Pfinal'Pfinal) =   3.66e+01
+condest(P'AP) =   2.26e+04
+  1: ||r||=1.905560e+02
+  1: ||r||=5.479779e+03
+  1: ||r||=4.664260e+03
+  1: ||r||=1.091887e+03
+  1: ||r||=2.698390e+02
+  1: ||r||=5.107559e+01
+  1: ||r||=1.469855e+01
+  1: ||r||=3.551311e+00
+  1: ||r||=8.534350e-01
+  1: ||r||=1.966253e-01
+  1: ||r||=5.285919e-02
+  1: ||r||=1.216828e-02
+  1: ||r||=2.647126e-03
+  1: ||r||=6.224244e-04
+  1: ||r||=1.456112e-04
+  1: ||r||=2.741777e-05
+  1: ||r||=6.228341e-06
+flag=0; res = 2.631e-06 after 17 iterations.
+AMG Operator Complexity = 1.361812e+00, sub complexity = 1.344686e+00

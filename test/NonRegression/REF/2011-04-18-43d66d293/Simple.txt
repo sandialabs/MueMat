@@ -1,0 +1,47 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Nullspace: Using default nullspace size=1
+Aggregating
+ 1 .........
+Hierarchy: actual #levels  = 2
+(level 1) GaussSeidel: sweeps=1, omega=1, mode='symmetric'
+   17.0597
+
+Solving Ax=b with multigrid...
+
+  1: ||r||=1.362314e+01
+  2: ||r||=1.876122e+00
+  3: ||r||=2.676099e-01
+  4: ||r||=3.791410e-02
+  5: ||r||=5.387252e-03
+  6: ||r||=7.678605e-04
+  7: ||r||=1.097055e-04
+  8: ||r||=1.570270e-05
+  9: ||r||=2.251053e-06
+
+||r_0|| / ||r_final|| = 5.31908e-08
+
+Solving Ax=b again with conjugate gradients preconditioned by multigrid...
+
+  1: ||r||=17.0597
+  2: ||r||=6.96549
+  3: ||r||=0.174601
+  4: ||r||=0.00815867
+  5: ||r||=0.000318151
+  6: ||r||=1.44616e-05
+  7: ||r||=4.97747e-07
+  8: ||r||=2.17507e-08
+
+||r_0|| / ||r_final|| = 1.27498e-09
+

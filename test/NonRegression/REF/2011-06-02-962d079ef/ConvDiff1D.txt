@@ -1,0 +1,53 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Aggregation Factory Warning: AggPtsPerDim only used with rectangle algorithm!
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Nullspace: Using default nullspace size=1
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+condest(Pfinal'Pfinal) =   3.03e+00
+condest(P'AP) =   2.74e+17
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+condest(Pfinal'Pfinal) =   3.02e+00
+condest(P'AP) =   2.71e+16
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 2
+condest(Pfinal'Pfinal) =   3.73e+00
+condest(P'AP) =   8.80e+15
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+condest(Pfinal'Pfinal) =   2.51e+00
+condest(P'AP) =   3.95e+15
+Hierarchy: actual #levels  = 3
+Warning: Coarsest Level will have a direct solve!
+  1: ||r||=1.186849e+04
+  1: ||r||=5.740345e+02
+  1: ||r||=1.060981e+04
+  1: ||r||=1.998898e+04
+  1: ||r||=7.124718e+04
+  1: ||r||=1.173181e+05
+  1: ||r||=1.149091e+05
+  1: ||r||=1.017360e+05
+  1: ||r||=9.199727e+04
+  1: ||r||=1.115867e+05
+  1: ||r||=1.168624e+05
+  1: ||r||=1.101563e+05
+  1: ||r||=9.479122e+04
+  1: ||r||=9.427008e+04
+  1: ||r||=9.286526e+04
+  1: ||r||=9.006863e+04
+  1: ||r||=2.637721e-05
+Nits = 15, ||r|| = 3.456560e-09 

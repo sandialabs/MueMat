@@ -1,0 +1,1 @@
+To open .zargo files (= source files of UML diagrams), download ArgoUML (http://argouml-downloads.tigris.org/) and run 'java -jar argouml.jar'

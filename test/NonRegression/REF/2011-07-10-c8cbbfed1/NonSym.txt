@@ -1,0 +1,109 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+numDesiredLevels =
+
+     3
+
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 3
+Aggregating
+ 3 ................................................................................
+ 2 ................................................................................
+ 1 ...........................
+Nullspace: Using default nullspace size=1
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 810
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   4.38e+00
+norm(P.cnull-fnull)=2567312.557666, nnzP = 18750
+condest(final Ptent'Ptent) =   4.38e+00
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 8
+condest(Pfinal'Pfinal) =   5.03e+00
+condest(P'AP) =   8.88e+05
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+condest(Pfinal'Pfinal) =   5.03e+00
+condest(P'AP) =   8.88e+05
+Aggregating
+ 1 ........
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 31
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   4.12e+00
+norm(P.cnull-fnull)=23024.543644, nnzP = 810
+condest(final Ptent'Ptent) =   4.12e+00
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 10
+condest(Pfinal'Pfinal) =   7.53e+00
+condest(P'AP) =   8.08e+02
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+condest(Pfinal'Pfinal) =   7.53e+00
+condest(P'AP) =   8.08e+02
+Hierarchy: actual #levels  = 3
+Warning: Coarsest Level will have a direct solve!
+  1: ||r||=4.854585e-02
+  1: ||r||=1.156621e-02
+  1: ||r||=1.254641e-01
+  1: ||r||=1.031314e-01
+  1: ||r||=1.080383e-01
+  1: ||r||=1.330276e-01
+  1: ||r||=1.419808e-01
+  1: ||r||=1.509305e-01
+  1: ||r||=1.220306e-01
+  1: ||r||=1.312752e-01
+  1: ||r||=1.398733e-01
+  1: ||r||=1.235943e-01
+  1: ||r||=1.457216e-01
+  1: ||r||=1.331286e-01
+  1: ||r||=1.439696e-01
+  1: ||r||=1.487971e-01
+  1: ||r||=1.357853e-01
+  1: ||r||=1.748976e-01
+  1: ||r||=1.440793e-01
+  1: ||r||=1.732265e-01
+  1: ||r||=1.693197e-01
+  1: ||r||=1.668106e-01
+  1: ||r||=2.099046e-01
+  1: ||r||=1.959559e-01
+  1: ||r||=2.219536e-01
+  1: ||r||=2.298436e-01
+  1: ||r||=1.924908e-01
+  1: ||r||=2.129870e-01
+  1: ||r||=1.973188e-01
+  1: ||r||=2.157350e-01
+  1: ||r||=2.012693e-01
+  1: ||r||=2.277742e-01
+  1: ||r||=2.387577e-01
+  1: ||r||=2.477364e-01
+  1: ||r||=2.701865e-01
+  1: ||r||=2.885655e-01
+  1: ||r||=2.854948e-01
+  1: ||r||=2.603342e-01
+  1: ||r||=2.356025e-01
+  1: ||r||=2.622001e-01
+  1: ||r||=2.682209e-01
+  1: ||r||=2.689068e-01
+  1: ||r||=3.691798e-01
+  1: ||r||=4.233577e-01
+  1: ||r||=3.471533e-07
+Nits = 43, ||r|| = 8.340979e-06 

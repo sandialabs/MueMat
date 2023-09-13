@@ -1,0 +1,591 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Demonstration of different ways to construct smoothers.</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2010-12-06"><meta name="DC.source" content="SmoothingTest.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Demonstration of different ways to construct smoothers.</h1><!--introduction--><p>This example builds a 1D Laplacian and solves via a 2-level multigrid hierarchy. The example shows different ways smoothers are constructed. In particular,</p><pre>sym Gauss-Seidel       | SFact= BlkSmootherFactory('GaussSeidel',   Nits,Omega);
+-----------------------------------------------------------------------------
+sym block Gauss-Seidel | SFact= BlkSmootherFactory('BlkGaussSeidel',Nits,Omega);
+-----------------------------------------------------------------------------
+Jacobi                 | SFact= BlkSmootherFactory('Jacobi',        Nits,Omega);
+-----------------------------------------------------------------------------
+block Jacobi           | SFact= BlkSmootherFactory('BlkJacobi',     Nits,Omega);
+-----------------------------------------------------------------------------
+additive domain        | SFact= BlkSmootherFactory('Jacobi',Nits,Omega,...
+decomposition          |                        'Random NonOverlapping');
+-----------------------------------------------------------------------------
+multiplicative domain  | SFact= BlkSmootherFactory('GaussSeidel',Nits,Omega,...
+decomposition          |                        'Random NonOverlapping');
+-----------------------------------------------------------------------------</pre><p><b>Remarks</b>:</p><div><ol><li>Omega == 1 runs the fast version of Gauss-Seidel. No fast version of Jacobi is currently available (for doing Dinv).</li><li>#pre iterations = # post iterations = <tt>Nits</tt></li><li>domains are silly (random) for domain decomposition. Overlapping is also available.  The example is meant to demonstrate the interface and hopefully more realistic things will be created.</li></ol></div><p>Fine grain control is available. For example,</p><pre>     SFact = SmootherFactory(Smoother('GaussSeidel', Nits, Omega));
+     SFact.SetIts(Npre,Npost);
+     SFact.SetOmega(OmegaPre, OmegaPost);
+     SFact.ForwardSweeps(TrueOrFalse,TrueOrFalse);
+     SFact.BackwardSweeps(TrueOrFalse,TrueOrFalse);</pre><p><b>Remarks</b>:</p><div><ol><li><tt>SetIts()</tt> over-rides <tt>Nits</tt> in constructor and allows the number of pre- and post- iterations to differ.</li><li><tt>SetOmega()</tt> over-rides <tt>Omega</tt> in constructor and allows the damping factor for pre- and post- iterations to differ.</li><li><tt>SetIts()</tt> and <tt>SetOmega()</tt> do similar things for other smoothers.</li><li><tt>ForwardSweeps()</tt> and <tt>BackwardSweeps()</tt> decide whether forward and/or backward sweeps are used within Gauss-Seidel iterations. They do similar things for block Gauss-Seidel and multiplicative domain decomposition.</li></ol></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Advanced Concepts</a></li></ul></div><h2>Advanced Concepts<a name="1"></a></h2><div><ol><li>The last example is for setting domain decomposition blocks. The basic idea in factories is that no real problem specific data is given when factories are constructed. This means that only strategies for defining blocks can be given during the factory construction phase.  The standard procedure for setting smoothers is to create a smoother factory as illustrated above and pass this to <tt>MgHierarchy.SetSmoothers()</tt> which automatically invokes the smoother factory's build method to create smoothers on all levels.  If we happen to actually have block data for a particular level, we must directly call the factory's build method so that we can pass this data in. See last example for more details.</li></ol></div><div><ol><li>If the number of pre (or post) iterations is equal to zero, then a pre (or post) smoothing object is not created when the factory's build method is invoked. This means that we can build completely independent pre and post smoothing objects by invoking <tt>MgHierarchy.SetSmoothers()</tt> twice with two different smoother factories. The first time setting PostIts to 0 and the second time setting <tt>PreIts</tt> to 0.</li></ol></div><p><b>Problem setup</b></p><pre class="codeinput">clear;
+srand;
+mue_include
+InitGuessStatus = NOTALLZEROS;
+
+Amat = BuildLaplace1DBlk(1,-1,100);
+
+rowmap = Amat.GetRowMap();
+rhs  = rand(rowmap.NDOFs(),1);
+sol  = zeros(rowmap.NDOFs(),1); InitGuessStatus = ALLZEROS;
+</pre><pre class="codeoutput">
+*****************************************************************************
+
+Building 100 x 100 block matrix with constant block size = 1
+</pre><p><b>Factories to define AMG</b></p><pre class="codeinput">AmalgamateDropFact= CoalesceDropFactory();
+AggFact        = AggregationFactory();
+Pfact             = SaPFactory(AmalgamateDropFact,AggFact);
+Rfact             = TransPFactory();
+PRfact            = GenericPRFactory(Pfact,Rfact);
+Acfact            = RAPFactory();
+</pre><p><b>Construct and populate finest level with user information</b></p><pre class="codeinput">Finest = SaLevel();
+Finest.SetA(Amat);
+<span class="comment">%Finest.SetNull(ones(rowmap.NDOFs(),1));</span>
+Finest.SetNull(BuildNullSpace(Amat));
+
+MgHierarchy = Hierarchy();
+MgHierarchy.SetOutputLevel(1);
+MgHierarchy.SetBucket(Finest,1);
+MgHierarchy.FillHierarchy(PRfact, Acfact, 1, 2);
+</pre><pre class="codeoutput">Aggregating
+ 1 .
+condest(P'P) =   3.04e+00
+condest(P'AP) =   5.63e+02
+</pre><p><b>Different ways to set and exercise smoothers</b></p><pre class="codeinput">sweeps = 1;               <span class="comment">% number of smoothing sweeps (pre or post)</span>
+startLevel = 1;           <span class="comment">% start indexing at level 1</span>
+numDesiredLevels = 2;     <span class="comment">% max number of levels in hierarchy</span>
+iterations = 9;           <span class="comment">% multigrid iterations</span>
+smoothCoarsest = false;   <span class="comment">% if true, run smoother on coarsest problem</span>
+                          <span class="comment">% (must be true if a one-level method and you</span>
+                          <span class="comment">%  don't want a direct solve)</span>
+</pre><p><b>Symmetric Gauss-Seidel</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric Gauss-Seidel V(1,1) with w = .99\n'</span>);
+SFact   = SmootherFactory(Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99, <span class="string">'point'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running symmetric Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=7.795416e-01
+  3: ||r||=6.757628e-02
+  4: ||r||=6.686209e-03
+  5: ||r||=6.841606e-04
+  6: ||r||=7.132156e-05
+  7: ||r||=7.529785e-06
+  8: ||r||=8.021406e-07
+  9: ||r||=8.601797e-08
+</pre><p><b>Symmetric Block Gauss-Seidel, pre and post smoothing</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric Block Gauss-Seidel V(1,1) with w = .99\n'</span>);
+SFact   = SmootherFactory(Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99, <span class="string">'default'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running symmetric Block Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=7.795416e-01
+  3: ||r||=6.757628e-02
+  4: ||r||=6.686209e-03
+  5: ||r||=6.841606e-04
+  6: ||r||=7.132156e-05
+  7: ||r||=7.529785e-06
+  8: ||r||=8.021406e-07
+  9: ||r||=8.601797e-08
+</pre><p><b>Jacobi</b></p><pre class="codeinput">fprintf(<span class="string">'Running Jacobi V(1,1) with w = .7\n'</span>);
+SFact  = SmootherFactory(Smoother(<span class="string">'Jacobi'</span>, sweeps, .7, <span class="string">'point'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running Jacobi V(1,1) with w = .7
+  1: ||r||=5.386794e+00
+  2: ||r||=1.798559e+00
+  3: ||r||=4.389146e-01
+  4: ||r||=1.382946e-01
+  5: ||r||=4.786904e-02
+  6: ||r||=1.735337e-02
+  7: ||r||=6.474518e-03
+  8: ||r||=2.464664e-03
+  9: ||r||=9.522996e-04
+</pre><p><b>Block Jacobi</b></p><pre class="codeinput">fprintf(<span class="string">'Running Block Jacobi V(1,1) with w = .7\n'</span>);
+SFact  = SmootherFactory(Smoother(<span class="string">'Jacobi'</span>, sweeps, .7, <span class="string">'default'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running Block Jacobi V(1,1) with w = .7
+  1: ||r||=5.386794e+00
+  2: ||r||=1.798559e+00
+  3: ||r||=4.389146e-01
+  4: ||r||=1.382946e-01
+  5: ||r||=4.786904e-02
+  6: ||r||=1.735337e-02
+  7: ||r||=6.474518e-03
+  8: ||r||=2.464664e-03
+  9: ||r||=9.522996e-04
+</pre><p><b>Symmetric Gauss-Seidel, pre smoothing only</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric Gauss-Seidel V(1,0) with w = .99\n'</span>);
+SFact    = SmootherFactory(Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99, <span class="string">'point'</span>), []);
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running symmetric Gauss-Seidel V(1,0) with w = .99
+  1: ||r||=5.194005e+00
+  2: ||r||=3.013625e+00
+  3: ||r||=5.381176e-01
+  4: ||r||=1.229222e-01
+  5: ||r||=3.227590e-02
+  6: ||r||=9.051401e-03
+  7: ||r||=2.628973e-03
+  8: ||r||=7.809245e-04
+  9: ||r||=2.357547e-04
+</pre><p><b>Symmetric Gauss-Seidel, post smoothing only</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric Gauss-Seidel V(0,1) with w = .99\n'</span>);
+SFact    = SmootherFactory([],Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99, <span class="string">'point'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running symmetric Gauss-Seidel V(0,1) with w = .99
+  1: ||r||=5.852479e+00
+  2: ||r||=5.194005e+00
+  3: ||r||=3.013625e+00
+  4: ||r||=5.381176e-01
+  5: ||r||=1.229222e-01
+  6: ||r||=3.227590e-02
+  7: ||r||=9.051401e-03
+  8: ||r||=2.628973e-03
+  9: ||r||=7.809245e-04
+</pre><p><b>Symmetric Block Gauss-Seidel, pre and post smoothing but with different damping factors</b></p><pre class="codeinput">fprintf(<span class="string">'Running pre-forward sweep only with omega = .5 and post-backward sweep only Gauss-Seidel V(1,1) with w = .99\n'</span>);
+PreSmoo  = Smoother(<span class="string">'GaussSeidel'</span>, sweeps);
+PreSmoo.SetOmega(.5);
+PreSmoo.SetForwardSweep(true);
+PreSmoo.SetBackwardSweep(false);
+PostSmoo  = Smoother(<span class="string">'GaussSeidel'</span>, sweeps);
+PostSmoo.SetOmega(.99);
+PostSmoo.SetForwardSweep(false);
+PostSmoo.SetBackwardSweep(true);
+SFact    = SmootherFactory(PreSmoo,PostSmoo);
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running pre-forward sweep only with omega = .5 and post-backward sweep only Gauss-Seidel V(1,1) with w = .99
+  1: ||r||=5.446526e+00
+  2: ||r||=3.324264e+00
+  3: ||r||=6.748232e-01
+  4: ||r||=1.894452e-01
+  5: ||r||=6.124303e-02
+  6: ||r||=2.076412e-02
+  7: ||r||=7.228104e-03
+  8: ||r||=2.557486e-03
+  9: ||r||=9.149994e-04
+</pre><p><b>Overlapping additive Schwarz, pre and post smoothing, random domains</b></p><pre class="codeinput">fprintf(<span class="string">'Running overlapping additive domain decomp. V(1,1) where domains are chosen randomly\n'</span>);
+SFact  = SmootherFactory(Smoother(<span class="string">'Jacobi'</span>, sweeps, .7,<span class="string">'Random NonOverlapping'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running overlapping additive domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=5.445111e+00
+  2: ||r||=1.831662e+00
+  3: ||r||=4.433059e-01
+  4: ||r||=1.398277e-01
+  5: ||r||=4.825559e-02
+  6: ||r||=1.734737e-02
+  7: ||r||=6.385157e-03
+  8: ||r||=2.388448e-03
+  9: ||r||=9.046390e-04
+</pre><p><b>Overlapping multiplicative Schwarz, pre and post smoothing, random domains</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly\n'</span>);
+SFact   = SmootherFactory(Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99,<span class="string">'Random Overlapping'</span>));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly
+  1: ||r||=7.468166e+00
+  2: ||r||=1.073634e+00
+  3: ||r||=6.819124e-02
+  4: ||r||=5.101968e-03
+  5: ||r||=4.212034e-04
+  6: ||r||=3.615522e-05
+  7: ||r||=3.144878e-06
+  8: ||r||=2.747951e-07
+  9: ||r||=2.405559e-08
+</pre><p><b>Alternative setup method for overlapping multiplicative Schwarz, pre and post smoothing, random domains</b></p><pre class="codeinput">fprintf(<span class="string">'Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly but ...\n'</span>);
+fprintf(<span class="string">'setting the blocks in a more direct but low-level fashion\n'</span>);
+NewMg = MgHierarchy.Copy();
+Finest      = NewMg.GetBucket(1);
+FineA       = Finest.GetA();
+</pre><pre class="codeoutput">Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly but ...
+setting the blocks in a more direct but low-level fashion
+</pre><p><b>Switching views of matrix and smoothing using different diagonal</b></p><pre class="codeinput">FineA.CreateView(<span class="string">'ovblock'</span>, FineA.GetRowMap(), FineA.GetColMap(), FineA.GetApply());
+previousView = FineA.SwitchToView(<span class="string">'ovblock'</span>);
+<span class="comment">% create a new block diagonal</span>
+Collection = MakeUpRandomBlks(FineA,<span class="string">'Overlapping'</span>);
+
+BlkDiag = FineA.GetDiagonal(Collection);
+<span class="keyword">if</span> isempty(BlkDiag.GetApplyInverse())
+  FactorBlkDiag(BlkDiag);
+<span class="keyword">end</span>
+
+<span class="comment">%[Pre,Post,Op]= SFact.OverloadBuild(Finest,Collection); %old version</span>
+<span class="comment">% See also: SmootherFactory</span>
+SFact       = SmootherFactory(Smoother(<span class="string">'GaussSeidel'</span>, sweeps, .99, <span class="string">'ovblock'</span>));
+[PreSmooPrototype,PostSmooPrototype] = SFact.GetSmootherPrototypes();
+
+PreSmoo = PreSmooPrototype.Copy();
+PreSmoo.OverloadSetup(Finest, Collection);
+
+<span class="keyword">if</span> ~isempty(PostSmooPrototype)
+  <span class="keyword">if</span> ~isempty(PreSmooPrototype) &amp;&amp; <span class="keyword">...</span>
+       (strcmp(PreSmooPrototype.GetType(), <span class="keyword">...</span>
+              PostSmooPrototype.GetType()))
+                 PostSmoo = PreSmoo.Copy();
+               PostSmoo.CopyParameters(PostSmooPrototype);
+
+               PostSmoo.OverloadSetup(Finest, Collection); <span class="comment">% In general, do nothing.</span>
+  <span class="keyword">else</span>
+
+    PostSmoo = this.PostSmooPrototype.Copy();
+    PostSmoo.OverloadSetupSetup(Finest, Collection);
+
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+Finest.SetPreSmoother(PreSmoo);
+Finest.SetPostSmoother(PostSmoo);
+
+FineA.SwitchToView(previousView);
+
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+</pre><pre class="codeoutput">  1: ||r||=7.468166e+00
+  2: ||r||=1.073634e+00
+  3: ||r||=6.819124e-02
+  4: ||r||=5.101968e-03
+  5: ||r||=4.212034e-04
+  6: ||r||=3.615522e-05
+  7: ||r||=3.144878e-06
+  8: ||r||=2.747951e-07
+  9: ||r||=2.405559e-08
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Demonstration of different ways to construct smoothers.
+%
+% This example builds a 1D Laplacian and solves via a 2-level multigrid hierarchy.
+% The example shows different ways smoothers are constructed. In particular,
+%
+%  sym Gauss-Seidel       | SFact= BlkSmootherFactory('GaussSeidel',   Nits,Omega);
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  sym block Gauss-Seidel | SFact= BlkSmootherFactory('BlkGaussSeidel',Nits,Omega);
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  Jacobi                 | SFact= BlkSmootherFactory('Jacobi',        Nits,Omega);
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  block Jacobi           | SFact= BlkSmootherFactory('BlkJacobi',     Nits,Omega);
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  additive domain        | SFact= BlkSmootherFactory('Jacobi',Nits,Omega,...
+%  decomposition          |                        'Random NonOverlapping');
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  multiplicative domain  | SFact= BlkSmootherFactory('GaussSeidel',Nits,Omega,...
+%  decomposition          |                        'Random NonOverlapping');
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%
+% *Remarks*:
+%
+% # Omega == 1 runs the fast version of Gauss-Seidel. No fast 
+% version of Jacobi is currently available (for doing Dinv). 
+% # #pre iterations = # post iterations = |Nits|
+% # domains are silly (random) for domain decomposition. Overlapping
+% is also available.  The example is meant to demonstrate the 
+% interface and hopefully more realistic things will be created.
+%
+%
+% Fine grain control is available. For example,
+%
+%       SFact = SmootherFactory(Smoother('GaussSeidel', Nits, Omega));
+%       SFact.SetIts(Npre,Npost);
+%       SFact.SetOmega(OmegaPre, OmegaPost);
+%       SFact.ForwardSweeps(TrueOrFalse,TrueOrFalse);
+%       SFact.BackwardSweeps(TrueOrFalse,TrueOrFalse);
+%
+% *Remarks*:
+%
+% # |SetIts()| over-rides |Nits| in constructor and allows the 
+% number of pre- and post- iterations to differ.
+% # |SetOmega()| over-rides |Omega| in constructor and allows the 
+% damping factor for pre- and post- iterations to differ.
+% # |SetIts()| and |SetOmega()| do similar things for other smoothers.
+% # |ForwardSweeps()| and |BackwardSweeps()| decide whether forward
+% and/or backward sweeps are used within Gauss-Seidel iterations.
+% They do similar things for block Gauss-Seidel and 
+% multiplicative domain decomposition.
+%
+%% Advanced Concepts
+%
+% # The last example is for setting domain decomposition blocks. The basic
+% idea in factories is that no real problem specific data is given when 
+% factories are constructed. This means that only strategies for defining
+% blocks can be given during the factory construction phase.  The standard
+% procedure for setting smoothers is to create a smoother factory as
+% illustrated above and pass this to |MgHierarchy.SetSmoothers()| which 
+% automatically invokes the smoother factory's build method to create
+% smoothers on all levels.  If we happen to actually have block data for
+% a particular level, we must directly call the factory's build method 
+% so that we can pass this data in. See last example for more details.
+% 
+% # If the number of pre (or post) iterations is equal to zero, then
+% a pre (or post) smoothing object is not created when the factory's
+% build method is invoked. This means that we can build completely 
+% independent pre and post smoothing objects by invoking
+% |MgHierarchy.SetSmoothers()| twice with two different smoother
+% factories. The first time setting PostIts to 0 and the second time
+% setting |PreIts| to 0. 
+%
+
+%%
+% *Problem setup*
+clear;
+srand;
+mue_include
+InitGuessStatus = NOTALLZEROS;
+
+Amat = BuildLaplace1DBlk(1,-1,100);
+
+rowmap = Amat.GetRowMap();
+rhs  = rand(rowmap.NDOFs(),1);
+sol  = zeros(rowmap.NDOFs(),1); InitGuessStatus = ALLZEROS;
+
+%%
+% *Factories to define AMG*
+%
+AmalgamateDropFact= CoalesceDropFactory();
+AggFact        = AggregationFactory();
+Pfact             = SaPFactory(AmalgamateDropFact,AggFact);
+Rfact             = TransPFactory();
+PRfact            = GenericPRFactory(Pfact,Rfact);
+Acfact            = RAPFactory();
+%%
+% *Construct and populate finest level with user information*
+%
+Finest = SaLevel();
+Finest.SetA(Amat);
+%Finest.SetNull(ones(rowmap.NDOFs(),1));
+Finest.SetNull(BuildNullSpace(Amat));
+
+MgHierarchy = Hierarchy();
+MgHierarchy.SetOutputLevel(1);
+MgHierarchy.SetBucket(Finest,1);
+MgHierarchy.FillHierarchy(PRfact, Acfact, 1, 2);
+
+%%
+% *Different ways to set and exercise smoothers*
+%
+sweeps = 1;               % number of smoothing sweeps (pre or post)
+startLevel = 1;           % start indexing at level 1
+numDesiredLevels = 2;     % max number of levels in hierarchy
+iterations = 9;           % multigrid iterations
+smoothCoarsest = false;   % if true, run smoother on coarsest problem
+                          % (must be true if a one-level method and you
+                          %  don't want a direct solve)
+
+%%
+% *Symmetric Gauss-Seidel*
+fprintf('Running symmetric Gauss-Seidel V(1,1) with w = .99\n');
+SFact   = SmootherFactory(Smoother('GaussSeidel', sweeps, .99, 'point'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Symmetric Block Gauss-Seidel, pre and post smoothing*
+fprintf('Running symmetric Block Gauss-Seidel V(1,1) with w = .99\n');
+SFact   = SmootherFactory(Smoother('GaussSeidel', sweeps, .99, 'default'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Jacobi*
+fprintf('Running Jacobi V(1,1) with w = .7\n');
+SFact  = SmootherFactory(Smoother('Jacobi', sweeps, .7, 'point'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Block Jacobi*
+fprintf('Running Block Jacobi V(1,1) with w = .7\n');
+SFact  = SmootherFactory(Smoother('Jacobi', sweeps, .7, 'default'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Symmetric Gauss-Seidel, pre smoothing only*
+fprintf('Running symmetric Gauss-Seidel V(1,0) with w = .99\n');
+SFact    = SmootherFactory(Smoother('GaussSeidel', sweeps, .99, 'point'), []);
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Symmetric Gauss-Seidel, post smoothing only*
+fprintf('Running symmetric Gauss-Seidel V(0,1) with w = .99\n');
+SFact    = SmootherFactory([],Smoother('GaussSeidel', sweeps, .99, 'point'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Symmetric Block Gauss-Seidel, pre and post smoothing but with different damping factors*
+fprintf('Running pre-forward sweep only with omega = .5 and post-backward sweep only Gauss-Seidel V(1,1) with w = .99\n');
+PreSmoo  = Smoother('GaussSeidel', sweeps);
+PreSmoo.SetOmega(.5);
+PreSmoo.SetForwardSweep(true);
+PreSmoo.SetBackwardSweep(false);
+PostSmoo  = Smoother('GaussSeidel', sweeps);
+PostSmoo.SetOmega(.99); 
+PostSmoo.SetForwardSweep(false); 
+PostSmoo.SetBackwardSweep(true);
+SFact    = SmootherFactory(PreSmoo,PostSmoo);
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Overlapping additive Schwarz, pre and post smoothing, random domains*
+fprintf('Running overlapping additive domain decomp. V(1,1) where domains are chosen randomly\n');
+SFact  = SmootherFactory(Smoother('Jacobi', sweeps, .7,'Random NonOverlapping'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Overlapping multiplicative Schwarz, pre and post smoothing, random domains*
+fprintf('Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly\n');
+SFact   = SmootherFactory(Smoother('GaussSeidel', sweeps, .99,'Random Overlapping'));
+SFact.SetCoarsest(smoothCoarsest);
+NewMg    = MgHierarchy.Copy();
+NewMg.SetSmoothers(SFact, startLevel, numDesiredLevels);
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+%%
+% *Alternative setup method for overlapping multiplicative Schwarz, pre and post smoothing, random domains*
+fprintf('Running symmetric overlapping multiplicative domain decomp. V(1,1) where domains are chosen randomly but ...\n');
+fprintf('setting the blocks in a more direct but low-level fashion\n');
+NewMg = MgHierarchy.Copy();
+Finest      = NewMg.GetBucket(1);
+FineA       = Finest.GetA();
+
+%%
+% *Switching views of matrix and smoothing using different diagonal*
+FineA.CreateView('ovblock', FineA.GetRowMap(), FineA.GetColMap(), FineA.GetApply());
+previousView = FineA.SwitchToView('ovblock');
+% create a new block diagonal
+Collection = MakeUpRandomBlks(FineA,'Overlapping');
+
+BlkDiag = FineA.GetDiagonal(Collection);
+if isempty(BlkDiag.GetApplyInverse())
+  FactorBlkDiag(BlkDiag);
+end
+
+%[Pre,Post,Op]= SFact.OverloadBuild(Finest,Collection); %old version
+% See also: SmootherFactory
+SFact       = SmootherFactory(Smoother('GaussSeidel', sweeps, .99, 'ovblock'));
+[PreSmooPrototype,PostSmooPrototype] = SFact.GetSmootherPrototypes();
+
+PreSmoo = PreSmooPrototype.Copy();
+PreSmoo.OverloadSetup(Finest, Collection);
+
+if ~isempty(PostSmooPrototype)
+  if ~isempty(PreSmooPrototype) && ...
+       (strcmp(PreSmooPrototype.GetType(), ...
+              PostSmooPrototype.GetType()))
+                 PostSmoo = PreSmoo.Copy();
+               PostSmoo.CopyParameters(PostSmooPrototype);
+
+               PostSmoo.OverloadSetup(Finest, Collection); % In general, do nothing.
+  else
+                 
+    PostSmoo = this.PostSmooPrototype.Copy();
+    PostSmoo.OverloadSetupSetup(Finest, Collection);
+    
+  end
+end
+Finest.SetPreSmoother(PreSmoo);
+Finest.SetPostSmoother(PostSmoo);
+
+FineA.SwitchToView(previousView);
+
+newsol   = NewMg.Iterate(rhs, iterations, sol, InitGuessStatus);
+
+
+##### SOURCE END #####
+--></body></html>

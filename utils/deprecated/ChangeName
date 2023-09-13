@@ -1,0 +1,68 @@
+#!/bin/sh
+# Changes any occurences of the string "OldName" to "NewName" in all files 
+# ending in .m, all README files, and all files containing a ]. 
+# ChangeName makes a backup in /tmp before doing anything and does
+# go through all subdirectories as well as the parent directory.
+#
+# 
+if test `expr $#` -ne `expr 2`
+then
+   echo Usage: ChangeName OldName NewName
+#   echo $#
+#   echo $@
+   exit
+fi
+#
+#
+echo "Before doing anything exciting, ChangeName creates a new copy of MueMat"
+echo "in /tmp. Here is information on copies that you already have in /tmp"
+echo ""
+ls -l /tmp 2>/dev/null | grep MueBackup | wc  | sed "s/^[^0123456789]*\([0123456789]*\).*/      ===> Number of backup copies = \1 /"
+ls -lt --time-style=long-iso /tmp | grep MueBackup | tail -1 | sed "s/^.*\( 20..-..-.. ..:.. \).*/      ===> Oldest copy was modified on\1/"
+echo 
+echo "Do you want to clean up first? [y/n]"
+read YesOrNo
+if test `expr $YesOrNo`_ = 'y_' 
+then
+   echo "Okay then I'll exit to give you some quality time "
+   exit
+fi
+
+BACKUP_NAME="/tmp/MueBackup_"`date | sed "s/ /_/g"`
+mkdir $BACKUP_NAME
+if test -d $BACKUP_NAME
+then
+   tar czf $BACKUP_NAME/tarball.tgz .
+   if test -f $BACKUP_NAME/tarball.tgz
+   then
+      MYHOME=`pwd`
+      cd $BACKUP_NAME ; tar xf tarball.tgz
+      cd $MYHOME
+      pwd
+      # 
+      # only change files with name ending in .m, or README or ending with ]
+      #
+      FILESTOCHANGE=`find . -print | grep "\.m$\|README\|\]"` 
+   
+      echo "Changing all occurences of " $1 " to " $2 "? [y/n]"
+      echo " ==> Please be careful with special characters/regular expressions!!"
+      read YesOrNo
+   
+      if test `expr $YesOrNo`_ = 'y_' 
+      then
+         for i in $FILESTOCHANGE
+         do
+            if test -f ${BACKUP_NAME}/${i}
+            then
+               cat ${BACKUP_NAME}/${i} | sed "s/$1/$2/g" > $i
+            fi
+         done
+      else
+        echo "Okay ... I'll hold off"
+      fi
+
+   else
+      echo "TarBall not made"
+      exit
+   fi
+fi

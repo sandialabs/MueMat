@@ -1,0 +1,202 @@
+* ****************************************************************************
+* author:  Ray Tuminaro
+* date:    April 5th, 2007
+* subject: Energy minimization, as motivated by "Energy Optimization of
+*          Algebraic Multigrid Bases", by Jan Mandel, Marian Brezina, and
+*          Peter Vanek, in Computing, Vol. 62, pages 205-228.
+* ****************************************************************************
+
+I looked at energy minimization so that we "might" discuss 
+it further in the basis shifting paper. Here is my "guess"
+as to what it REALLY is.
+
+We want to find P that satisfies
+
+  min  (1/2) sum (p_i)^T A p_i                      (eq 1)
+   P          i
+
+  subject to  P(i,j) = 0  if  (i,j) in S
+      and     P B_1 =  B_0 .
+
+B_0 is a matrix basis for the fine mesh near null space.
+B_1 is a matrix basis for the coarse mesh near null space.
+S is the pattern of P that MUST BE zero.
+
+A practical algorithm constructs a tentative prolongator
+satisfying constraints (in the usual way). An update is 
+computed via
+
+min  (1/2) sum (ptent_i + q_i)^T A (ptent_i + q_i)  (eq 2)
+ Q          i
+
+subject to  Q(i,j) = 0  if  (i,j) in S
+ and        Q B_1 =  0 
+
+and then take P = Ptent + Q.  This quadratic problem is 
+equivalent to the linear system:
+
+      (  H   Z^T  C^T  )  ( q )     ( -g )
+      (  Z    0    0   )  ( s )  =  (  0 )          (eq 3)
+      (  C    0    0   )  ( l )     (  0 )
+
+where 
+    q = flatten(Q) = [q1^T q2^T q3^T ...]^T
+    g is a gradient vector associated with the quadratic term
+    H is the Hessian associated with the quadratic term
+    Z is associated with the Q(i,j) = 0 constraints
+    C are the constraints associated with Q B_1 = 0
+and
+    s,l are Lagrange multipliers. 
+
+
+************************  What is g?  ************************
+
+Looking at one term in (eq 2)'s sum, we have
+
+  (1/2) (ptent_i + q_i)^T A (ptent_i + q_i) = 
+
+  (1/2) [q_i^T A q_i + ptent_i^T A ptent_i + 2 q_i^T A ptent_i]
+
+The gradient (with respect to q_i) is A ptent_i + A q_i
+
+Considering all terms in the sum, this becomes
+
+     g = flatten(A Ptent + A Q)
+
+When the initial guess is Q = 0, g = flatten(A Ptent).
+Solving (eq 3) via 1 damped Jacobi step gives the 
+standard "omega Dinv A Ptent" update in regular SA.
+Note: when regular aggregates are used, 1-step Jacobi 
+automatically satisfies constraints (i.e. s = l = 0).
+
+************************  What is H?  ************************
+
+Using similar arguments, it is easy to show that
+
+      H q = flatten(A Q)
+
+Ignoring constraints, further damped Jacobi iterations 
+correspond to higher order polynomials applied to Ptent 
+(i.e. p(A) Ptent). This is similar to standard prolongator 
+smoothers for large aggregates (where again aggregates are
+large enough so that s = l = 0 for several iterations).
+
+***************** Iterating on (eq 3) ************************
+
+Of course, we want to satisfy constraints at every iteration when
+solving (eq 3). This can be done by taking matrix vector products
+with H and then applying (I - Z^T inv(Z Z^T) Z) followed by 
+(I - C^T inv(C C^T) C). That is, a damped Richardson algorithm
+for solving (eq 3) is given by 
+
+    q = zeros();
+    for i=1:...
+       r = (I - C^T inv(C C^T) C)(I - Z^T inv(Z Z^T) Z) (-g - hessian*q)
+       q = q + omega*r
+    end
+
+This is similar to projected conjugate gradient.  Here are a 
+few fun facts to see the equivalence:
+
+    a) C*Z' = 0. This is because Z modifies unknowns which DO NOT    
+       appear in the final sparsity pattern while C modifies
+       unknowns that DO appear in the final sparsity pattern.
+
+    b) (I - C^T inv(C C^T) C)(I - Z^T inv(Z Z^T) Z) = 
+            I - C^T inv(C C^T) C - Z^T inv(Z Z^T) Z  
+
+    c) The two projections imply C*r = 0 and Z*r = 0. 
+
+       This implies that C*q = 0 and Z*q = 0 for all iterates and so we
+       can ignore the last two block equations in (eq 3) when iterating.
+
+    d) At the current iterate the Lagrange multiplier associated with Z is 
+
+              s =  inv(Z Z^T) Z) (-g - hessian*q)
+
+       corresponding to components of the negative gradient in Z's domain.
+
+    e) Likewise, the Lagrange multiplier associated with C is
+
+              l =  inv(C C^T) C) (-g - hessian*q)
+
+       Together d) and e) imply that the projected residual corresponds
+       to the true residual in the 1st block row of (eq 3):
+          -g - [hessian  Z^T C^T ][q; s; l]
+
+***************** What is (I - Z^T inv(Z Z^T) Z)? *******************
+
+Z is a matrix of 0's and 1's, Z Z^T is the identity, and 
+(I - Z^T inv(Z Z^T) Z) zeros out any variables which must be zero. 
+Thus, (I - Z^T inv(Z Z^T) Z) flatten(A Ptent) is equivalent 
+to forming A Ptent and zeroing out any non-allowed entries.
+
+
+***************** What is (I - C^T inv(C C^T) C)? *******************
+
+inv(C C^T) is block diagonal with block size equal to the null 
+space dimension.  When the nullspace is just a constant, the projection
+insures that the prolongator update has zero row sums. This is done by 
+subtracting off the average value within a row of the old update.
+
+More generally, each row of the update needs to not alter the rigid 
+body mode interpolation.  If, for example, we have 3 modes with 5
+'allowed nonzeros' in the 1st row update, it must satisfy
+
+    [0 0 0 ] = [ v11 v12 v13 v14 v15 ] [N1 N2 N3]    (eq 4)
+
+where v1. are the updates to the 1st row of the prolongator
+and N1,N2,N3 are the 3 coarse rigid body modes restricted to the 
+5 degrees of freedom in the 'allowed' sparsity pattern. Normally,
+these modes would actually be the R's from the QR in the tentative
+prolongator construction. Notice that N1,N2,N3 span several aggregates.
+
+                                         [0]     [ N1^T ]    [v11]
+Transposing we get a more standard form: [0]  =  [ N2^T ]    [v12]
+                                         [0]     [ N3^T ]    [v13]  .
+                                                             [v14]
+                                                             [v15]
+
+Obviously, v = 0 is uninteresting.  Instead, we seek a v which is 
+close to 'q', obtained by minimizing the objective function (without 
+considering these constraints). This is obtained via
+
+         [ N1^T ]    [q11]       [ N1^T ]    [d11]
+         [ N2^T ]    [q12]    =  [ N2^T ]    [d12]
+         [ N3^T ]    [q13]       [ N3^T ]    [d13] ,
+                     [q14]                   [d14]
+                     [q15]                   [d15]
+
+
+                                         [d11]
+                                         [d12]               [t1]
+taking v = q - d, and assuming the form: [d13]  = [N1 N2 N3] [t2]  .
+                                         [d14]               [t3]
+                                         [d15] 
+
+                               [ <N1,N1>    <N1,N2>    <N1,N3> ]
+leading to the linear systems: [ <N1,N2>    <N2,N2>    <N2,N3> ] .
+                               [ <N1,N3>    <N3,N2>    <N3,N3> ]
+
+
+***************** Putting it all together        ********************
+
+Energy minimization is really
+
+    for i=1:...
+       r = (I - C^T inv(C C^T) C)(I - Z^T inv(Z Z^T) Z) (-g - hessian*q)
+       q = q + omega*r
+    end
+
+The update, r, is equivalent to 
+         = - Cproj * Zproj *  flatten(A Ptent + A Q)
+where
+   Zproj zeros out non-allowed entries in the update
+and 
+   Cproj inverts a dense block per prolongator row.
+
+
+The real difference with basis shifting and one iteration of energy 
+minimization is how constraints are satisfied. Basis shifting finds 
+a different solution to (eq 4). This avoid solving linear systems 
+and also uses 'smooth' properties of the unconstrained solution. 

@@ -1,0 +1,59 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+SCHUR:data/Xfem_1cr_al_prop3_090x91.mat 
+=====================
+Aggregating
+ 2 ................................................................................
+ 1 .
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 518709
+initial emin residual = 1.073e+07
+final emin residual   = 3.708e+06
+condest(Pfinal'Pfinal) =   1.47e+01
+condest(P'AP) =   3.06e+06
+Aggregating
+ 1 ........
+AP_Pattern: Using filtering for A
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 99830.6
+initial emin residual = 2.493e+06
+final emin residual   = 7.363e+05
+condest(Pfinal'Pfinal) =   1.56e+01
+condest(P'AP) =   5.44e+05
+  1: ||r||=1.903145e+02
+  1: ||r||=3.853317e+03
+  1: ||r||=1.988357e+03
+  1: ||r||=4.614293e+02
+  1: ||r||=1.214161e+02
+  1: ||r||=3.858011e+01
+  1: ||r||=1.209314e+01
+  1: ||r||=2.272009e+00
+  1: ||r||=5.190559e-01
+  1: ||r||=1.114708e-01
+  1: ||r||=2.573062e-02
+  1: ||r||=4.805119e-03
+  1: ||r||=1.008888e-03
+  1: ||r||=2.224003e-04
+  1: ||r||=5.057474e-05
+  1: ||r||=1.004428e-05
+  1: ||r||=2.159316e-06
+  1: ||r||=4.740304e-07
+flag = 0; res = 3.16e-07 after 18 iterations 

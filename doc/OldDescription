@@ -1,0 +1,398 @@
+I've tried to do lots of things with blocks (both variable block size
+and constant block size) to clarify my thinking. The main things I 
+wanted to consider include 
+
+            - Amalgamation
+                - dropping entries before amalgamation
+                - dropping entries after amalgamation
+
+            - block GS
+                - blocks follow discretization matrix blocking
+                - arbitrary blocks (i.e., Amat's blocks are grouped
+                  into bigger blocks that are inverted for GS sweeps).
+
+            - block prolongator smoothing.
+                - I haven't quite gotten to everthing I would like here.
+                  I think the most general case is where we have a 
+                  variable block discretization matrix and we have a
+                  null space dimension that is greater than the largest
+                  variable block. This would require rectangular
+                  blocks in the prolongator and would have constant
+                  blocksize for columns and variable blocksize for
+                  rows (opposite for restriction).
+
+Getting Started ==> Use driver.m to exercise the code!!!! 
+                    Note: run ExpandTemplates.sh after updating templated code.
+==============================================================================
+Philosophy: It would be nice to make a Matlab code that comes as close
+as possible to the basic structure of the future real code: classes similar 
+to the real code, naming conventions consistent with the real code, 
+parameter lists, etc. It is fine if the Matlab code does things that 
+are not implemented right away in the real code and of course 'parallel'
+and 'templates' wouldn't be done in Matlab (though we should keep these 
+in mind).  As the Matlab code should guide the real code, it is far more 
+important that the Matlab code be readable and resemble standard programming 
+as opposed to be efficient and Matlab-cryptic. 
+
+ps: I've written a small shell script to do wimpy templates. The script looks
+    for filenames of the form *[*|*] where * is any string. It sticks
+    two new files in the directory PostTemplate for each found file.
+    The new files are identical to the original except occurences of the 
+    strings TEMPLATE[aaa|bbb] are replaced by aaa in the first file and 
+    bbb in the second file. For example, 
+          Vec(TEMPLATE[first|count]:TEMPLATE[last|nextcount-1],:);
+    in the file DCBlkApply[|SubIn] spawns a file PostTemplate/DCBlkApply.m 
+    with
+          Vec(first:last,:);
+    and a second file PostTemplate/DCBlkApplySubIn.m with 
+          Vec(count:nextcount-1,:);
+
+    **** This script is now unsued.
+
+==============================================================================
+Here are the main files ...
+
+AMGSetup.m                Something pretty junky to exercise AMG kernels. At
+AMGIterate.m              some point they should be replaced by something smarter.
+                          Right now we can iterate on a two-level hierarchy.
+
+Aggregate.m               Really crappy aggregation algorithm. The 
+                          main things to focus on here are the input
+                          and the output. Right now the input is
+                          whatever we choose for a matrix and an
+                          options widget. It is assumed that any dropping
+                          and amalgmation has already occurred at this
+                          point. The output is something that lets us
+                          go quickly from  node id to agg id and from
+                          agg id to a list of nodes.
+
+AmalgamateAndOrDrop.m     This could be two separate functions 'Drop' and
+                          'Amalgamate'. I'm not sure. I wanted an ability 
+                          to drop both before and after the amalgamation. 
+                          Input: 
+                            A           :Block matrix to be amalgamated
+                            PreDropFunc :User supplied function which 
+                                         determine whether A_ij is dropped
+                            PreDropData :Data passed to PreDropFunc
+                            AmalgFunc   :User supplied function which takes
+                                         a block (a dense matrix) and replaces
+                                         it by a single number 
+                            AmalgData   :Data passed to AmalgFunc
+                            PostDropFunc:User supplied function which 
+                                         determine whether A_ij is dropped
+                                         where A is amalgamated matrix.
+                            PostDropData:Data passed to PreDropFunc
+
+Node2DOF.m                Convert a list of node (or block) ids to individual 
+                          degree-of-freedoms consistent with the block size 
+                          information of an operator. 
+
+BuildNullSpace.m          Utility to build the constant null vector.
+
+BuildPois.m               Build a block Poisson operator with either Constant 
+                          or Variable sized blocks. In the variable block size
+                          case, the kth DOF within a node has a nonzero 
+                          connection to the kth DOF of any adjacent nodes. If 
+                          adjacent nodes don't have a kth DOF, then this DOF 
+                          is obviously not linked to this adjacent node.
+
+DCBlkApply[|SubIn]        Templated function to do a matrix-vector product
+                          with a specfic format used to represent a block 
+                          diagonal matrix of constant block size.  There is a 
+                          possibility of performing the matvec only on a 
+                          subset of block rows which can be contiguous or 
+                          scattered. Templating determines whether the
+                          entire input vector is passed in or just the relevant
+                          subset when performing a subset matvec.
+                          Note: a multivector is allowed on input.
+                          
+DVBlkApply[|SubIn]        Templated function to do a matrix-vector product
+                          with a specfic format used to represent a block 
+                          diagonal matrix of variable block size.  There is a 
+                          possibility of performing the matvec only on a 
+                          subset of block rows which can be contiguous or 
+                          scattered. Templating determines whether the
+                          entire input vector is passed in or just the relevant
+                          subset when performing a subset matvec.
+                          Note: a multivector is allowed on input.
+
+DinvCBlkApply[|SubIn]     Matrix solve versions of DCBlkApply[|SubIn] and
+DinvVBlkApply[|SubIn]     DVBlkApply[|SubIn].
+
+ExtractBlkDiag.m          Extract block diagonal of matrix and store it in 
+                          two special structures meant to efficiently represent
+                          a diagonal matrix with either a constant block
+                          size or a variable block size. The resulting
+                          matrix then works with DCBlkApply[|SubIn],
+                          DVBlkApply[|SubIn], and FactorBlkDiag.m. Note: the 
+                          block diagonal matrix uses the blocking associated 
+                          with the original matrix. 
+
+ExtractNonContigBlkDiag.m Construct a block diagonal matrix by grouping 
+                          blocks of the original matrix together. This
+                          grouping is user defined and can be quite 
+                          arbitrary (e.g., overlapping blocks). 
+                          Input:
+                            Operator:Matrix used to construct block diagonal 
+                            Collection  :Collection.NSubsets is the # of blocks
+                                     in user-defined diagonal matrix.
+                                     Collection.Subsets(i) defines the ith 
+                                     subblock. See CreateDOFSubset.m
+
+                          The resulting matrix is then suitable for 
+                          FactorBlkDiag.m and the SubIn versions of 
+                          DCBlkApply[|SubIn] and DVBlkApply[|SubIn]. For the 
+                          applys, one must assemble the input vector in the 
+                          proper order.  In particular, a matvec with the ith 
+                          block would look like
+                            DiagSubset=CreateDOFSubset(BDiag,'Contiguous',i,i,[]);
+                            ApplyInverse(BlkDiag(v(Subset2DOF(
+                                              Collection.Subsets(i))),DiagSubset);
+                          Collection.Subsets(i) indicates which elements in the
+                          vector v are gathered while DiagSubset indicates 
+                          that this subvector should be applied to the ith 
+                          block of BDiag.  More comments are in GSBlkApply.m
+
+FactorBlkDiag.m           Forms LU factorization of already extracted diagonal
+                          matrix (stored in the special format produced by 
+                          ExtractBlkDiag.m or ExtractNonContigBlkDiag.m) and 
+                          stores the result in a special format suitable for 
+                          DinvCBlkApply[|SubIn] and DinvVBlkApply[|SubIn].
+                          Note: it would be a far better world if this
+                          function would take in two function pointers. One
+                          to do the actual "factorization" and another to
+                          do the actual "solve". This would allow one to also
+                          do ILU and different direct solvers.
+
+GSBlkApply.m              Apply Gauss-Seidel iterations based on information
+                          defined by GSBlkSetup.m
+
+GSBlkSetup.m              Initialize a smoother object for later performing
+                          Gauss-Seidel. This setup allows users to pass
+                          in an auxiliary diagonal matrix (instead of using
+                          the diagonal of the actual operator) and to pass
+                          in a mapper object which allows one to construct
+                          block diagonals in fairly arbitrary ways.
+                          Input:
+                            Operator:Matrix to be solved via Gauss-Seidel.
+                            Nits    :Number of Gauss-Seidel iterations.
+                            omega   :Damping parameter. Ideally, Muloo would
+                                     have some way of generating eigenvalue 
+                                     estimates for default omegas (if 
+                                     requested). Putting this inside a
+                                     specific smoother seems bad. It could
+                                     be that the eigenvalue estimator could
+                                     use the smoother apply function (e.g.,
+                                     GSBlkApply) with a zero right hand as
+                                     the matrix-vector product for the 
+                                     eigenvalue routine.
+                            BlkDiag :Optional (alternative) block diagonal 
+                                     matrix to be used within Gauss-Seidel
+                            Collection:Collection.NSubsets is the # of blocks
+                                     in user-defined diagonal matrix.
+                                     Collection.Subsets(i) defines the ith 
+                                     subblock. See CreateDOFSubset.m
+
+MakeNoQRTentative.m       Builds a tentative prolongator  without any
+                          QR factorization. It is invoked by MakeTentative.m.
+                          I didn't put a lot of time into this so ...
+                          Input:
+                            AggInfo: Aggregate information produced by 
+                                       Aggregate.m.
+                            Amat     : Right now this is only used to get
+                                       blocking information. If that
+                                       information was available without
+                                       the matrix that could be used instead.
+                            nullspace :Obviously, the nullspace.
+
+MakeTentative.m           Builds the tentative prolongator with an option to
+                          do QR. Individual aggregation routines should be
+                          invoked from here.
+                        
+MakeUpRandomBlks.m        A utility function which randomly determines
+                          a grouping of blocks for testing the arbitrary
+                          block aspect of the Gauss-Seidel.
+
+MatMatAdd.m               These four are pretty obvious and I didn't put
+MatMatMult.m              much time into them. MatMatSolve.m actually
+MatMatSolve.m             corresponds to Ainv*B (used for prolongator smoothing
+Transpose.m               with block diagonal D).
+
+MatlabApply.m             Matrix-vector multiply for standard matlab-style
+                          matrices. Used for all applies except the special
+                          ones associated with block diagonal matrices.
+
+CreateDOFSubset.m         Creates a Subset operator which is used to 
+                          define a subset of matrix rows or vector elements
+                          to be operated on. The main thing is that
+                          it allows for continuous subsets or scattered
+                          subsets.  The fields are given by
+
+                            Subset.type    :Contiguous or scatted set of 
+                                           :rows ['Contiguous' 'Scattered']
+                            Subset.First,  :If Subset.type=='Contiguous', rows
+                                           :correspond to 
+                            Subset.Last    :   Subset.First:Subset.Last
+                            Subset.BlkList :If Subset.type=='Scattered',the ith
+                                           :block row is BlkList[i]
+                            Subset.FirstBlk:If Subset.type=='Contiguous', block
+                                           :rows correspond to 
+                            Subset.LastBlk :   Subset.FirstBlk:Subset.LastBlk
+                          subsets.  The fields are given by
+
+Subset2DOF.m              Converts a Subset list a list of indices used to
+                          extract rows or vector elements.
+
+
+classicSA.m               Utility functions used with AmalgamateAndOrDrop.m
+standardnorm.m            to determine whether elements should be dropped
+                          and how blocks should be reduced to scalars.
+
+driver.m                  Simple driver to exercise AMG code.
+
+==============================================================================
+I've used structures but not classes in Matlab. This was primarily 
+because it was easier. At some point, we'll probably want to redo things 
+with classes. Almost all the structures are now described.
+
+
+******************************************************************************
+******************************************************************************
+A Map keeps track of basic size information.
+
+Map.NDOFs              Total Number of DOFs in vector
+
+Map.NNodes             Number of nodes in vector
+
+Map.MaxBlkSize         Maximum number of degrees-of-freedom per node.
+
+Map.type               = 'ConstBlk': all nodes have the same number of DOFs
+                       = 'VarBlk   : nodes have varying numbers of DOFs
+
+Map.ConstBlkSize       DOFs per node when type == 'ConstBlk'
+
+Map.VarBlkPtr          VarBlkPtr(i):VarBlkPtr(i+1)-1 gives DOF ids in
+                       ith node when  type == 'VarBlk'
+
+******************************************************************************
+******************************************************************************
+Subsets are a subset of the DOFs within a map.
+
+Subset.type            Contiguous or scattered set of DOFs
+                       ['Contiguous' 'Scattered']
+
+Subset.First,          DOFs within subset correspond to Subset.First:Subset.Last
+Subset.Last            when type=='Contiguous'
+
+Subset.FirstBlk        Nodes within subset correspond to 
+Subset.LastBlk         Subset.FirstBlk:Subset.LastBlk when type=='Contiguous'
+
+Subset.BlkList         BlkList(i) gives ith node when type=='Scattered'
+
+******************************************************************************
+******************************************************************************
+A collection of Subsets which right now are used to describe arbitrary diagonal 
+block matrices (and used to access the correct subvector indices to apply to
+these diagonal blocks).
+
+Collection.NSubsets      Number of subsets. When used with diag. block matrices,
+                       this is the number of diagonal blocks.
+
+Collection.Subset        Subset array where Subset(i) describes the ith subset.
+                       When used with diagonal block matrix, Subset(i) gives
+                       the DOFs comprising the ith block matrix.
+                       
+******************************************************************************
+******************************************************************************
+Describes a block matrix including fields corresponding to the block diagonal
+and to a datafield associated with the inverse.
+
+
+Operator.RowMap        Map (size information) associated with rows.
+Operator.ColMap        Map (size information) associated with columns.
+
+Operator.Apply         Matvec function pointer. Matvec can be performed
+                       on a subset of rows, but this function always
+                       assumes that the entire input vector is given.
+                       
+Operator.ApplySubIn    Matvec function pointer. When a  subset matvec is
+                       performed, the input vector corresponds to the 
+                       same subset as the output vector. This is used for 
+                       a subset associated with a block diagonal matrix
+                       where the input/output vectors include just the 
+                       indices associated with the diagonal blocks
+                       subset. Hopefully, templating can be used to generate
+                       Apply() and ApplySubIn().
+
+
+Operator.ApplyInverse  Inverse (or solve) function pointer which can be
+                       applied to subsets.
+
+Operator.ApplyInverseSubIn Inverse (or solve) function pointer using
+                       subset input vectors (see ApplySubIn).
+
+Operator.MatrixData    Matrix data pointer (used for matvec/getrow). 
+
+Operator.MatrixInvData Inverse matrix data pointer.
+
+Operator.BlkDiag       Matrix of the block diagonal portion of Operator.
+
+******************************************************************************
+******************************************************************************
+Holds stuff relevant to the smoother.
+
+Smoother.Apply         Function pointer to smoothing method (e.g., Jacobi).
+
+Smoother.Amat          Matrix to apply smoothing iterations.
+
+Smoother.BlkDiag       Block diagonal matrix whose inverse would be used in
+                       methods like block Jacobi and block Gauss-Seidel. If 
+                       not present, Smoother.Amat.BlkDiag is used. Otherwise,
+                       this provides a mechanism for doing arbitrary block
+                       Gauss-Seidel (or block ILU).
+
+Smoother.Collection      Gives the DOFs associated with Smoother.BlkDiag
+                       when an arbitrary block diagonal matrix is used.
+                       This is need to obtain the proper vector subsets 
+                       when working with the block diagonal matrix.
+
+Smoother.Nits          Number of relaxation iterations.
+Smoother.omega         Damping parameter.
+
+******************************************************************************
+******************************************************************************
+Aggregation information. This is also pretty simple now.
+
+AggInfo.AggId          AggId(i) is the aggregate id associated with node i.
+AggInfo.NodesInAgg     NodesInAgg(i,:) gives node ids associated with the
+                       ith aggregate.
+******************************************************************************
+******************************************************************************
+Simple multilevel stuff. This needs some work.
+
+Level.Amat             Discretization matrix associated with this level.
+Level.Graph            Amalgamated and dropped matrix used for aggregation.
+Level.AggInfo          Aggregation information.
+Level.Nullspace        Nullspace for this level.
+Level.P                Prolongator.
+Level.R                Restrictor.
+
+******************************************************************************
+******************************************************************************
+Options passed into ML setup. Can sort of mimic Trilinos parameter lists.
+
+options.nullspace     These are all pretty obvious.
+options.Smoother
+options.AggTargestSize
+******************************************************************************
+******************************************************************************
+Really simple ML object. This obviously needs work.
+
+ML.finest              Points to finest level.
+ML.coarsest            Points to coarsest level.
+******************************************************************************
+******************************************************************************
+NOTE: To update the file Contents.m within a matlab subdirectory, one needs
+      to enter this directory via the gui (on the left side). Then, you
+      click on the little gear, highlight Reports, then click 
+      on 'Contents Report'. If you then, click on 'fix all' it will update.

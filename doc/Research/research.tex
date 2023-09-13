@@ -1,0 +1,226 @@
+\documentclass[pdf,ps2pdf,12pt,report]{article}
+\usepackage{pslatex}
+\usepackage{psboxit}
+\usepackage{xspace}     % Puts spaces after macros only when needed
+\usepackage{mathptmx}	% Use the Postscript Times font
+\usepackage[FIGBOTCAP,normal,bf,tight]{subfigure}
+\usepackage[dvips,light,first,bottomafter]{draftcopy}
+\usepackage[pdftex, pdfpagemode=none, pdfstartview=FitH]{hyperref}
+\usepackage{verbatim}
+\usepackage{chngpage}
+\usepackage{authblk}    % For footnoting of author affiliations
+\usepackage{amsfonts}   % Blackboard fonts
+\usepackage{amsmath}    % Matrices ...
+\usepackage{multido}    % Loops on LaTeX macros
+
+\usepackage{algorithm2e}
+
+% For listing code.  Default will be C++ unless you override it with the language=BLAH option.
+\usepackage{listings}
+\lstloadlanguages{C++}
+\lstset{language=C++,breaklines=true,showstringspaces=false}
+
+\usepackage[usenames]{color}
+\definecolor{jhured}{rgb}{1,.08,.58}
+\definecolor{rstblue}{rgb}{0,0,1}
+\definecolor{cmsgreen}{rgb}{0,.7,.4}
+
+  \setlength{\itemsep}{10pt}
+
+% For making comments in the document.
+\newcommand{\JJH}[1]{\textcolor{red}{JJH: #1}}
+\newcommand{\RST}[1]{\textcolor{blue}{RST: #1}}
+\newcommand{\CMS}[1]{\textcolor{green}{CMS: #1}}
+\newcommand{\JG}[1]{\textcolor{cyan}{JG: #1}}
+%\newcommand{\JJH}[1]{#1}
+%\newcommand{\RST}[1]{#1}
+%\newcommand{\CMS}[1]{#1}
+%\newcommand{\JG}[1]{#1}
+
+% For displaying class names, computer code, etc.
+\newcommand{\cc}[1]{{\lstinline!#1!}}
+
+% Package names.
+\newcommand{\Amesos}{{\sc Amesos}\xspace}
+\newcommand{\Anasazi}{{\sc Anasazi}\xspace}
+\newcommand{\AztecOO}{{\sc AztecOO}\xspace}
+\newcommand{\Belos}{{\sc Belos}\xspace}
+\newcommand{\Epetra}{{\sc Epetra}\xspace}
+\newcommand{\Ifpack}{{\sc Ifpack}\xspace}
+\newcommand{\Isorropia}{{\sc Isorropia}\xspace}
+\newcommand{\ML}{{\sc ML}\xspace}
+\newcommand{\mloo}{{\sc \textsf{M\"{u}Loo}}\xspace}
+\newcommand{\muemat}{{\sc\textsf{M\"{u}Mat}}\xspace}
+\newcommand{\NOX}{{\sc NOX}\xspace}
+\newcommand{\Teuchos}{{\sc Teuchos}\xspace}
+\newcommand{\Tifpack}{{\sc Tifpack}\xspace}
+\newcommand{\Tpetra}{{\sc Tpetra}\xspace}
+\newcommand{\Trilinos}{{\sc Trilinos}\xspace}
+\newcommand{\Zoltan}{{\sc Zoltan}\xspace}
+
+\hypersetup{
+  pdfauthor = {Jeremie Gaidamour, Jonathan J. Hu, Christopher M. Siefert, Ray S. Tuminaro},
+  pdftitle = {\mloo Research Document},
+  pdfkeywords = {multigrid, algebraic multigrid, AMG, energy minimization},
+  colorlinks= {true},
+  citecolor = {blue},
+}
+
+% MueMat specific macros
+\newcommand{\operator}{{\tt operator}\xspace}
+
+% MLOO specific macros
+
+% Common macros
+\newcommand{\point}{point\xspace}           % aka degree-of-freedom
+\newcommand{\node}{node\xspace}             % all the degrees-of-freedom at a "node"
+\newcommand{\block}{block\xspace}           % an arbitrary collection of degrees-of-freedom
+\newcommand{\getrow}{{\tt getrow}\xspace}
+
+% Miscellaneous.
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newenvironment{myitem}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+}{\end{itemize}}
+
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{T}
+
+\newcounter{colMax}
+\newcommand{\Matrix}[3]{
+  \setcounter{colMax}{#3} \addtocounter{colMax}{-1}
+ 
+  \let\myMatrix\empty
+  \begingroup
+  \let\\\relax
+  \multido{\iRow=1+1}{#2}{%
+    \let\myMatrixLine\empty
+    \multido{\iCol=2+1}{\value{colMax}}{%
+      \xdef\myMatrixLine{\myMatrixLine &  #1_{\iRow \iCol}}}
+    \xdef\myMatrix{\myMatrix #1_{\iRow 1} \myMatrixLine \\ }}
+  \endgroup
+  
+  \myMatrix
+}
+
+\newcommand{\pMatrix}[3]{
+  \begin{pmatrix}
+    \Matrix{#1}{#2}{#3}
+  \end{pmatrix}
+}
+
+\newcommand{\MatrixT}[3]{
+  \setcounter{colMax}{#3} \addtocounter{colMax}{-1}
+ 
+  \let\myMatrix\empty
+  \begingroup
+  \let\\\relax
+  \multido{\iRow=1+1}{#2}{%
+    \let\myMatrixLine\empty
+    \multido{\iCol=2+1}{\value{colMax}}{%
+      \xdef\myMatrixLine{\myMatrixLine &  #1_{\iCol \iRow}}}
+    \xdef\myMatrix{\myMatrix #1_{1 \iRow} \myMatrixLine \\ }}
+  \endgroup
+  
+  \myMatrix
+}
+
+\newcommand{\pMatrixT}[3]{
+  \begin{pmatrix}
+    \MatrixT{#1}{#3}{#2}
+  \end{pmatrix}
+}
+
+\newcommand{\MatrixReshape}[3]{
+  \setcounter{colMax}{#3} \addtocounter{colMax}{-1}
+ 
+  \let\myMatrix\empty
+  \begingroup
+  \let\\\relax
+  \multido{\iRow=1+1}{#2}{%
+    \let\myMatrixLine\empty
+    \multido{\iCol=2+1}{\value{colMax}}{%
+      \xdef\myMatrixLine{\myMatrixLine \\  #1_{\iRow \iCol}}}
+    \xdef\myMatrix{\myMatrix #1_{\iRow 1} \myMatrixLine \\ }}
+  \endgroup
+  
+  \myMatrix
+}
+
+\newcommand{\pMatrixReshape}[3]{
+  \begin{pmatrix}
+    \MatrixReshape{#1}{#2}{#3}
+  \end{pmatrix}
+}
+
+\newcommand{\Vector}[2]{
+  \let\myVector\empty
+  \begingroup
+  \let\\\relax
+  \multido{\iRow=1+1}{#2}{%
+    \xdef\myVector{\myVector #1_{\iRow} \\ }}
+  \endgroup
+  
+  \myVector
+}
+
+\newcommand{\pVector}[2]{
+  \begin{pmatrix}
+    \Vector{#1}{#2}
+  \end{pmatrix}
+}
+
+\newcommand{\VectorT}[2]{
+  \setcounter{colMax}{#2} \addtocounter{colMax}{-1}
+ 
+  \let\myVector\empty
+  \begingroup
+  \let\\\relax
+  \multido{\iCol=2+1}{\value{colMax}}{%
+    \xdef\myVector{\myVector & #1_{\iCol}}}
+  \endgroup
+  
+  #1_{1} \myVector
+}
+
+\newcommand{\pVectorT}[2]{
+  \begin{pmatrix}
+    \VectorT{#1}{#2}
+  \end{pmatrix}
+}
+
+  \newcounter{example}
+  \newenvironment{example}[1][]{\refstepcounter{example}\par\medskip\noindent%
+    \textbf{Example~\theexample. #1} \rmfamily}{\medskip}
+
+
+\title{Research Document for the \mloo Project}
+\author[1]{J\'er\'emie Gaidamour}
+\author[1]{Jonathan ``Drill, Baby, Drill'' Hu}
+\author[2]{Christopher ``Superbad'' Siefert}
+\author[1]{Raymond S. Tuminaro}
+\affil[1]{Scalable Algorithms Department}
+\affil[2]{Computational Shock \& Multiphysics Department}
+
+\begin{document}
+
+  \maketitle
+
+  \tableofcontents
+
+  \section{Introduction}
+  \input{intro}
+
+  \section{AMG principle}\label{amg}
+  \input{amg}
+
+  \section{Energy minimization}\label{emin}
+  \input{emin}
+  
+  \section{Research work}\label{work}
+  \input{work}
+
+\end{document}

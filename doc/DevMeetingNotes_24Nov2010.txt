@@ -1,0 +1,102 @@
+Minutes from the MueMat developer meeting, November 24, 2010
+
+Attendees:  J. Gaidamour (JG), A. Gerstenberger (AG), J. Hu (JH),
+            C. Siefer (CS), R. Tuminaro (RT), T. Wiesner (TW)
+
+TW: Proposed that we address the items in this order: 2,3,1,4,5.  Everyone
+agreed.
+
+====================================================
+Item 2: Should there be a SingleLevelFactoryBase?
+====================================================
+RST: It is convenient to pass in 2 levels to TwoLevelFactoryBase because you
+never know what might needed.  We should defer discussion of the needs
+mechanism and what will be stored in the Level class to a smaller subset of
+developers.
+
+JG: There's a mistake in proposedDesign.tif -- [PR]Factory should derive from
+2LevelFactoryBase.  There are 2 types of factories, those that interact with
+two levels, and those used by AMG. So we have some choice in how the latter
+is designed.  Likes flexibility of levels.
+
+RST: Is uncomfortable with parallel structure, e.g., minimization methods in
+PRFactory and EminFactory.  A lot could be done cleverly with A^T.  This could
+be really expensive if done naiively, so we would want to do this implicitly.
+Ultimately, we could override MV and IP and use external min. method, e.g.,
+Belos.
+
+
+Decision -- Add SingleLevelFactory, delete EminFactory2.
+Owner -- JH
+
+====================================================
+Item 3: Should PatternFactoryBase class be removed?
+====================================================
+
+Very little discussion.
+
+Decision -- remove PatternFactoryBase
+Owner -- TW
+
+====================================================
+Item 1: Should FactoryBase change to something like
+        "NeedsObject" or "BaseMueMatObject"?
+====================================================
+
+JG: Suggested introducing new verbose object between copieable handle and
+    children.  With the introduction of a smart needs mechanism, FactoryBase
+    could even go away.
+
+RST: Afraid of state information corruption/pollution.
+
+JH: Could defer decision for right now, as this isn't a pressing issue.
+
+Decision -- Make everything derive from a Verbose object, change FactoryBase
+            into Needs object, have all factories derive from that.
+Owner -- JH
+
+====================================================
+Item 4: Should PatternFilterFactory be renamed or
+        otherwise be modified?
+====================================================
+
+TW: Agrees that current name is somewhat misleading, as it is not a factory.
+    Doesn't like idea of modifying PatternFilterFactory by including its 
+    current children (InlineNNZperRowFilter, ConstNNZperRowFilter,
+    AvgNNZperRowFilter, Thresholding).  PatternFilterFactory might need
+    cross factory needs.  Needs apply, not a build, so shouldn't derive from
+    TwoLevelFactoryBase.  Perhaps better to derive from copiable handle?
+
+RS: Could have different patterns for R & P
+
+TW: Nonbinary patterns are necessary.  However, this data are not persistent,
+    so it's better to store this locally rather than in the level.
+
+RS: May want to pull info from Level
+
+Decision -- PatternFilterFactory derives off of MueMatBaseObject
+            rename to PatternFilter
+Owner -- TW
+
+====================================================
+Item 5: Introduce a FilterFactory to merge common
+        methods between CoalesceDropFactory
+        and PatternFilterFactory.
+====================================================
+
+TW: It's perhaps too early to make such decision. Is OK leaving separate for
+    right now.  May want to consider making SADrop a class rather than
+    function pointer.
+
+RS: It's important to enforce a common interface. Keeping data with methods is
+    more modern, perhaps more palatable.
+
+JG: Could use hash table or some bit field to mark read-only.
+
+General consensus that using "const" is good.
+
+RS: Can think later about splitting out CoalesceDropFactory into multiple
+    factories.
+
+Decision -- Keep PatternFilterFactory and CoalesceDropFactory separate for
+            right now.

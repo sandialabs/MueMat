@@ -1,0 +1,361 @@
+\documentclass{siamltex}
+
+\advance\oddsidemargin by -0.25in
+\advance\evensidemargin by -0.25in
+\advance\textwidth by .55in
+
+\usepackage{amsfonts,amssymb,amsmath}
+%\usepackage{subfigure}
+\usepackage[dvips,pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{url}
+\usepackage{calc,array}
+\usepackage{booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[linesnumbered,noline,ruled,noend]{}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{rem}[thm]{Remark}
+\DeclareMathOperator*{\argmin}{argmin}
+\newcommand{\Bcoarse}{\ensuremath{B^{C}}}
+\newcommand{\nns}{near null-space}
+\DeclareGraphicsRule{.pdftex}{pdf}{*}{}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\numberwithin{algorithm}{section}  % <--- chapter, section etc. depending on what is required
+\def\Boxers#1#2{\noindent$\hphantom{Muv}${\parbox[t]{1.75in}{\it
+#1}}{\parbox[t]{2.9in}{#2}} \\[0.7em]}
+
+\title{Level Interface: getting at level data in MueMat/MueLu}
+
+\author{J.~Hu
+\and    J.~Gaidamour
+\and    R.~Tuminaro
+\and    T.~Wiesner}
+
+% For making comments in the document.
+\newcommand{\JJH}[1]{\textcolor{red}{JJH: #1}}
+\newcommand{\JG}[1]{\textcolor{cyan}{JG: #1}}
+\newcommand{\RST}[1]{\textcolor{Blue}{RST: #1}}
+\newcommand{\TW}[1]{\textcolor{RoyalBlue}{TW: #1}}
+
+
+\begin{document}
+\maketitle
+
+
+\section{Test Cases} \label{test cases}
+Some cases to consider (note: auxiliary matrix and Emin(Emin) examples are interesting but would not be used heavily).
+\vskip .1in
+\begin{enumerate}
+\item SA with coalesced $A$ for aggregation.\\
+
+\item SA with filtered then coalesced $A$ for aggregation \& filtered $A$ for
+   prolongator smoother.\\
+
+\item SA with user-defined auxiliary graph for aggregation \& a decoalesced
+   version to define matrix for prolongator smoother.\\
+
+\item SA with user-defined auxiliary graph for aggregation \&
+   prolongator smoother matrix is a filtered $A$ where pattern
+   matches decoalesced version of auxiliary matrix.
+   \newcounter{enumi_saved}
+    \setcounter{enumi_saved}{\value{enumi}}
+\end{enumerate}
+\vskip .1in
+%Emin algorithms are trickier. The main additional things to play with include:
+%\vskip .1in
+%\Boxers{P0ForPattern}{obvious}
+%\Boxers{P0ForKrylovInitialGuess}{obvious}
+%\Boxers{P0ForAPpattern}{obvious}
+%\Boxers{AForAPpattern}{obvious}
+%\Boxers{AForEnergy}{obvious}
+%\Boxers{MForKrylov}{might want to consider preconditioning the Krylov 
+%minimizer with arbitrary block diagonals.}
+%\Boxers{FNull,CNull,Constraints}{Only MakeConstraints need FNull and CNull.
+%                              While FNull/CNull might be defined in different
+%                              ways, I'm not sure that we would ever have a
+%                              valid case where we would want more than one
+%                              type of null space on the same level. We might
+%                              someday want to consider constraints other than
+%                              P CNull = FNull.  I'm thinking mostly of
+%                              something where we only care about adding
+%                              constraints locally to enforce local features
+%                              like preserving a discontinuity.}
+\begin{enumerate}
+      \setcounter{enumi}{\value{enumi_saved}}
+\item Standard Emin using an initial guess of $Ptent$ (obtained by aggregating
+   coalesced A).\\
+\item Badri-like case where two user-provided matrices are each filtered
+      to provide different matrices for Emin: one is Krylov
+      energy \& the other for use by APpattern.\\
+\item Emin using 1-step SA as initial guess.\\
+
+\item Emin using Emin as initial guess where each computes a Ptent and Coarse Null space \& both are to be saved for later reuse.\\
+
+\item Convert an SA factory so that it can be used for restriction.\\
+
+\item A test case for an F/C-style sparsity pattern (e.g,
+      F/C pattern generates a P0)?
+
+\end{enumerate}
+\section{Function Pointer Interface}
+\subsection{LevelInterface class}
+A simple class with only two things: static functions and data member 
+function pointers The basic idea is that the function pointers are used in
+specific factories to access data. They effectively define the factory's
+interface to Level.  They are set to one of the particular static functions. 
+Developers add new static functions as needed and perhaps new function 
+pointers as well.  There is no attempt to group functions into subclasses
+or to hide some functions from some factories.  The static functions
+are extremely basic and are not meant to hide complex logic. They are
+strictly for data access.  A sample matlab-style class is shown below
+\vskip .1in
+\begin{verbatim}
+classdef LevelInterface < CopiableHandle
+
+  properties (Access = public)
+
+    % function pointers (null or set to a static function) defining interface.
+    
+   P0ForPattern            = 
+   P0ForKrylovInitialGuess = @LevelInterface.GetPtent
+   P0ForAPpattern          = @LevelInterface.GetPtent
+   AForAPpattern           = @LevelInterface.GetA
+   AForEnergy              = @LevelInterface.GetA
+   GraphForCoarsening      = @LevelInterface.GetGraphOfA
+   NullForPtent            = @LevelInterface.GetNull
+   NullForConstraints      = @LevelInterface.GetNull
+
+   SetFilteredA            = @LevelInterface.SetFilteredA
+   SetGraph                = @LevelInterface.SetGraph
+   SetCoalescedA           = @LevelInterface.SetCoalescedA
+   SetNull                 = @LevelInterface.SetNull
+   MForKrylov
+   Constraints
+   CPoints
+
+  end %properties
+
+  methods (Static = true)
+
+    % static functions for use by the above function ptrs
+
+    function [A] = GetA(Level)
+        A = Level.GetA();               end 
+    function [A] = GetATrans(Level)
+        A = Level.CheckOut("ATrans");   end
+    function [A] = GetFilteredA(Level)  
+        A = Level.CheckOut("Afiltered");end
+    function [A] = GetFilteredAAux(Level)  
+        A = Level.CheckOut("AfiltAux"); end
+    function [A] = GetCoalescedA(Level)
+        A = Level.CheckOut("ACoalesce");end
+    function [P] = GetP(Level)        
+        P = Level.GetP();               end
+    function [P] = GetPtent(Level)    
+        P = Level.CheckOut("Ptent");    end
+    function [P] = GetPAux(Level) 
+        P = Level.CheckOut("PAux");     end 
+    function [G] = GetGraphOfA(Level) 
+        G = Level.CheckOut("Graph");    end
+    function [N] = GetNull(Level)     
+        N = Level.CheckOut("Null");     end
+    function [N] = GetNullAux(Level)     
+        N = Level.CheckOut("NullAux");  end
+    function [ ] = SetA(Level, A)          
+        Level.SetA();                   end
+    function [ ] = SetFilteredA(Level,A)    
+        Level.Save("Afiltered",A);      end
+    function [ ] = SetFilteredAAux(Level,A)    
+        Level.Save("AfiltAux",A);       end
+    function [ ] = SetCoalescedA(Level,A)  
+        Level.Save("ACoalesce",A);      end
+    function [ ] = SetNull(Level,Null)          
+        Level.Save("Null",Null);        end
+    function [ ] = SetP(Level,P)          
+        Level.SetP();                   end 
+    function [ ] = SetPtent(Level,P)      
+        Level.Save("Ptent",P);          end
+    function [ ] = SetPAux(Level,P)   
+        Level.Save("PAux",P);           end
+    function [ ] = SetGraphOfA(Level,G)
+       Level.Save("Graph",G);           end
+
+  end % methods (Static = true)
+
+end %Operator classdef
+\end{verbatim}
+\vskip .1in
+Note: CheckOut() and Save() are MueLu ideas to be incorporated in MueMat.
+To simplify the presentation, data members are assumed public
+(things can obviously done via Set/Get). 
+
+\subsection{Factory Access}
+One can make arguments in favor of a Level-centric view or a Factory-centric
+view. Here, a bit of both is proposed where each factory makes the final 
+decision.  In particular, each Level has a field which is of type 
+LevelInterface called LevelsView.  Inheritance would be highly discouraged
+for this LevelsView.  When users create a level, they can do things like
+\vskip .1in
+\begin{verbatim}
+    FineLevel.LevelsView.AForAPpattern = @GetFilteredA;
+    FineLevel.LevelsView.AForEnergy    = @GetFilteredA;
+\end{verbatim}
+\vskip .1in
+Again, Set/Get functions can be used to hide things.  When a new coarse level 
+is created by Populate(), it copies FineLevel.LevelsView.  In this way, all 
+levels have a well-defined interface. If the user wants different behavior 
+on a coarser level, he can manually create a coarse level and set its
+LevelsView function pointers to whatever he wants.
+
+So far, this looks Level-centric, but we can allow each factory to decide
+what it does with the interface. For example, a factory could have a private
+member of type LevelInterface called FactorysView.  The factory's build() 
+now has two LevelInterfaces: FactorysView and LevelsView.  The build() 
+implementer decides how these are merged to create a consistent interface 
+called MergedView that is used within the method. Inheritance is permitted in
+FactorysView and MergedView.  As a merge example, consider 
+\begin{itemize}
+\item function pointers in FactorysView are NULL except for a couple 
+      where behavior is to be altered in a factory specific way.
+\item build() copies LevelsView to MergedView (which is local to 
+      build()).  It then copies all nonNull function pointers 
+      from FactorysView to MergedView. 
+\item MergedView is now used exclusively within build().
+\end{itemize}
+
+This is meant as a simple example to give the idea. Factories could
+do powerful (but perhaps dangerous things) if they wanted. For example,
+suppose that build() not only wants to change how it accesses
+data but how other build methods in other factories that it calls access the 
+Level. It could save LevelsView, then copy MergedView into the Level structure
+(overwriting LevelsView), and finally just before exiting the
+build function it could restore the saved copy back in the Level. If
+inheritance is discouraged in LevelsView, then only an uninherited version
+of the MergedView is stored in the Level.  There are other possibilities. 
+Another merge idea (mimicking Jeremie's view of different SmartLayers 
+building on each other) is a capability to define a MergedView function 
+pointer as a copy of a DIFFERENT LevelsView function pointer.  For example,
+SA by definition uses the same matrix to define both energy and the AP pattern.
+One way to recognize this in the interface is via
+\vskip .1in
+\begin{verbatim}
+     MergedView.AForAPpattern = LevelsView.AForAPpattern. 
+     MergedView.AForEnergy    = LevelsView.AForAPpattern. 
+\end{verbatim}
+\vskip .1in
+That is, MergedView is just a reshuffling of function pointers in 
+LevelsView. This effectively defines a mapping from one interface to
+a new one. There are also other ambitious possibilities. For example, a 
+factory could use the Save/CheckOut mechanism to store additional 
+interfaces within a level's data.  So long as another factory knows what 
+to look for, it can pull out these other interfaces and use them when
+forming its MergedView.  
+
+\subsection{Strengths}
+\begin{itemize}
+\item Handles important cases.
+\item Easy to understand without looking at much documentation.
+\item Factory implementers have a lot of freedom while allowing a
+      basic mechanism to associate an interface with a level.
+\item Could probably be changed easily if we decide later to adopt another
+      model (Tobias' Communication Layer or Jeremie's SmartLevel).
+\end{itemize}
+\subsection{Weakness}
+\begin{itemize}
+\item Does not logically group or organize access functions.
+\item Factories could do dangerous things.
+\item \TW{The \textit{LevelInterface} class emulates the old-style \textit{Level} class interface. You may need auxiliary variables in the \textit{InterfaceLevel} class (e.g. \textit{GetPAux}, for test case 7). If we have a highly flexible \textit{Level} class with a hashtable, it doesn't make sense for me to introduce an interface class for the \textit{Level} class that uses predefined auxiliary matrices like \textit{GetPAux}. In my opinion we should try to make use of the \textit{Level} class and not hide it behind an interface like \textit{LevelInterface}.}
+\item \TW{not object-oriented $\rightarrow$ port to MueLu?}
+\item Bring it on ... I can take it!
+\end{itemize}
+
+
+\subsection{Implementation of Test Cases}
+\begin{enumerate}
+\item SA with coalesced A for aggregation.
+   \begin{verbatim}
+   Standard SA case requiring only defaults.
+   \end{verbatim}
+\item SA with filtered then coalesced $A$ for aggregation \& filtered $A$ for
+   prolongator smoother.\\
+   \begin{verbatim}
+   FineLevel.AForAPpattern = @LevelInterface.GetFilteredA;
+   FineLevel.AForEnergy    = @LevelInterface.GetFilteredA;
+   \end{verbatim}
+\item SA with user-defined auxiliary matrix for aggregation \& a decoalesced
+   version to define matrix for prolongator smoother.\\
+   \begin{verbatim}
+   FineLevel.AForAPpattern      = @LevelInterface.GetFilteredA
+   FineLevel.AForEnergy         = @LevelInterface.GetFilteredA
+
+   This strange case can be addressed by a version of CoalesceAndDrop
+   which decoalesce graphs. Instead of polluting LevelsView, we make an
+   extended version of FactorysView with function pointers
+           GetGraphForDecoalescing = @LevelInterface.GetGraphOfA
+           SetDecoalescedA         = @LevelInterface.SetFilteredA.
+   The user puts the Graph in the right fine level place and provides
+   code to project graphs to coarse levels.
+   \end{verbatim}
+\item SA with user-defined auxiliary graph for aggregation \&
+   prolongator smoother matrix is a filtered $A$ where pattern
+   matches decoalesced version of auxiliary matrix.
+   \begin{verbatim}
+   Same as above. Special CoalesceAndDrop decoalesces, but does not
+   store decoalesced matrix. Instead it is used to filter A and store 
+   result in standard filtered spot(thus, no need for SetDecoalescedA)
+   \end{verbatim}
+\item Standard Emin using an initial guess of $Ptent$ (obtained by aggregating
+   coalesced A).
+   \begin{verbatim}
+   Just use defaults.
+   \end{verbatim}
+\item Badri-like case where two user-provided matrices are each filtered
+      to provide different matrices for Emin: one is Krylov
+      energy \& the other for use by APpattern.
+   \begin{verbatim}
+   FineLevel.AForAPpattern      = @LevelInterface.GetFilteredA
+   FineLevel.AForEnergy         = @LevelInterface.GetFilteredAAux
+
+   The standard CoalesceAndDrop factory is extended so that it can 
+   filter two different matrices and store them. Inheritance is
+   used to extend FactorsView so that it has functions like
+       GetMatrixForFilteredEnergy,  SetMatrixForFilteredEnergy 
+       GetMatrixForFilteredPattern, SetMatrixForFilteredPattern
+   \end{verbatim}
+\item Emin using 1-step SA as initial guess.
+   \begin{verbatim}
+      SAFactorysView.SetP           = @LevelInterface.SetPAux
+      EminFactorysView.P0ForPattern = @LevelInterface.GetPAux
+      EminFactorysView.P0ForKrylovInitialGuess= @LevelInterface.GetPAux
+   \end{verbatim}
+\item Emin using Emin as initial guess where each computes a Ptent and Coarse Null space \& both are to be saved for later reuse.
+   \begin{verbatim}
+   Create two Emin factories: OuterEmin & InnerEmin. InnerEmin is
+   standard. OuterEmin is changed so that it Sets/Gets the Ptent
+   and CNull from nonstandard spots.
+      OuterEminFactorysView.GetPtent = @LevelInterface.GetPAux
+      OuterEminFactorysView.SetPtent = @LevelInterface.SetPAux
+      OuterEminFactorysView.GetNull  = @LevelInterface.GetNullAux
+      OuterEminFactorysView.SetNull  = @LevelInterface.SetNullAux
+   Also modify Needs/CrossFactory string so counters are properly set?
+   \end{verbatim}
+\item Convert an SA factory so that it can be used for restriction.
+   \begin{verbatim}
+   Extend SA factory so that it computes/stores A^T, computes/stores
+   Rtent^T, and invokes standard build() with
+        FactorysView.GetPtent      = @LevelInterace.GetTransRtent
+        FactorysView.AForAPpattern = @LevelInterface.GetATrans
+        FactoriysView.AForEnergy   = @LevelInterface.GetATrans
+        FactorysView.SetPtent      = @LevelInterace.SetTransRtent
+   \end{verbatim}
+\item A test case for an F/C-style sparsity pattern (e.g,
+      F/C pattern generates a P0)?
+\end{enumerate}
+
+\input{commLayer}
+
+\end{document}

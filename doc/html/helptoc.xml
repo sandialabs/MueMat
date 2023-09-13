@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<toc version="1.0">
+<!-- First tocitem specifies top level in Help browser Contents pane-->
+<tocitem target="muemat_product_page.html">MueMat Toolbox
+<!-- Use nested tocitems to create hierarchical entries within your product in the Contents pane-->
+
+<tocitem target="overview.html" image="$toolbox/matlab/icons/greencircleicon.gif">Overview</tocitem>
+
+<tocitem target="Simple.html" image="HelpIcon.GETTING_STARTED">Simple example</tocitem>
+
+<tocitem target="Tutorial.html" image="$toolbox/matlab/icons/help_ug.png">MueMat Tutorial
+   <tocitem target="todo.html">Understanding MueMat design</tocitem>
+   <tocitem target="TutorialOperator.html">The Operator and Multivector class</tocitem>
+   <tocitem target="TutorialAMG.html">Creating an MultiGrid Hierarchy</tocitem>
+   <tocitem target="TutorialTransfer.html">Grid Transfer Operators</tocitem>
+   <tocitem target="SmoothingTest.html">Smoothers</tocitem>
+   <tocitem target="todo.html">Aggregation (Graph Coarsening)</tocitem>
+   <tocitem target="todo.html">Advanced usages
+      <tocitem target="todo.html">TBD</tocitem>
+   </tocitem>
+</tocitem>
+
+<tocitem target="classReferences.html" image="$toolbox/matlab/icons/help_fx.png">Class references
+  <tocitem target="ref_Operator.html">The Operator class</tocitem>
+  <tocitem target="ref_MultiVector.html">The Multivector class</tocitem>
+  <tocitem target="ref_MueCentral.html">Multigrid Hierarchy</tocitem>
+  <tocitem target="ref_Transfers.html">Grid Transfer Operators</tocitem>
+  <tocitem target="ref_Smoother.html">Smoothers</tocitem>
+  <tocitem target="ref_Graph.html">Aggregation (Graph Coarsening)</tocitem>
+</tocitem>
+
+<tocitem target="developers.html" image="$toolbox/matlab/icons/help_ex.png">Developer resources
+  <tocitem target="dev_CodingGuidelines.html">Coding Guidelines</tocitem>
+  <tocitem target="dev_AddingHelp.html">Adding documentation</tocitem>
+  <tocitem target="dev_CheckinPolicy.html">Policy/Process for Safe Checkin Testing</tocitem>
+  <tocitem target="dev_MatlabHints.html">Matlab Hints</tocitem>
+</tocitem>
+
+<tocitem target="todo.html" image="HelpIcon.RELEASE_NOTES">Contact</tocitem>
+<tocitem target="todo.html" image="HelpIcon.RELEASE_NOTES">Release notes</tocitem>
+
+</tocitem>
+</toc>
+

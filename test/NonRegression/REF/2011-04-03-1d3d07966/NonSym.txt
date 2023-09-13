@@ -1,0 +1,113 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 4
+Nullspace: Using default nullspace size=1
+Aggregating
+ 3 ................................................................................
+ 2 ................................................................................
+ 1 ...........................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 5363
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   4.50e+00
+norm(P.cnull-fnull)=2567312.557666, nnzP = 18750
+condest(final Ptent'Ptent) =   4.50e+00
+AP_Pattern: Using filtering for A
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+Underweighting 1863 constraint equations
+(before scaling) condest(BBt) = 6
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   1.02e+01
+condest(P'AP) =   4.49e+06
+norm(P.cnull-fnull)=1.184689, nnzP = 36103
+column by column norm(FNull - P(energy)*CNull) =   7.84e+00 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.3270e+04
+Constrained energy (sum_i pc_i^T A pc_i) = 1.3270e+04
+Final energy (sum_i p_i^T A p_i)        = 1.2193e+04
+Aggregating
+ 3 ................................................................................
+ 2 ................................................................................
+ 1 ...........................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 5363
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   4.50e+00
+norm(P.cnull-fnull)=2567312.557666, nnzP = 18750
+condest(final Ptent'Ptent) =   4.50e+00
+AP_Pattern: Using filtering for A
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 6
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   1.01e+01
+condest(P'AP) =   4.48e+06
+norm(P.cnull-fnull)=0.000000, nnzP = 36103
+column by column norm(FNull - P(energy)*CNull) =   9.68e-15 
+Initial energy (sum_i pt_i^T A pt_i)     = 1.3270e+04
+Constrained energy (sum_i pc_i^T A pc_i) = 1.3270e+04
+Final energy (sum_i p_i^T A p_i)        = 1.2278e+04
+Aggregating
+ 1 .....................................................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 1908
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   5.00e+00
+norm(P.cnull-fnull)=392672.699550, nnzP = 5363
+condest(final Ptent'Ptent) =   5.00e+00
+AP_Pattern: Using filtering for A
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+Underweighting 1087 constraint equations
+(before scaling) condest(BBt) = 6
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   1.10e+01
+condest(P'AP) =   4.05e+05
+norm(P.cnull-fnull)=1.289926, nnzP = 7422
+column by column norm(FNull - P(energy)*CNull) =   1.26e+01 
+Initial energy (sum_i pt_i^T A pt_i)     = 3.6510e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 3.6510e+03
+Final energy (sum_i p_i^T A p_i)        = 3.2380e+03
+Aggregating
+ 1 .....................................................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 1905
+column by column norm(FNull - Ptent*CNull) =   0.00e+00 
+condest(Ptent'Ptent) =   5.00e+00
+norm(P.cnull-fnull)=392672.699550, nnzP = 5363
+condest(final Ptent'Ptent) =   5.00e+00
+AP_Pattern: Using filtering for A
+Constraint Dropping: Nullspace
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 0 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 6
+column by column norm(FNull - P(noenergy)*CNull) =   0.00e+00 
+condest(Pfinal'Pfinal) =   1.10e+01
+condest(P'AP) =   6.29e+05
+norm(P.cnull-fnull)=0.000000, nnzP = 7411
+column by column norm(FNull - P(energy)*CNull) =   9.49e-15 
+Initial energy (sum_i pt_i^T A pt_i)     = 3.6470e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 3.6470e+03
+Final energy (sum_i p_i^T A p_i)        = 3.3882e+03

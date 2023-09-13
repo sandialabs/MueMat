@@ -1,0 +1,80 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.11.0.584 (R2010b) 64-bit (glnxa64)
+                              August 16, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .........................
+dropping all CNull entries < 1e-12
+  ==> Injecting entire fine grid NS CMS style
+Nnz(Ptent^T*Ptent - eye) = 578
+column by column norm(FNull - Ptent*CNull) =   0.00e+00   0.00e+00   5.63e-02 
+condest(Ptent'Ptent) =   2.25e+00
+norm(P.cnull-fnull)=612371.619200, nnzP = 5000
+condest(final Ptent'Ptent) =   2.25e+00
+BuildConstraints: dropping rows of B w/ singular value < 1.000000e-08
+removing 648 rows from constraints due to redundancy
+(before scaling) condest(BBt) = 4880.1
+column by column norm(FNull - P(noenergy)*CNull) =   1.98e-03   1.98e-03   2.12e-03 
+initial emin residual = 1.219e+09
+final emin residual   = 1.088e+04
+condest(Pfinal'Pfinal) =   8.53e+00
+condest(P'AP) =   2.31e+02
+norm(P.cnull-fnull)=0.001009, nnzP = 26896
+column by column norm(FNull - P(energy)*CNull) =   1.98e-03   1.98e-03   2.12e-03 
+Initial energy (sum_i pt_i^T A pt_i)     = 2.2610e+03
+Constrained energy (sum_i pc_i^T A pc_i) = 2.0871e+03
+Final energy (sum_i p_i^T A p_i)        = 6.2550e+02
+Hierarchy: actual #levels  = 2
+AMG without CG
+  1: ||r||=3.243954e+01
+  2: ||r||=6.803256e+00
+  3: ||r||=1.410801e+00
+  4: ||r||=2.915747e-01
+  5: ||r||=6.097541e-02
+  6: ||r||=1.285340e-02
+  7: ||r||=2.722258e-03
+  8: ||r||=5.781752e-04
+  9: ||r||=1.230105e-04
+
+ans =
+
+   9.8027e-07
+
+CG preconditioned by AMG
+  1: ||r||=3.243954e+01
+  1: ||r||=6.489971e+00
+  1: ||r||=2.733197e-01
+  1: ||r||=1.425581e-02
+  1: ||r||=7.879950e-04
+  1: ||r||=4.622149e-05
+  1: ||r||=2.400823e-06
+  1: ||r||=2.113695e-07
+  1: ||r||=1.407285e-08
+  1: ||r||=1.078219e+01
+  2: ||r||=5.572527e-01
+  3: ||r||=5.027430e-02
+  4: ||r||=2.334968e-03
+  5: ||r||=1.849095e-04
+  6: ||r||=1.069526e-05
+  7: ||r||=8.053874e-07
+  8: ||r||=4.932685e-08
+  9: ||r||=1.854283e-09
+
+ans =
+
+   4.5377e-11
+

@@ -1,0 +1,7 @@
+% MueMat header file
+ALLZEROS = 0;
+NOTALLZEROS = 1;
+VCYCLE = 1;
+WCYCLE = 2;
+GLOBAL = 1;
+LOCAL  = 2;

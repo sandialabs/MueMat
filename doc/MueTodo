@@ -1,0 +1,193 @@
+A -- decide soon
+B -- not pressing, but should be decided
+C -- can be deferred indefinitely
+D -- ongoing
+
+ 0)  Vector class (A)
+    - Multivectors
+    - Eliminate the use of native vectors in non-compute-intensive parts of MueMat, in favor of vector class.
+
+    STATUS - Done Working MultiVector class created.  It isn't terribly pervasive throughout the source.  I don't see the value
+    right now in having it everywhere.  One new test exercises it.
+
+ 1)  Project aux information (B)
+    - backend is probably there, but interface may be lacking
+
+ 2)  Geometric (B)
+    - 1D or 2D example for testing framework, hybrid methods
+
+ 3)  Energy minimization (B)
+
+ 4)  Unit testing (D)
+
+ 5)  Error handling. (D)
+ 
+ 6)  Memory cleaning
+
+ 7)  Multiple right-hand sides (B)
+
+ 8)  Change Operator to a class  (A)
+    - multiple views, which entails multiple maps                         > DONE
+    - multiple diagonals                                                  > DONE
+    - the stuff in src/Diag for extracting, creating, inverting diagonals > DONE
+      should probably go in the SingleViewOperator class.                 > DONE
+     
+    - Operator Smoothing in SaPFactory + Diagonal Extraction in
+	Smoother/*: should use Operator views to be able to switch between block or
+	scalar diagonal.
+
+    - GetDiag and ExtractDiag are confusing.  Should have only one.       > DONE
+
+    - We should try to write the C++ thin layer between Tpetra/Epetra
+	and the Operator interface to figure out if something is wrong with
+	the current interface of the Operator Class.
+
+ 9) Move functionality in MatlabApply.m, MatMatAdd.m, MatMatAdd.m, MatMatMult.m, MatMatSolve.m, MatPrint.m to Operator class. (B)
+    STATUS: DONE
+
+ 10)  An Operator's point diagonal should be created by default, and invoking a point/block smoother
+     should automatically choose/use the right diagonal. (A)
+
+     STATUS: done
+
+ 11) Clean up EminFactory, removing "dead" experimental options and moving code to other classes as necessary. (A)
+
+     STATUS: EminFactory has been refactored.  However, almost all of the experimental options still exist and need
+     to be gone through.
+
+ 12) Eliminate the use of native Matlab matrices in non-compute-intensive parts of MueMat, in favor of Operator class. (B)
+
+ 13) Convert parameter list options into  factory "set" methods. (C)
+
+ 14) document everything doxygen type stuff (D)
+
+ 15) Eigenvalue computation (B)
+    - duplication of code between SmootherFactory and SaPFactory. 
+      Add a new	class to compute eigenvalue of D^{-1}A ? Or an EigenValueFactory (if multiple algorithms to compute
+	eigenvalue is planned in MueLu) ?
+
+ 16) Decide code convention :
+	- variable name convention: NULLSPACE, Nullspace, NS, fnull, FNull, NullSpace, nullSpace, nullspace etc.
+	- A, Amat Adata,...
+	- P, Pt, Ptent
+	- if (), or if ()
+	- end; or end
+	- end keyword at the end of each function
+
+ 17) EminFactory: change the name to leave room for a real "Energy-Minimisation" factory dedicated to provide several
+     energy min algo (CGEmin, GMRESEmin...)
+
+ 18) Review msg of M-Lint using the matlab editor (D)
+
+ 19)  Smoother classes: Design questions (A)
+     * We have one main factory (BlkSmoothFactory) and a string parameter to select gauss-seidel, jacoby, cheby etc. :
+     - Rename BlkSmoothFactory to SmoothFactory ? JG: yes
+     - Create a distinct factory for Cheby ? >    JG: no
+
+     * Currently, a Smoother Factory (SmootherFactoryBase.m BlkSmootherFactory.m
+	Hybrid2x2SmootherFactory.m) build one Pre and one Post smoother at the
+	same time. This implies a lot of code duplications (duplication of variables
+	to store parameters etc.)
+	JG: I suggest to change the meaning of a smoother factory. A smoother
+	factory can build only one smoother (pre or post) and in this case, the MG
+	hierachy store two smoother factories. > but pb to do Setup only once. 
+	
+    STATUS: done
+
+ 20) Review if each source file have a documentation compatible with Content.m and Matlab's doc viewer.
+
+    STATUS: some documentation.
+
+ 21) provide at least one example (D)
+    - range of difficulty levels
+    - purpose is twofold:  1) testing; 2) guide
+
+    STATUS: some examples exist. Probably need to organize.
+
+ 22) move some functions inside their class (D)
+    e.g., move MakeTentative() so that it is a private function
+    within SaPFactory(). we should probably also make a smooth
+    prolongator function. the only thing that is a bit tricky is
+    if we want to use MakeTentative from an energy minimization
+    algorithm. I'm hoping that 'friends will let us do this'.
+
+   STATUS: started. Using public static functions inside SaPFactory() right 
+   now to handle the tentative prolongator. This allows other people access
+   and since there is no state data, it minimizes the damage that these
+   others might do.
+
+ 23) For methods that change the state of an object, we should check that the user
+   has supplied the minimum number of return objects.  If not, print an error.  (B)
+
+
+ 24) handle classes or check if the return object is used
+
+ 25) check switch view in Smoother.m + Add swich diag view in ChebySmoother
+
+++)  Add an option to keep prolongator smoothing and pass in the damping
+     parameter instead of hard-wiring 4/3.
+
+    STATUS: DONE
+ 
+++)  Add a notion of MaxCoarseSize so that coarsening is stopped
+     automatically when things are coarse enough.
+
+    STATUS: DONE, but might move?
+
+++)  Reorganize the coarsening so that we can get root points.
+ 
+++)  Add the old matlab aggregation routine.
+
+    STATUS: DONE
+
+++) perhaps make a real basic linear algebra class (D)
+    or suck this into the operator class. Basically, a place to
+    stick MatMatMult, MatMatSolve(), etc.
+
+++)  Decide on a sane MueMat directory structure.  (B)
+
+    STATUS: DONE
+
+++) reuse (B)
+    - doesn't necessarily need to be implemented, but we should write
+      out some use cases
+    - could go in design document
+
+    STATUS: DONE, an example called CrossFactoryTest exercises this.
+            One caveat is that Muemat has no cleaning mechanism.
+
+++) const on fine level and the fact that we compute dinv*A stuff. (A)
+    - could go in design document
+
+    STATUS: DONE
+
+++) pre and post smoothing. (B)   
+
+    STATUS: DONE, an example called SmoothingTest exercises this.
+
+++) zero initial guess (C)
+
+    STATUS: DONE. Just added a parameter to a few function calls. I also
+    added a mue_include.m which is supposed to mimic a C include file.
+
+++) Reorganize the GS class (which probably shouldn't be call GS) (B)
+     as we can do Jacobi as well. We should be able to use the
+     class and factory to do point/block Jacobi, point/block GS,
+     and overlapping/nonoverlapping domain decomposition.
+
+     STATUS: DONE. See SmoothingTest.m for an example. This can probably
+     be fixed up some more ... but it is pretty good for now.
+
+++) Decide on something for global-type things such as output level and comm.
+
+    STATUS: DONE, at least for now CrossFactorySpecs is meant for this.
+
+++) perhaps there should be a SetPath in a 'startup.m' or something else
+    at the parent level (as opposed to sticking these path setting commands
+    in every example).
+
+    STATUS: DONE.
+
+++)  Have MGHierarchy return a status which gives the complexity.
+ 
+    STATUS: DONE

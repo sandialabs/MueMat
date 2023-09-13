@@ -1,0 +1,207 @@
+\newcommand{\ConstraintsM}{\mathcal{B}}  
+\newcommand{\Cnull}{C}
+\newcommand{\Fnull}{F}  
+\newcommand{\nulldim}{nulldim}
+\newcommand{\Pbar}{\bar{P}}
+\newcommand{\Fnullbar}{\bar{\Fnull}}
+
+\subsection{Goals}
+
+A near-term goal of this research is to produce a multigrid method for
+systems of partial differential equations (PDEs) in which the number of degrees of freedom on the coarse levels is the same as the fine
+level (in smoothed aggregation for linear elasticity, this number grows).
+
+\subsection{Quick analysis of expected gain}
+TODO: analysis of Chris of how much the constraint multigrid could decrease the operator complexity for linear elasticity
+over plain old SA.
+
+\subsection{Principles}
+\subsection{Constraints}
+%  TODO : manifesto
+
+\newpage
+\subsection{Representation of the Nullspace on the Coarse Grid}
+In this section we discuss the construction of the coarse nullspace and the corresponding tentative prolongator that will
+ultimately be the initial guess to the energy minimization process.
+
+Here is the current algorithm for generating the coarse null space representation:
+
+\begin{algorithm}[Hhtbp]
+  \SetAlgoLined %\SetLine
+  Let $F=$ fine nullspace\;
+  Let $W=$ user-defined weighting applied to fine nullspace\;
+  Let $n=$ the number of DOFs at a fine node and at a coarse node\;
+  Let $k=$ the number of nullspace vectors\;
+  $FW = U\Sigma V^{T}$ \tcc*{{\em SVD} decomposition}
+  $U_{(:,1:n)} = QR$ \tcc*{$Q^{T}Q = I$, but $QQ^{T} \neq I$}
+  $C = [R\hskip 0.1in   Q^{T} U(_{(:,n+1:k)}]$\;
+  $\underbrace{Q}_{P^{(tent)}}\underbrace{C\Sigma V^{T}W^{-1}}_{C^{(new)}} = [QR\hskip 0.1in QQ^{T}U_{(:,n+1:k)}]\Sigma V^{T} W^{-1}$\;
+  $P^{(tent)}C^{(new)} = [U_{(:,1:n)}\hskip 0.1in QQ^{T}U_{(:,n+1:k)}]\Sigma V^{T} W^{-1}$\;
+  \caption{Algorithm to illustrate how the coarse null space representation is generated}
+\end{algorithm}
+
+Note that because $QQ^{T} \neq I$, exact interpolation $P^{(tent)}C^{(new)} = F$ is not recovered.
+
+\subsubsection{Building the Matrix of Constraints}
+
+% TODO: P is Ppattern
+
+The number of degrees of freedom on the fine grid and on the coarse
+grid are respectively denoted $n_F$ and $n_C$. With such notations,
+the dimension of the prolongator $P$ is $n_F \times n_C$:
+$$P = (p_{i,j})_{n_F \times n_C}$$
+
+Let $\nulldim$ be the number of nullspace vectors.
+Let $\Fnull$ and $\Cnull$ be respectively the matrix of the fine nullspace vectors and the matrix of the coarse nullspace vectors:
+
+$$\Fnull = (f_{i,j})_{n_F \times \nulldim}$$
+$$\Cnull = (c_{i,j})_{n_C \times \nulldim}$$
+$$P.\Cnull = \Fnull$$
+
+Let $\Pbar$ be a vector of size $(nnz(P)$ whose non-zeros are taken row-wise from $P$ ($\Pbar$ corresponds to the function \verb+reshape(P',[],1)+ of Matlab if we remove the zeros values of the resulting vector afterward). The vector $\Fnullbar$ is defined in the same way.
+The constraint matrix $\ConstraintsM$ is the matrix which satisfied :
+$$\ConstraintsM . \Pbar = \Fnullbar$$
+The values of $\ConstraintsM$ are the values of $\Cnull$ and the size of $\ConstraintsM$ is $$(n_F \times \nulldim) \times (nnz(P))$$
+
+\begin{example}
+  \begin{myitem}
+  \item $n_F = 3$, $n_C = 2$, $\nulldim = 1$
+  \item $P = \pMatrix{p}{3}{2},\,\, F = \pVector{f}{3},\,\, C = \pVector{c}{2}$
+  \end{myitem}
+  
+  \begin{equation}
+    \Cnull^\T.P^\T = \Fnull^\T
+  \end{equation}
+  
+  \begin{equation}\pVectorT{c}{2} . \pMatrixT{p}{3}{2} = \pVectorT{f}{3}\end{equation}
+  
+  \begin{equation}\begin{cases} 
+      c_1 . p_{11} + c_2 . p_{12} = f_1\\ 
+      c_1 . p_{21} + c_2 . p_{22} = f_2\\ 
+      c_1 . p_{31} + c_2 . p_{32} = f_3\\ 
+  \end{cases} \end{equation}
+  
+  \begin{equation} 
+    \underbrace{
+      \begin{pmatrix}
+	c_1 & c_2 & & & &\\
+	& & c_1 & c_2 & &\\
+	& & & & c_1 & c_2\\
+      \end{pmatrix}
+    }_{\ConstraintsM}
+    . \pMatrixReshape{p}{3}{2} = \pVector{f}{3}
+  \end{equation}
+\end{example}
+
+%  \begin{example}
+\begin{myitem}
+\item    If $p_{12} = 0$ and $p_{31} = 0$,
+\end{myitem}
+\begin{equation} 
+  \underbrace{
+    \begin{pmatrix}
+      c_1 & \times & & & &\\
+      & & c_1 & c_2 & &\\
+      & & & & \times & c_2\\
+    \end{pmatrix}
+  }_{\ConstraintsM}
+  . 
+  \begin{pmatrix}
+    p_{11}\\0\\p_{21}\\p_{22}\\0\\p_{32}\\
+  \end{pmatrix}
+  = \pVector{f}{3}
+\end{equation}
+
+\begin{equation} 
+  \underbrace{
+    \begin{pmatrix}
+      c_1 &     &     &    \\
+      & c_1 & c_2 &    \\
+      &     &     & c_2\\
+    \end{pmatrix}
+  }_{\ConstraintsM}
+  . 
+  \begin{pmatrix}
+    p_{11}\\p_{21}\\p_{22}\\p_{32}\\
+  \end{pmatrix}
+  = \pVector{f}{3}
+\end{equation}
+%  \end{example}pattern
+
+
+\begin{example}
+  \label{example-constraints-nulldim2}
+  \begin{myitem}
+  \item $n_F = 3$, $n_C = 2$, $\nulldim = 2$
+  \item $P = \pMatrix{p}{3}{2},\,\, F = \pMatrix{f}{3}{2},\,\, C = \pMatrix{c}{2}{2}$
+  \end{myitem}
+  
+  \begin{equation} 
+    \underbrace{
+      \begin{pmatrix}
+	c_{11} & c_{21} & & & &\\
+	c_{12} & c_{22} & & & &\\
+	& & c_{11} & c_{21} & &\\
+	& & c_{12} & c_{22} & &\\
+	& & & & c_{11} & c_{21}\\
+	& & & & c_{12} & c_{22}\\
+      \end{pmatrix}
+    }_{\ConstraintsM}
+    . \pMatrixReshape{p}{3}{2} = \pMatrixReshape{f}{3}{2}
+  \end{equation}
+
+  %%     \begin{equation} 
+  %%       \underbrace{
+  %% 	\begin{pmatrix}
+  %% 	  C^\T & & \\
+  %% 	  & C^\T & \\
+  %% 	  & & C^\T \\
+  %% 	\end{pmatrix}
+  %%       }_{\ConstraintsM}
+  %%       . \Pbar = F
+  %%     \end{equation}
+
+\end{example}
+
+\subsubsection{Removing duplicated constraints in $\ConstraintsM$}
+
+When $\nulldim > 1$, $\ConstraintsM$ can be rank deficient. This can happen, for example, if we have two identical
+nullspace vectors (See example \ref{example-constraints-nulldim2} page \pageref{example-constraints-nulldim2} with $(c_{11}, c_{21}) = (c_{12}, c_{22})$). 
+It can also happen in more subtle situations. Several methods for removing rows are implemented in \muemat:
+
+\begin{enumerate}
+\item The first method consists on performing a Singular Value Decomposition (SVD) of $\ConstraintsM$:
+$$\ConstraintsM = U.S.V^\T$$
+Let $k$ be the rank of $\ConstraintsM$ and $U(:,1:k)$ the columns of $U$ that correspond to non null eigenvalues in $S$.
+We then use the full rank constraints matrix $\ConstraintsM' = U(:,1:k)^\T . \ConstraintsM$ which satisfied:
+
+$$\underbrace{U(:,1:k)^\T . \ConstraintsM}_{\ConstraintsM'} . \Pbar = U(:,1:k)^\T . \Fnullbar$$
+
+\item A more efficient method consists on applying the SVD algorithm only on sub parts of the matrix that could be linearly dependent.
+By construction, 
+\begin{enumerate}
+\item each column of $\ConstraintsM$ corresponds to a non-zero of $P$,
+\item each row of $\ConstraintsM$ corresponds to a row of $P$. When $\nulldim > 1$, multiple rows of $\ConstraintsM$ corresponds to the same row of $P$.
+\end{enumerate}
+%
+Linear dependencies in $\ConstraintsM$ can only appears between rows that correspond to the same row of $P$.
+Thanks to the ordering of $\Pbar$, such rows are adjacent in $\ConstraintsM$ and $\ConstraintsM$ is a block matrix (see example \ref{example-constraints-nulldim2}) where:
+\begin{itemize}
+\item the number of columns of each block is the number of non-zero on the corresponding row of $P$,
+\item the number of rows of a block is \nulldim.
+\end{itemize}
+
+We can then perform a SVD locally for each sub block $\ConstraintsM(i)$ of $\ConstraintsM$:
+$$\ConstraintsM(i) = U.S.V^\T$$
+and replace it by :
+$$U(:,1:k)^\T.\ConstraintsM(i)$$
+
+\end{enumerate}
+
+% residual and BBt vs BtB
+
+\subsection{Energy minimization algorithm}
+
+%definition vector energy
+
+%  \subsection{wideP stuff}

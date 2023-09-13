@@ -1,0 +1,73 @@
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+             (__)
+             (oo)  "MueMat"
+      /-------\/ 
+     / |     ||
+    *  ||----||
+       ~~    ~~
+
+*****************************************************************************
+
+Building 100 x 100 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .
+Hierarchy: actual #levels  = 2
+  1: ||r||=5.073552e+00
+  1: ||r||=1.909729e-01
+  1: ||r||=1.936596e-03
+  1: ||r||=1.754182e-05
+  1: ||r||=1.721224e-07
+  1: ||r||=1.551152e-09
+  1: ||r||=1.273696e-11
+pcg converged to the desired tolerance 1e-12 within 7 iterations.
+nIts=7 - relative residual norm=2.81042e-13
+
+*****************************************************************************
+
+Building 900 x 900 scalar matrix
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .........
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.290475e+01
+  1: ||r||=4.690863e-01
+  1: ||r||=1.570159e-02
+  1: ||r||=5.988301e-04
+  1: ||r||=1.567517e-05
+  1: ||r||=3.453605e-07
+  1: ||r||=9.551902e-09
+  1: ||r||=2.945380e-10
+  1: ||r||=8.718923e-12
+pcg converged to the desired tolerance 1e-12 within 9 iterations.
+nIts=9 - relative residual norm=5.24551e-14
+
+*****************************************************************************
+
+Building anisotropic 900 x 900 scalar matrix on stretched mesh... done!
+
+*****************************************************************************
+Nullspace: Using default nullspace size=1
+Hierarchy: start level     = 1
+Hierarchy: maximum #levels = 2
+Aggregating
+ 1 .........
+Hierarchy: actual #levels  = 2
+  1: ||r||=1.402681e+01
+  1: ||r||=1.803708e+00
+  1: ||r||=1.036250e+00
+  1: ||r||=7.197119e-01
+  1: ||r||=4.020774e-01
+  1: ||r||=2.086767e-01
+  1: ||r||=6.679253e-02
+  1: ||r||=3.000634e-02
+  1: ||r||=1.726177e-02
+pcg iterated 9 times but did not converge.

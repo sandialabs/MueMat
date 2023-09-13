@@ -1,0 +1,24 @@
+# Standard ignores
+*~
+*.pyc
+\#*#
+.#*
+checkin_message
+flat_headers/
+old_and_busted/
+TAGS
+SetHomeDir.m
+doc/Research/research.aux
+doc/Research/research.log
+doc/Research/research.out
+doc/Research/research.pdf
+doc/Research/research.toc
+RESULTS/*
+*.bak[0-9]*
+*.swp
+data/Elas2D-120x120.mat
+data/Elas2D-40x40.mat
+data/Elas2D-80x80.mat
+etest*.mat
+test/utils/AddFuncDescr?.m.out.m
+test/NonRegression/current-version/
